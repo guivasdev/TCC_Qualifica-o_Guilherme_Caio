@@ -6,76 +6,222 @@ echo '
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Criação de ATA</title>
+
+  <!-- Bootstrap e Ícones -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-<div class="container mt-5">
-  <div class="form-container shadow p-4 rounded bg-white">
-    <h2 class="text-center mb-4">Criação de ATA</h2>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+      color: #222;
+    }
 
-    <form id="formAta" method="post" action="model/AtaModel.php">
+    header {
+      background: #4e73df;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      font-weight: 500;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 35px;
+      font-weight: 600;
+      color: #4e73df;
+    }
+
+    h5 {
+      color: #4e73df;
+      font-weight: 600;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 6px;
+    }
+
+    .form-control {
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      transition: all 0.2s ease-in-out;
       
-      <!-- Nome -->
-      <div class="mb-3">
-        <label class="form-label">Nome</label>
-        <input type="text" class="form-control" name="nome" required>
+    }
+      .form-control-Text {
+      width:100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      transition: all 0.2s ease-in-out;
+      height:100px;
+    }
+
+    .form-control:focus {
+      border-color: #4e73df;
+      box-shadow: 0 0 6px rgba(78,115,223,0.25);
+    }
+
+    .form-section {
+      margin-bottom: 1.2rem;
+    }
+
+    .split-row {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .split-col {
+      flex: 1 1 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Linha para data, local e horário */
+    .inline-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .inline-row .form-section {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      color: #888;
+      font-size: 0.85rem;
+    }
+
+    .btn-primary {
+      border-radius: 6px;
+      background-color: #4e73df;
+      border: none;
+      transition: 0.2s;
+    }
+      label {
+        font-size:20;
+        font-weight: bold;
+      }
+
+    .btn-primary:hover {
+      background-color: #3b5bdb;
+    }
+
+    .btn-secondary {
+      border-radius: 6px;
+      color: #ffffffff;
+      border: none;
+    }
+      .predef:hover{
+      background-color: #c2d6f3ff;
+      cursor: pointer;
+      
+      }
+
+    .btn-secondary:hover {
+      background-color: #aaadb2ff;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Criação de ATA</h1>
+</header>
+
+<main>
+  <h2>Nova ATA</h2>
+
+  <form id="formAta" method="post" action="model/AtaModel.php">
+  <div class="form-section">
+          <label for="nome" class="form-label">Nome da ATA</label>
+          <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+
+    <div class="split-row">
+      <!-- Coluna Esquerda -->
+      <div class="split-col">
+        ' . $this->inputComPredef("Organização", "organizacao", ["IFSP", "SENAI", "Prefeitura"]) . '
+        ' . $this->inputComPredef("Nucleo Institucional", "nucleo", ["FHO", "Sala 202", "Núcleo de Pesquisa"]) . '
+        ' . $this->inputComPredef("Curso", "curso", ["Informática", "Administração", "Logística"]) . '
+        ' . $this->inputComPredef("Integrantes", "Integrantes", ["João Silva", "Maria Souza", "Carlos Pereira"]) . '
+
       </div>
 
-      <!-- Organização -->
-      ' . $this->inputComPredef("Organização", "organizacao", ["IFSP", "SENAI", "Prefeitura"]) . '
+      <!-- Coluna Direita -->
+      <div class="split-col">
 
-      <!-- Curso -->
-      ' . $this->inputComPredef("Curso", "curso", ["Informática", "Administração", "Logística"]) . '
+        
 
-      <!-- Local -->
-      ' . $this->inputComPredef("Local", "local", ["Auditório", "Sala 101", "Laboratório"]) . '
-      <!-- nucleo -->
-      ' . $this->inputComPredef("Nucleo Institucional", "nucleo", ["Fho", "Sala 101", "Laboratório"]) . '
-      <!-- Prefacio -->
-      ' . $this->inputComPredef("Prefácio", "prefacio", ["Fho", "Sala 101", "Laboratório"]) . '
+        <!-- Linha: Data / Local / Horário -->
+        <div class="inline-row">
+          <div class="form-section">
+            <label for="data" class="form-label">Data</label>
+            <input type="date" class="form-control" id="data" name="data" required>
+          </div>
 
-      <!-- Data -->
-      <div class="mb-3">
-        <label class="form-label">Data</label>
-        <input type="date" class="form-control" name="data" required>
+          <div class="form-section">
+            ' . $this->inputComPredef("local", "local", ["IFSP", "SENAI", "Prefeitura"]) . '
+
+            </div>
+
+          <div class="form-section">
+            <label for="horario" class="form-label">Horário</label>
+            <input type="time" class="form-control" id="horario" name="horario" required>
+          </div>
+        </div>
+
+        ' . $this->inputComPredef("Prefácio", "prefacio", ["Abertura de atividades", "Planejamento do semestre"]) . '
+
+        ' . $this->inputComPredef("Informação Introdutória", "infoIntro", ["Reunião para deliberação", "Início das atividades do semestre"]) . '
+
+        ' . $this->inputComPredef("Assunto", "assunto", ["Apresentação de projetos", "Avaliação institucional", "Planejamento do semestre"]) . '
+
+        ' . $this->inputComPredef("Encerramento", "encerramento", ["Agradecimentos finais", "Encerramento às 12h"]) . '
       </div>
-
-      <!-- Horário -->
-      ' . $this->inputComPredef("Horário", "horario", ["08:00", "10:30", "14:00"]) . '
-
-      <!-- Informação introdutória -->
-      ' . $this->inputComPredef("Informação Introdutória", "infoIntro", ["Reunião para deliberação", "Início das atividades do semestre"]) . '
-
-      <!-- Integrantes -->
-      ' . $this->inputComPredef("Integrantes", "Integrantes", []) . '
-
-      <!-- Assunto -->
-      ' . $this->inputComPredef("Assunto", "assunto", ["Apresentação de projetos", "Avaliação institucional", "Planejamento do semestre"]) . '
-
-      <!-- Encerramento -->
-      ' . $this->inputComPredef("Encerramento", "encerramento", ["Agradecimentos finais", "Encerramento às 12h"]) . '
-
-    <div class="d-flex justify-content-between mt-3">
-      <button type="submit" class="btn btn-info text-white">Gerar ATA</button>
-      <a href="index.php" class="btn btn-secondary">Voltar</a>
     </div>
-        </form>
-      </div>
+
+    <div class="d-flex justify-content-between mt-4">
+      <button type="submit" class="btn btn-primary px-4 py-4 fs-5">
+        <i class="bi bi-file-earmark-text"></i> Gerar ATA
+      </button>
+      <button class="btn btn-secondary px-4 py-4 fs-5">
+        <i class="bi bi-arrow-left-circle"></i> Voltar
+      </button>
     </div>
+
+  </form>
+</main>
+
+<footer>
+  © ' . date("Y") . ' Sistema de Criação de ATA — Todos os direitos reservados.
+</footer>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  $(document).ready(function(){
-    $(".dropdown-item.predef").on("click", function(){
+  $(function() {
+    $(".dropdown-item.predef").on("click", function() {
       const target = $(this).data("target");
       const value = $(this).text();
       $("#" + target).val(value);
     });
 
     $("#formAta").on("submit", function() {
-      alert("Dados da ata foram guardados com sucesso");
+      alert("✅ ATA criada com sucesso!");
     });
   });
 </script>

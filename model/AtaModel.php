@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
+
 class AtaModel
 {
     public function criarAta()
@@ -19,6 +20,7 @@ class AtaModel
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+
             $organizacao = $_POST['organizacao'] ?? "TESTANTO";
             $curso = $_POST['curso'] ?? "TESTANTO";
             $local = $_POST['local'] ?? "TESTANTO";
@@ -30,11 +32,32 @@ class AtaModel
             $assunto = $_POST['assunto'] ?? "TESTANTO";
             $encerramento = $_POST['encerramento'] ?? "TESTANTO";
             $dataOriginal = $data; // formato: Y-m-d
+$data2 = new DateTime($dataOriginal, new DateTimeZone('America/Sao_Paulo'));
 
-            $data2 = new DateTime($dataOriginal);
-            $novaData = $data2->format('d \d\e F \d\e Y'); // novo formato: dia/mês/ano
+            $fmt = new IntlDateFormatter(
+                'pt_BR', // idioma
+                IntlDateFormatter::LONG, // formato da data
+                IntlDateFormatter::NONE, // sem hora
+                'America/Sao_Paulo', // fuso horário
+                IntlDateFormatter::GREGORIAN,
+                "d 'de' MMMM 'de' y" // formato personalizado
+            );
+            $dataEncerramento = new IntlDateFormatter(
+                'pt_BR', // idioma
+                IntlDateFormatter::LONG, // formato da data
+                IntlDateFormatter::NONE, // sem hora
+                'America/Sao_Paulo', // fuso horário
+                IntlDateFormatter::GREGORIAN,
+                "dd / MM /yyyy" // formato personalizado
+            );
+
+            $novaData = $fmt->format($data2);
+            $novaDataEncerramento = $dataEncerramento->format($data2);
+
 
             $pdf = new TCPDF();
+            $pdf->setPrintHeader(false);
+            $pdf->setPrintFooter(false);
             $pdf->SetMargins(20, 40, 20);
             $pdf->AddPage();
             $logo = __DIR__ . '/../Img/imgLogo.png';
@@ -65,7 +88,7 @@ class AtaModel
             $pdf->Ln(10);
             $pdf->Write(0, $assunto);
             $pdf->Ln(15);
-            $pdf->Write(0, $encerramento . " " . $data);
+            $pdf->Write(0, $encerramento . " " . $novaDataEncerramento);
 
             $pdf->Output('arquivo.pdf', 'I');
             exit;

@@ -9,7 +9,11 @@ $model = new AtaModel();
 $view = new AtaScreen();
 $controller = new AtaController($model, $view);
 $acao = $_GET['acao'] ?? 'buscar';
+    $controller->gerarAta();
+//$controller->buscarAta();
 
+
+/*
 switch($acao){
     case 'gerar':
         $controller->gerarAta();
@@ -38,5 +42,6 @@ switch($acao){
     default:
         $controller->buscarAta();
 }
+        */
 
 ?>

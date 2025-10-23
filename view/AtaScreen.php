@@ -1,25 +1,30 @@
-<?php 
-class AtaScreen {
-  public function mostrarPaginaATA($resultado) {
+<?php
+class AtaScreen
+{
+  public function mostrarPaginaATA($resultado)
+  {
     include 'PaginaAta.php';
   }
 
-  public function mostrarBuscaATA($resultado) {
+  public function mostrarBuscaATA($resultado)
+  {
     include 'PaginaBusca.php';
   }
 
-  private function inputComPredef(string $label, string $name, array $valores = []) {
+  private function inputComPredef(string $label, string $name, array $valores = [])
+  {
     $id = "input-" . $name;
 
-    // Campos que terão botão de cadastro + dropdown
-    $camposComCadastro = ["Organização", "Curso", "Local", "Integrantes", "Nucleo Institucional"];
+    $camposComCadastro = ["Curso", "Organização", "Integrantes", "Nucleo Institucional", "local"];
+
 
     // Se o campo não estiver na lista, é só um input simples
     if (!in_array($label, $camposComCadastro)) {
-        return '
+      return '
         <div class="mb-3">
             <label class="form-label">' . htmlspecialchars($label) . '</label>
-            <input type="text" class="form-control" name="' . htmlspecialchars($name) . '" id="' . $id . '" required>
+            <textarea class="form-control" placeholder="Digite algo..." name="' . htmlspecialchars($name) . '" id="' . $id . '" required rows="5"></textarea>
+
         </div>';
     }
 
@@ -32,16 +37,24 @@ class AtaScreen {
 
     // Dropdown apenas se houver valores
     if (!empty($valores)) {
-        $html .= '<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">▼</button>
+      $html .= '<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">▼</button>
                   <ul class="dropdown-menu">';
-        foreach ($valores as $valor) {
-            $html .= '<li><a class="dropdown-item predef" data-target="' . $id . '">' . htmlspecialchars($valor) . '</a></li>';
+      foreach ($valores as $index => $valor) {
+        // Adiciona o botão apenas no primeiro item
+        if ($index === 0) {
+          $html .= '
+<div class="d-flex flex-column align-items-center mt-2">
+  <button class="btn btn-primary w-100" type="button" onclick="location.href=\'index.php?acao=cadastrarComponente&campo=' . urlencode($label) . '\'">
+    Cadastrar
+  </button>
+</div>';
         }
-        $html .= '</ul>';
-    }
 
-    // Botão de cadastro
-    $html .= '<button class="btn btn-primary" type="button" onclick="location.href=\'index.php?acao=cadastrarComponente&campo=' . urlencode($label) . '\'">Cadastrar</button>';
+        // Adiciona os itens do dropdown normalmente
+        $html .= '<li><a class="dropdown-item predef" data-target="' . $id . '">' . htmlspecialchars($valor) . '</a></li>';
+      }
+      $html .= '</ul>';
+    }
 
     $html .= '
         </div>
