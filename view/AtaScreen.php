@@ -23,7 +23,7 @@ class AtaScreen
       return '
         <div class="mb-3">
             <label class="form-label">' . htmlspecialchars($label) . '</label>
-            <textarea class="form-control" placeholder="Digite algo..." name="' . htmlspecialchars($name) . '" id="' . $id . '" required rows="5"></textarea>
+            <textarea style="width: 100%; height: auto;" class="form-control" placeholder="Digite algo..." name="' . htmlspecialchars($name) . '" id="' . $id . '" required rows="5"wrap="soft"></textarea>
 
         </div>';
     }

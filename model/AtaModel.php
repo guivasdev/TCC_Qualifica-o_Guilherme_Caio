@@ -21,18 +21,19 @@ class AtaModel
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
-            $organizacao = $_POST['organizacao'] ?? "TESTANTO";
-            $curso = $_POST['curso'] ?? "TESTANTO";
-            $local = $_POST['local'] ?? "TESTANTO";
-            $data = $_POST['data'] ?? "TESTANTO";
-            $horario = $_POST['horario'] ?? "TESTANTO";
-            $infoIntro = $_POST['infoIntro'] ?? "TESTANTO";
-            $prefacio = $_POST['prefacio'] ?? "TESTANTO";
-            $nucleo = $_POST['nucleo'] ?? "TESTANTO";
-            $assunto = $_POST['assunto'] ?? "TESTANTO";
-            $encerramento = $_POST['encerramento'] ?? "TESTANTO";
-            $dataOriginal = $data; // formato: Y-m-d
-$data2 = new DateTime($dataOriginal, new DateTimeZone('America/Sao_Paulo'));
+            $organizacao = str_replace(array("\r", "\n"), ' ', $_POST['organizacao'] ?? "TESTANDO");
+            $curso = str_replace(array("\r", "\n"), ' ', $_POST['curso'] ?? "TESTANDO");
+            $local = str_replace(array("\r", "\n"), ' ', $_POST['local'] ?? "TESTANDO");
+            $data = str_replace(array("\r", "\n"), ' ', $_POST['data'] ?? "TESTANDO");
+            $horario = str_replace(array("\r", "\n"), ' ', $_POST['horario'] ?? "TESTANDO");
+            $infoIntro = str_replace(array("\r", "\n"), ' ', $_POST['infoIntro'] ?? "TESTANDO");
+            $prefacio = str_replace(array("\r", "\n"), ' ', $_POST['prefacio'] ?? "TESTANDO");
+            $nucleo = str_replace(array("\r", "\n"), ' ', $_POST['nucleo'] ?? "TESTANDO");
+            $assunto = str_replace(array("\r", "\n"), ' ', $_POST['assunto'] ?? "TESTANDO");
+            $encerramento = str_replace(array("\r", "\n"), ' ', $_POST['encerramento'] ?? "TESTANDO");
+
+            $dataOriginal = $data; // mantém o formato original
+            $data2 = new DateTime($dataOriginal, new DateTimeZone('America/Sao_Paulo'));
 
             $fmt = new IntlDateFormatter(
                 'pt_BR', // idioma
@@ -56,12 +57,42 @@ $data2 = new DateTime($dataOriginal, new DateTimeZone('America/Sao_Paulo'));
 
 
             $pdf = new TCPDF();
+            $pdf->SetFont('', '', 14);
+
             $pdf->setPrintHeader(false);
             $pdf->setPrintFooter(false);
-            $pdf->SetMargins(20, 40, 20);
+            $pdf->SetMargins(29, 40, 30);
             $pdf->AddPage();
             $logo = __DIR__ . '/../Img/imgLogo.png';
-            $pdf->Image($logo, 15, 20, 40, 0, '', '', '', false, 300, '', false, false, 0, false, false, false);
+            // Pega as dimensões originais em pixels
+            list($width, $height) = getimagesize($logo);
+
+            // Converte pixels para milímetros (1px = 0.264583 mm)
+            $width_mm = $width * 0.264583;
+            $height_mm = $height * 0.264583;
+
+            // Fator de aumento (por exemplo, 1.5x maior)
+            $escala = 0.7;
+
+            $pdf->Image(
+                $logo,          // caminho da imagem
+                5,             // posição X
+                5,             // posição Y
+                $width_mm * $escala,  // nova largura (maior)
+                $height_mm * $escala, // nova altura (proporcional)
+                '',
+                '',
+                '',
+                false,
+                10000,            // 600 DPI garante alta qualidade
+                '',
+                false,
+                false,
+                0,
+                false,
+                false,
+                false
+            );
 
             $pdf->Write(0, $nucleo);
             $pdf->Ln(5);
