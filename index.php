@@ -9,7 +9,7 @@ $model = new AtaModel();
 $view = new AtaScreen();
 $controller = new AtaController($model, $view);
 $acao = $_GET['acao'] ?? 'buscar';
-    $controller->gerarAta();
+$controller->gerarAta();
 //$controller->buscarAta();
 
 

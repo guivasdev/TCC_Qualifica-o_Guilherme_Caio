@@ -3,8 +3,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 class AtaModel
 {
-    public function verificarCampos()
-    {
+    public function criarAta() {
+    // ... todo o código que estava em verificarCampos()
+
         if (ob_get_length())
             ob_end_clean();
 
@@ -116,5 +117,5 @@ class AtaModel
 }
 
 $ata = new AtaModel();
-$ata->verificarCampos();
+$ata->criarAta();
 ?>
