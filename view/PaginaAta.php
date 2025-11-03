@@ -143,7 +143,7 @@ echo '
 </header>
 
 <main>
-  <h2>Nova ATA</h2>
+  <h2 class="fw-bold">Nova ATA</h2>
 
   <form id="formAta" method="post" action="model/AtaModel.php">
   <div class="form-section">
@@ -164,29 +164,34 @@ echo '
       <!-- Coluna Direita -->
       <div class="split-col">
 
-        
-
         <!-- Linha: Data / Local / Horário -->
         <div class="inline-row">
-          <div class="form-section">
+          <div class="form-section justify-content-center">
             <label for="data" class="form-label">Data</label>
             <input type="date" class="form-control" id="data" name="data" required>
           </div>
 
           <div class="form-section">
             ' . $this->inputComPredef("local", "local", ["IFSP", "SENAI", "Prefeitura"]) . '
+          </div>
 
+          <div class="form-section inline-row justify-content-center">
+          <div class="flex-column">
+            <label for="horario" class="form-label">Hora Início</label>
+            <input type="time" class="form-control" id="horario" name="horaInicial" required>
             </div>
-
-          <div class="form-section">
-            <label for="horario" class="form-label">Horário</label>
-            <input type="time" class="form-control" id="horario" name="horario" required>
+            <div class="flex-column">
+            <label for="horario" class="form-label">Hora Final</label>
+            <input type="time" class="form-control" id="horario" name="horaFinal" required>
+             </div>
           </div>
         </div>
 
+        ' . $this->inputComPredef("Informação Introdutória", "infoIntro", ["Reunião para deliberação", "Início das atividades do semestre"]) . '
+
+
         ' . $this->inputComPredef("Prefácio", "prefacio", ["Abertura de atividades", "Planejamento do semestre"]) . '
 
-        ' . $this->inputComPredef("Informação Introdutória", "infoIntro", ["Reunião para deliberação", "Início das atividades do semestre"]) . '
 
         ' . $this->inputComPredef("Assunto", "assunto", ["Apresentação de projetos", "Avaliação institucional", "Planejamento do semestre"]) . '
 
