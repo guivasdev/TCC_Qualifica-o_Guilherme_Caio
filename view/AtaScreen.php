@@ -8,8 +8,7 @@ class AtaScreen implements IAtaView
 
     public function mostrarPaginaATA($resultado = null): void
     {
-        echo "<pre>DEBUG: Entrou na View</pre>";
-        include __DIR__ . '/PaginaAta.php';
+        include __DIR__ . '/ata/criar.php';
     }
 
 
