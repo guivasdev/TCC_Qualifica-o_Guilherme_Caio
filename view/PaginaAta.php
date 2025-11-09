@@ -157,7 +157,7 @@ echo '
 <main>
   <h2 class="fw-bold">Nova ATA</h2>
 
-  <form id="formAta" method="post" action="model/AtaModel.php">
+<form method="post" action="http://localhost/TCC_Qualifica-o_Guilherme_Caio/model/AtaModel.php">
   <div class="form-section">
 
           <label for="nome" class="form-label">Nome da ATA</label>

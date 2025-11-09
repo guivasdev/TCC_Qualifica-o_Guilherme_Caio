@@ -1,8 +1,4 @@
 <?php
-require_once 'model/AtaModel.php';
-require_once 'view/AtaScreen.php';
-require_once 'view/IncluirComponentes.php'; // ajuste o caminho conforme seu projeto
-
 class AtaController {
     private $model;
     private $view;
@@ -18,8 +14,10 @@ class AtaController {
     }
 
     public function buscarAta(){
-        $resultado = $this->model->buscarAta();
-        $this->view->mostrarBuscaATA($resultado);
+        $this->view->mostrarPaginaATA([
+            'status' => 'aguardando',
+            'mensagem' => 'Preencha os campos e gere uma nova ATA.'
+        ]);
     }
 }
 ?>

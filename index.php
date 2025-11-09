@@ -1,47 +1,19 @@
 <?php
-require_once 'model/AtaModel.php';
-require_once 'view/AtaScreen.php';
-require_once 'view/IncluirComponentes.php';
+require_once __DIR__ . '/model/AtaRepository.php';
+require_once __DIR__ . '/model/AtaModel.php';
+require_once __DIR__ . '/controller/AtaController.php';
+require_once __DIR__ . '/view/AtaScreen.php';
 
-require_once 'controller/AtaController.php';
-
-$model = new AtaModel();
+$repo = new AtaRepository();
+$model = new AtaModel($repo);
 $view = new AtaScreen();
 $controller = new AtaController($model, $view);
-$acao = $_GET['acao'] ?? 'buscar';
-$controller->gerarAta();
-//$controller->buscarAta();
 
-
-/*
-switch($acao){
-    case 'gerar':
-        $controller->gerarAta();
-        break;
-    case 'buscar':
-        $controller->buscarAta();
-        break;
-    case 'cadastrarComponente':
-        $campo = $_GET['campo'] ?? null;
-        $incluir = new IncluirComponentes();
-        switch($campo){
-            case 'Organização':
-                $incluir->mostrarPaginaOrganizacao([]);
-                break;
-            case 'Curso':
-                $incluir->mostrarPaginaCurso([]);
-                break;
-            case 'Local':
-                $incluir->mostrarPaginaLocal([]);
-                break;
-            case 'Integrantes':
-                $incluir->mostrarPaginaIntegrante([]);
-           ;
-        }
-        break;
-    default:
-        $controller->buscarAta();
+// Controle de fluxo
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Quando o botão "Gerar ATA" é clicado
+    $controller->gerarAta();
+} else {
+    // Primeira vez que o usuário entra
+    $controller->buscarAta();
 }
-        */
-
-?>
