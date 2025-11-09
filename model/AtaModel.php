@@ -16,42 +16,41 @@ class MeuPDF extends TCPDF
 
             $this->Image($logo, 5, 5, $width_mm * $escala, $height_mm * $escala, '', '', '', false, 300);
         }
-
         // Define margem após o cabeçalho
         $this->SetY(25);
     }
 
     // Rodapé (executa em todas as páginas)
-   public function Footer()
-{
-    // Altura do rodapé
-    $footerHeight = 20;
+    public function Footer()
+    {
+        // Altura do rodapé
+        $footerHeight = 20;
 
-    // Define posição Y (altura da página - rodapé)
-    $this->SetY(-$footerHeight);
+        // Define posição Y (altura da página - rodapé)
+        $this->SetY(-$footerHeight);
 
-    // Largura e altura da página
-    $pageWidth = $this->getPageWidth();
-    $pageHeight = $this->getPageHeight();
+        // Largura e altura da página
+        $pageWidth = $this->getPageWidth();
+        $pageHeight = $this->getPageHeight();
 
-    // Define cor e fonte do texto
-    $this->SetTextColor(95, 155, 167) ;// Branco
-    $this->SetFont('helvetica', '', 13);
+        // Define cor e fonte do texto
+        $this->SetTextColor(95, 155, 167);// Branco
+        $this->SetFont('helvetica', '', 13);
 
-    // Texto da esquerda
-    $leftText = "FHO Uniararas\nAv. Dr. Maximiliano Baruto, 500\nJd. Universitário - Araras/SP\nCEP: 13607-339";
+        // Texto da esquerda
+        $leftText = "FHO Uniararas\nAv. Dr. Maximiliano Baruto, 500\nJd. Universitário - Araras/SP\nCEP: 13607-339";
 
-    // Texto da direita
-    $rightText = "www.uniararas.br";
+        // Texto da direita
+        $rightText = "www.uniararas.br";
 
-    // Define a posição do texto esquerdo
-    $this->SetXY(7, $pageHeight - $footerHeight -10);
-    $this->MultiCell(0, 4, $leftText, 0, 'L', false, 1, '', '', true);
+        // Define a posição do texto esquerdo
+        $this->SetXY(7, $pageHeight - $footerHeight - 10);
+        $this->MultiCell(0, 4, $leftText, 0, 'L', false, 1, '', '', true);
 
-    // Define a posição do texto direito (domínio)
-    $this->SetXY(-40, $pageHeight - $footerHeight +2);
-    $this->Cell(0, 0, $rightText, 0, 0, 'R', false, '', 0, false, 'T', 'M');
-}
+        // Define a posição do texto direito (domínio)
+        $this->SetXY(-40, $pageHeight - $footerHeight + 2);
+        $this->Cell(0, 0, $rightText, 0, 0, 'R', false, '', 0, false, 'T', 'M');
+    }
 
 }
 
@@ -77,6 +76,9 @@ class AtaModel
             $assunto = str_replace(["\r", "\n"], ' ', $_POST['assunto'] ?? "TESTANDO");
             $encerramento = str_replace(["\r", "\n"], ' ', $_POST['encerramento'] ?? "TESTANDO");
 
+            // Remove os ":00" do final, mas mantém outros minutos (como :30)
+            $horarioInicio = preg_replace('/:00$/', '', $horarioInicio);
+            $horarioFinal = preg_replace('/:00$/', '', $horarioFinal);
             // --- Formatação de datas ---
             $data2 = new DateTime($data, new DateTimeZone('America/Sao_Paulo'));
 
@@ -99,6 +101,11 @@ class AtaModel
             );
 
             $novaData = $fmt->format($data2);
+            $textoData = preg_replace_callback(
+                "/de (\p{L}+)/u",
+                fn($m) => "de " . ucfirst($m[1]),
+                $novaData
+            );
             $novaDataEncerramento = $dataEncerramento->format($data2);
 
             // --- Criação do PDF com a classe personalizada ---
@@ -116,7 +123,7 @@ class AtaModel
             $pdf->Write(0, $organizacao);
             $pdf->Ln(12);
 
-            $pdf->Write(0, 'Data: ' . $novaData);
+            $pdf->Write(0, 'Data: ' . $textoData);
             $pdf->Ln(6);
             $pdf->Write(0, 'Local: ' . $local);
             $pdf->Ln(6);
@@ -133,7 +140,7 @@ class AtaModel
             // --- infoIntro ---
             $htmlIntro = $style . '<p>' . nl2br($infoIntro) . '</p>';
             $pdf->writeHTML($htmlIntro, true, false, true, false, '');
-            $pdf->Ln(10);
+            $pdf->Ln(5);
 
             // --- lista de integrantes ---
             for ($i = 0; $i < 5; $i++) {
@@ -150,7 +157,7 @@ class AtaModel
             // --- assunto ---
             $htmlAssunto = $style . '<p>' . nl2br($assunto) . '</p>';
             $pdf->writeHTML($htmlAssunto, true, false, true, false, '');
-            $pdf->Ln(10);
+            $pdf->Ln(5);
 
             // --- encerramento ---
             $htmlEncerramento = $style . '<p>' . nl2br($encerramento) . '</p>';

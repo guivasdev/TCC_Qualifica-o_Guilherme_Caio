@@ -51,13 +51,29 @@ echo '
       padding-bottom: 6px;
     }
 
-    .form-control {
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      transition: all 0.2s ease-in-out;
-      
-    }
-      .form-control-Text {
+  .form-control {
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  transition: all 0.2s ease-in-out;
+    line-height: 1.6;         /* <-- Espaçamento vertical suave */
+}
+
+.form-control:focus {
+  border-color: #4e73df;
+  box-shadow: 0 0 6px rgba(78,115,223,0.25);
+}
+
+/* Caso o campo seja contenteditable */[contenteditable="true"].form-control {
+  width: 100%;
+  min-height: 120px;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  line-height: 1.6;
+
+
+}
+
+    .form-control-Text {
       width:100%;
       border-radius: 6px;
       border: 1px solid #ccc;
@@ -65,10 +81,6 @@ echo '
       height:100px;
     }
 
-    .form-control:focus {
-      border-color: #4e73df;
-      box-shadow: 0 0 6px rgba(78,115,223,0.25);
-    }
 
     .form-section {
       margin-bottom: 1.2rem;
@@ -147,9 +159,43 @@ echo '
 
   <form id="formAta" method="post" action="model/AtaModel.php">
   <div class="form-section">
+
           <label for="nome" class="form-label">Nome da ATA</label>
-          <input type="text" class="form-control" id="nome" name="nome" required>
-        </div>
+<input type="text" class="form-control" id="nome" name="nome" required>
+
+<script>
+(function(){
+  const input = document.getElementById("nome");
+
+  // Função de normalização: substitui 1 a → 1ª e 2 o → 2º
+  function normalizeText(text) {
+    return text
+      .replace(/(\d+)[\s\n\r\u00A0\u200B]*a(?![\w>])/gi, "$1ª")
+      .replace(/(\d+)[\s\n\r\u00A0\u200B]*o(?![\w>])/gi, "$1º");
+  }
+
+  // Atualiza o valor ao digitar
+  input.addEventListener("input", () => {
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const newValue = normalizeText(input.value);
+    if (newValue !== input.value) {
+      input.value = newValue;
+      // restaura a posição do cursor
+      input.setSelectionRange(start, end);
+    }
+  });
+
+  // Normaliza também ao colar
+  input.addEventListener("paste", (e) => {
+    e.preventDefault();
+    const clipboard = e.clipboardData || window.clipboardData;
+    let text = clipboard.getData("text/plain");
+    document.execCommand("insertText", false, normalizeText(text));
+  });
+})();
+</script>
+  </div>
 
     <div class="split-row">
       <!-- Coluna Esquerda -->
@@ -189,9 +235,7 @@ echo '
 
         ' . $this->inputComPredef("Informação Introdutória", "infoIntro", ["Reunião para deliberação", "Início das atividades do semestre"]) . '
 
-
         ' . $this->inputComPredef("Prefácio", "prefacio", ["Abertura de atividades", "Planejamento do semestre"]) . '
-
 
         ' . $this->inputComPredef("Assunto", "assunto", ["Apresentação de projetos", "Avaliação institucional", "Planejamento do semestre"]) . '
 
@@ -230,6 +274,28 @@ echo '
     });
   });
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("textarea").forEach(el => {
+    el.addEventListener("paste", e => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+
+      // Insere exatamente o texto copiado (sem normalizar)
+      el.value = el.value.slice(0, start) + text + el.value.slice(end);
+
+      // Reposiciona o cursor no fim do texto colado
+      el.selectionStart = el.selectionEnd = start + text.length;
+    });
+  });
+});
+</script>
+
+
+
 </body>
 </html>
 ';
