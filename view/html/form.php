@@ -121,120 +121,124 @@ $base = '/TCC_Qualifica-o_Guilherme_Caio';
 <body>
 
     <div class="container">
-    <h2>Cadastrar Dados</h2>
+        <h2>Cadastrar Dados</h2>
 
-    <form action="?acao=salvar" method="POST" id="form-dinamico">
-        <input type="hidden" name="tabela" id="tabela">
+        <form action="?acao=salvar" method="POST" id="form-dinamico">
+            <input type="hidden" name="tabela" id="tabela">
 
-        <div class="form-group">
-            <label>Escolha o tipo de cadastro:</label>
-            <select id="tipo-cadastro">
-                <option value="">Selecione...</option>
-                <option value="organizacao">Organização</option>
-                <option value="nucleo">Núcleo</option>
-                <option value="curso">Curso</option>
-                <option value="cargo">Cargo</option>
-                <option value="integrante">Integrante</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label>Escolha o tipo de cadastro:</label>
+                <select id="tipo-cadastro">
+                    <option value="">Selecione...</option>
+                    <option value="organizacao">Organização</option>
+                    <option value="nucleo">Núcleo</option>
+                    <option value="curso">Curso</option>
+                    <option value="cargo">Cargo</option>
+                    <option value="integrante">Integrante</option>
+                </select>
+            </div>
 
-        <!-- Campos Dinâmicos -->
-        <div id="campos-dinamicos"></div>
+            <!-- Campos Dinâmicos -->
+            <div id="campos-dinamicos"></div>
 
-        <button type="submit" id="btn-salvar" style="display:none;">Salvar</button>
-    </form>
-</div>
+            <button type="submit" id="btn-salvar" style="display:none;">Salvar</button>
+            <a href="<?php echo $base; ?>/index.php?acao=buscar" class="btn btn-secondary px-4 py-4 fs-5">
+                <i class="bi bi-arrow-left-circle"></i> Voltar
+            </a>
+        </form>
+    </div>
 
-<style>
-.form-group {
-    margin-bottom: 20px;
-}
+    <style>
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-select, input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 8px;
-    font-size: 15px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    background: #1e1e1e;
-    color: #fff;
-}
+        select,
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #1e1e1e;
+            color: #fff;
+        }
 
-button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: #0d6efd;
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.25s;
-}
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #0d6efd;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+        }
 
-button:hover {
-    background: #0b5ed7;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
-}
-</style>
+        button:hover {
+            background: #0b5ed7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
+        }
+    </style>
 
-<script>
-// Dados do banco (você deve passar via PHP)
-const organizacoes = <?= json_encode($organizacoes) ?>;
-const nucleos = <?= json_encode($nucleos) ?>;
-const cursos = <?= json_encode($cursos) ?>;
-const cargos = <?= json_encode($cargos) ?>;
+    <script>
+        // Dados do banco (você deve passar via PHP)
+        const organizacoes = <?= json_encode($organizacoes) ?>;
+        const nucleos = <?= json_encode($nucleos) ?>;
+        const cursos = <?= json_encode($cursos) ?>;
+        const cargos = <?= json_encode($cargos) ?>;
 
-const tipoSelect = document.getElementById('tipo-cadastro');
-const camposDiv = document.getElementById('campos-dinamicos');
-const tabelaInput = document.getElementById('tabela');
-const btnSalvar = document.getElementById('btn-salvar');
+        const tipoSelect = document.getElementById('tipo-cadastro');
+        const camposDiv = document.getElementById('campos-dinamicos');
+        const tabelaInput = document.getElementById('tabela');
+        const btnSalvar = document.getElementById('btn-salvar');
 
-tipoSelect.addEventListener('change', function() {
-    camposDiv.innerHTML = '';
-    btnSalvar.style.display = 'none';
-    tabelaInput.value = '';
+        tipoSelect.addEventListener('change', function () {
+            camposDiv.innerHTML = '';
+            btnSalvar.style.display = 'none';
+            tabelaInput.value = '';
 
-    const tipo = this.value;
-    if (!tipo) return;
+            const tipo = this.value;
+            if (!tipo) return;
 
-    tabelaInput.value = tipo;
-    btnSalvar.style.display = 'block';
+            tabelaInput.value = tipo;
+            btnSalvar.style.display = 'block';
 
-    if (tipo === 'organizacao') {
-        camposDiv.innerHTML = `<label>Nome da Organização:</label>
+            if (tipo === 'organizacao') {
+                camposDiv.innerHTML = `<label>Nome da Organização:</label>
                                <input type="text" name="nome" placeholder="Digite o nome da organização" required>`;
-    }
-    else if (tipo === 'nucleo') {
-        let options = organizacoes.map(o => `<option value="${o.id}">${o.nome}</option>`).join('');
-        camposDiv.innerHTML = `<label>Selecione a Organização:</label>
+            }
+            else if (tipo === 'nucleo') {
+                let options = organizacoes.map(o => `<option value="${o.id}">${o.nome}</option>`).join('');
+                camposDiv.innerHTML = `<label>Selecione a Organização:</label>
                                <select name="organizacao_id" required>
                                    <option value="">Selecione...</option>
                                    ${options}
                                </select>
                                <label>Nome do Núcleo:</label>
                                <input type="text" name="nome" placeholder="Digite o nome do núcleo" required>`;
-    }
-    else if (tipo === 'curso') {
-        let options = nucleos.map(n => `<option value="${n.id}">${n.nome}</option>`).join('');
-        camposDiv.innerHTML = `<label>Selecione o Núcleo:</label>
+            }
+            else if (tipo === 'curso') {
+                let options = nucleos.map(n => `<option value="${n.id}">${n.nome}</option>`).join('');
+                camposDiv.innerHTML = `<label>Selecione o Núcleo:</label>
                                <select name="nucleo_id" required>
                                    <option value="">Selecione...</option>
                                    ${options}
                                </select>
                                <label>Nome do Curso:</label>
                                <input type="text" name="nome" placeholder="Digite o nome do curso" required>`;
-    }
-    else if (tipo === 'cargo') {
-        camposDiv.innerHTML = `<label>Nome do Cargo:</label>
+            }
+            else if (tipo === 'cargo') {
+                camposDiv.innerHTML = `<label>Nome do Cargo:</label>
                                <input type="text" name="nome" placeholder="Digite o nome do cargo" required>`;
-    }
-    else if (tipo === 'integrante') {
-        let cursoOptions = cursos.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
-        let cargoOptions = cargos.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
-        camposDiv.innerHTML = `<label>Selecione o Curso:</label>
+            }
+            else if (tipo === 'integrante') {
+                let cursoOptions = cursos.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+                let cargoOptions = cargos.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+                camposDiv.innerHTML = `<label>Selecione o Curso:</label>
                                <select name="curso_id" required>
                                    <option value="">Selecione...</option>
                                    ${cursoOptions}
@@ -246,12 +250,12 @@ tipoSelect.addEventListener('change', function() {
                                </select>
                                <label>Nome do Integrante:</label>
                                <input type="text" name="nome" placeholder="Digite o nome do integrante" required>`;
-    }
-});
-</script>
+            }
+        });
+    </script>
 
 
-</div>
+    </div>
 
 
 

@@ -56,6 +56,20 @@ class MeuPDF extends TCPDF
 
 class AtaModel
 {
+    public static function fromArray(array $dados): Ata
+    {
+        $ata = new Ata();
+        $ata->id = $dados['id'] ?? null;
+        $ata->titulo = $dados['titulo'] ?? '';
+        $ata->data = $dados['data'] ?? '';
+        $ata->tipo = $dados['tipo'] ?? '';
+        $ata->assuntos = $dados['assuntos'] ?? '';
+        $ata->palavras_chave = $dados['palavras_chave'] ?? '';
+        $ata->resumo = $dados['resumo'] ?? '';
+
+        return $ata;
+    }
+
     public function criarAta()
     {
         if (ob_get_length())

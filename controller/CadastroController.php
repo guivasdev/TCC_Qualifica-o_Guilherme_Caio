@@ -3,8 +3,9 @@
 class CadastroController
 {
     private Cadastro $model;
-    private $formView; // view do formulário
-    private $ataView;  // view da busca
+    private $formView;
+    private $ataView;
+
     private array $tabelas = [
         'Organização' => 'organizacao',
         'Núcleo Institucional' => 'nucleo',
@@ -19,21 +20,27 @@ class CadastroController
         $this->ataView = $ataView;
     }
 
-    // Mostra formulário de cadastro
-
+    // -----------------------------------------------
+    // FORMULÁRIO ÚNICO
+    // -----------------------------------------------
     public function mostrarFormularioUnico()
     {
-        // Buscar todos os dados necessários
         $organizacoes = $this->model->buscarTodas('organizacao');
         $nucleos = $this->model->buscarTodas('nucleo');
         $cursos = $this->model->buscarTodas('curso');
         $cargos = $this->model->buscarTodas('cargo');
 
-        // Passa tudo para a view
-        $this->formView->mostrarFormularioUnico($organizacoes, $nucleos, $cursos, $cargos);
+        $this->formView->mostrarFormularioUnico(
+            $organizacoes,
+            $nucleos,
+            $cursos,
+            $cargos
+        );
     }
 
-    // Salva cadastro dinâmico
+    // -----------------------------------------------
+    // SALVAR REGISTRO
+    // -----------------------------------------------
     public function salvarCadastro()
     {
         if (!isset($_POST['tabela'])) {
@@ -43,38 +50,57 @@ class CadastroController
 
         $tabela = $_POST['tabela'];
 
-        // Remove campo tabela para não inserir no banco
         $dados = $_POST;
         unset($dados['tabela']);
 
-
-        $item = new CadastroItem($_POST['tabela'], $dados);
+        $item = new CadastroItem($tabela, $dados);
         $resultado = $this->model->salvar($item);
 
-        if ($resultado) {
-            $_SESSION['mensagem'] = "✔ Registro salvo com sucesso!";
-        } else {
-            $_SESSION['mensagem'] = "✘ Erro ao salvar.";
-        }
+        $_SESSION['mensagem'] = $resultado
+            ? "✔ Registro salvo com sucesso!"
+            : "✘ Erro ao salvar.";
+
         header("Location: index.php?acao=busca");
         exit;
-
     }
 
-    // Mostra todos os registros
+    // -----------------------------------------------
+    // LISTAR REGISTROS
+    // -----------------------------------------------
     public function mostrarBusca()
     {
-        // Se quiser, pode passar a tabela como parâmetro
         $tabela = $_GET['tabela'] ?? 'organizacao';
-        $resultado = $this->model->buscarTodas($tabela);
-        $this->ataView->mostrarBuscaATA($resultado, $tabela);
+        $dados = $this->model->buscarTodas($tabela);
+
+        $this->ataView->mostrarBuscaATA($dados, $tabela);
     }
 
-    // Mostra página de registro específico
-    public function mostrarPaginaAta($id, $tabela = 'organizacao')
+    // -----------------------------------------------
+    // MOSTRAR ATA (POR ID OU ÚLTIMA)
+    // -----------------------------------------------
+    public function mostrarPaginaAta($id)
     {
-        $resultado = $this->model->buscarPorId($id, $tabela);
-        $this->ataView->mostrarPaginaATA($resultado);
+        $tabela = 'documento';
+
+        // Se não recebeu ID → busca o último documento
+        if ($id === null) {
+            $ultimo = $this->model->buscarUltimoRegistro($tabela);
+
+            if ($ultimo) {
+                $id = $ultimo['id']; // pega o ID do último documento
+            } else {
+                // Nenhum documento → mostra página vazia
+                $this->ataView->mostrarPaginaAta(null);
+                return;
+            }
+        }
+
+        // Carrega documento pelo ID
+        $dados = $this->model->buscarPorId($tabela, $id);
+
+        $this->ataView->mostrarPaginaAta($dados);
     }
+
+    
 
 }

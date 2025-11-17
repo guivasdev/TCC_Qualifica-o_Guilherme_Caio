@@ -1,25 +1,44 @@
 <?php
-function inputComPredef($label, $name, $opcoes)
-{
-  // Lista de nomes que devem usar textarea
-  $textareaNames = ["infoIntro", "prefacio", "assunto", "encerramento"]; // adicione outros nomes se necessário
+if (!function_exists('inputSelectEInput')) {
 
-  echo '<div class="form-section">';
-  echo "<label for='{$name}' class='form-label'>{$label}</label>";
+    function inputSelectEInput($label, $name, $opcoes)
+    {
+        $html = "<div class='form-section'>";
+        $html .= "<label class='form-label'>{$label}</label>";
 
-  if (in_array($name, $textareaNames)) {
-    // Usar textarea
-    echo "<textarea id='{$name}' name='{$name}' class='form-control' rows='4'></textarea>";
-  } else {
-    // Usar input com datalist
-    echo "<input list='{$name}_list' id='{$name}' name='{$name}' class='form-control'>";
-    echo "<datalist id='{$name}_list'>";
-    foreach ($opcoes as $opcao) {
-      echo "<option value='{$opcao}'>";
+        // SELECT vindo do banco
+        $html .= "<div class='d-flex gap-2'>";
+
+        $html .= "<select name='{$name}_id' class='form-control' style='max-width:150px'>";
+        $html .= "<option value=''>Selecionar</option>";
+
+        foreach ($opcoes as $op) {
+            $html .= "<option value='{$op['id']}'>{$op['nome']}</option>";
+        }
+
+        $html .= "</select>";
+
+        // INPUT para novo valor
+        $html .= "<input type='text' class='form-control' name='{$name}_novo' placeholder='Novo {$label}'>";
+
+        $html .= "</div></div>";
+
+        return $html;
     }
-    echo "</datalist>";
-  }
-
-  echo '</div>';
 }
+if (!function_exists('inputTextarea')) {
+
+    function inputTextarea($label, $name)
+    {
+        $html = "<div class='form-section'>";
+        $html .= "<label class='form-label' for='{$name}'>{$label}</label>";
+        $html .= "<textarea class='form-control' id='{$name}' name='{$name}' rows='3'></textarea>";
+        $html .= "</div>";
+
+        return $html;
+
+    }
+}
+
+
 ?>
