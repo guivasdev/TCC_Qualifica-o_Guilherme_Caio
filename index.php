@@ -1,25 +1,42 @@
 <?php
+// index.php (topo)
+require_once __DIR__ . '/model/CadastroRepository.php';
+require_once __DIR__ . '/model/Cadastro.php';
+require_once __DIR__ . '/model/CadastroItem.php';
+require_once __DIR__ . '/controller/CadastroController.php';
 
-require_once __DIR__ . '/model/AtaRepository.php';
-require_once __DIR__ . '/model/AtaModel.php';
-require_once __DIR__ . '/controller/AtaController.php';
+// Views - garanta que os ficheiros existam exatamente nesses caminhos
+require_once __DIR__ . '/view/CadastroScreen.php';
 require_once __DIR__ . '/view/AtaScreen.php';
 
-$repo = new AtaRepository();
-$model = new AtaModel($repo);
-$view = new AtaScreen();
-$controller = new AtaController($model, $view);
+// Instâncias
+$repo = new CadastroRepository();
+$model = new Cadastro($repo);
 
-// Pega a ação da URL
+$formView = new CadastroScreen(); // agora deve funcionar
+$ataView  = new AtaScreen();
+
+$controller = new CadastroController($model, $formView, $ataView);
+
+
 $acao = $_GET['acao'] ?? 'buscar';
 
-// Decide o fluxo
 switch ($acao) {
 
-    case 'gerar':
-        $controller->gerarAta();   // salva e valida
+    case 'salvar':
+        $controller->salvarCadastro();
         break;
+
+    case 'buscar':
+        $controller->mostrarBusca();
+        break;
+
+    case 'gerar':
+        $id = $_GET['id'] ?? null;
+        $controller->mostrarPaginaAta($id);
+        break;
+
     default:
-        $controller->buscarAta();
+        $controller->mostrarFormulario();
         break;
 }
