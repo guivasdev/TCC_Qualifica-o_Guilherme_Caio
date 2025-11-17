@@ -9,8 +9,8 @@ class CadastroController
     private array $tabelas = [
         'Organização' => 'organizacao',
         'Núcleo Institucional' => 'nucleo',
-        'Curso' => 'curso',
-        'Integrante' => 'integrante'
+        'Curso' => 'cursos',
+        'Integrante' => 'integrantes'
     ];
 
     public function __construct(Cadastro $model, $formView, $ataView)
@@ -25,13 +25,13 @@ class CadastroController
     // -----------------------------------------------
     public function mostrarFormularioUnico()
     {
-        $organizacoes = $this->model->buscarTodas('organizacao');
+        $organizacao = $this->model->buscarTodas('organizacao');
         $nucleos = $this->model->buscarTodas('nucleo');
         $cursos = $this->model->buscarTodas('curso');
         $cargos = $this->model->buscarTodas('cargo');
 
         $this->formView->mostrarFormularioUnico(
-            $organizacoes,
+            $organizacao,
             $nucleos,
             $cursos,
             $cargos
@@ -60,7 +60,7 @@ class CadastroController
             ? "✔ Registro salvo com sucesso!"
             : "✘ Erro ao salvar.";
 
-        header("Location: index.php?acao=busca");
+        header("Location: index.php?acao=buscar");
         exit;
     }
 

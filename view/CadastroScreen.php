@@ -2,10 +2,10 @@
 
 class CadastroScreen
 {
-    public function mostrarFormularioUnico($organizacoes, $nucleos, $cursos, $cargos)
+    public function mostrarFormularioUnico($organizacao, $nucleos, $cursos, $cargos)
     {
         // Torna variáveis acessíveis dentro do criar.php
-        $orgs = $organizacoes;
+        $orgs = $organizacao;
         $nucs = $nucleos;
         $crs = $cursos;
         $cgs = $cargos;
