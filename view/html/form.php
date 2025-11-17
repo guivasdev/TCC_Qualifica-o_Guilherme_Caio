@@ -119,7 +119,7 @@ $cargos = $cargos ?? [];
             <option value="organizacao">Organização</option>
             <option value="nucleo">Núcleo</option>
             <option value="cursos">Curso</option>
-            <option value="cargos">Cargo</option>
+            <option value="cargo">Cargo</option>
             <option value="integrante">Integrante</option>
         </select>
 

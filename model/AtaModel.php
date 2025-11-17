@@ -88,7 +88,7 @@ class AtaModel
     // =======================================================
     //  CRIAR ATA (CORRIGIDO)
     // =======================================================
-    public function criarAta($organizacoes, $cursos, $nucleos, $cargos)
+   public function criarAta($organizacoes, $cursos, $nucleos, $cargos)
 {
     if (ob_get_length()) {
         ob_end_clean();
@@ -197,7 +197,5 @@ class AtaModel
     } else {
         echo "<script>alert('Formulário não enviado corretamente.');</script>";
     }
-}
-
-}
+}}
 ?>
