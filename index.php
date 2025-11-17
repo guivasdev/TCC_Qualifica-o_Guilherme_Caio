@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/model/AtaRepository.php';
 require_once __DIR__ . '/model/AtaModel.php';
 require_once __DIR__ . '/controller/AtaController.php';
@@ -9,11 +10,16 @@ $model = new AtaModel($repo);
 $view = new AtaScreen();
 $controller = new AtaController($model, $view);
 
-// Controle de fluxo
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Quando o botão "Gerar ATA" é clicado
-    $controller->gerarAta();
-} else {
-    // Primeira vez que o usuário entra
-    $controller->buscarAta();
+// Pega a ação da URL
+$acao = $_GET['acao'] ?? 'buscar';
+
+// Decide o fluxo
+switch ($acao) {
+
+    case 'gerar':
+        $controller->gerarAta();   // salva e valida
+        break;
+    default:
+        $controller->buscarAta();
+        break;
 }

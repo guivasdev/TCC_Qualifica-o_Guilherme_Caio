@@ -16,5 +16,19 @@ class AtaRepository implements IAtaRepository {
         $json = file_get_contents($this->path);
         return json_decode($json, true) ?? [];
     }
+
+       public function buscar(string $filtro, string $texto): ?Ata
+    {
+        // MOCK — substitua por SELECT no banco futuramente
+        $ata = new Ata();
+        $ata->titulo = "ATA sobre gerenciamento de horário noturno - 2025";
+        $ata->data   = "25/10/2025";
+        $ata->tipo   = "online/presencial";
+        $ata->assuntos = "ass 01, ass 02, ass 03";
+        $ata->palavras_chave = "";
+        $ata->resumo = "";
+
+        return $ata;
+    }
 }
 ?>

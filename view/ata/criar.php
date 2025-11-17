@@ -5,7 +5,7 @@ $base = '/TCC_Qualifica-o_Guilherme_Caio';
 ?>
 <link rel="stylesheet" href="<?php echo $base; ?>/externo/CriarAta.css">
 
-<form id="formAta" method="post" action="http://localhost/TCC_Qualifica-o_Guilherme_Caio/model/AtaModel.php">
+<form id="formAta" method="post" action="/TCC_Qualifica-o_Guilherme_Caio/index.php">
   <div class="form-section">
     <label for="nome" class="form-label">Nome da ATA</label>
     <input type="text" class="form-control" id="nome" name="nome" required>
@@ -59,9 +59,11 @@ $base = '/TCC_Qualifica-o_Guilherme_Caio';
     <button type="submit" class="btn btn-primary px-4 py-4 fs-5">
       <i class="bi bi-file-earmark-text"></i> Gerar ATA
     </button>
-    <button class="btn btn-secondary px-4 py-4 fs-5">
+
+    <a href="<?php echo $base; ?>/index.php?acao=buscar" class="btn btn-secondary px-4 py-4 fs-5">
       <i class="bi bi-arrow-left-circle"></i> Voltar
-    </button>
+    </a>
+
   </div>
 </form>
 <?php include 'footer.php'; ?>

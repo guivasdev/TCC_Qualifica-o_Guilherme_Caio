@@ -14,7 +14,7 @@ class AtaController {
     }
 
     public function buscarAta(){
-        $this->view->mostrarPaginaATA([
+        $this->view->mostrarBuscaATA([
             'status' => 'aguardando',
             'mensagem' => 'Preencha os campos e gere uma nova ATA.'
         ]);
