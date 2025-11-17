@@ -1,5 +1,9 @@
 <?php
 // index.php (topo)
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/model/CadastroRepository.php';
 require_once __DIR__ . '/model/Cadastro.php';
 require_once __DIR__ . '/model/CadastroItem.php';
@@ -25,7 +29,7 @@ $acao = $_GET['acao'] ?? 'buscar';
 
 switch ($acao) {
 
-    case 'salvar':
+    case 'salvarForm':
         $controller->salvarCadastro();
         break;
 
@@ -36,7 +40,7 @@ switch ($acao) {
         $id = $_GET['id'] ?? null;
         $controller->mostrarPaginaAta($id);
         break;
-    case 'gerar2':
+    case 'gerarAta':
         $controller2->gerarAta();
 
         break;

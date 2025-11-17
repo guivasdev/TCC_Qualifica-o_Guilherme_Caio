@@ -31,22 +31,25 @@ require_once 'componentes.php';
 ?>
 
 <link rel="stylesheet" href="<?php echo $base; ?>/externo/CriarAta.css">
+<form id="formAta" method="post" action="/TCC_Qualifica-o_Guilherme_Caio-master/index.php?acao=gerarAta">
 
-<form id="formAta" method="post" action="/TCC_Qualifica-o_Guilherme_Caio-master/index.php?acao=gerar2">
+  <!-- TABELA QUE SERÁ SALVA -->
+  <input type="hidden" name="tabela" value="documento">
 
   <div class="form-section">
-    <label for="nome" class="form-label">Nome da ATA</label>
-    <input type="text" class="form-control" id="nome" name="nome" required>
+    <label for="titulo" class="form-label">Nome da ATA</label>
+    <input type="text" class="form-control" id="titulo" name="titulo" required>
   </div>
 
   <div class="split-row">
     <div class="split-col">
 
       <?php
+      // ALTERADO: nomes iguais aos da tabela
       echo inputSelectEInput("Organização", "organizacao", $organizacao);
       echo inputSelectEInput("Núcleo Institucional", "nucleo", $nucleos);
       echo inputSelectEInput("Curso", "curso", $cursos);
-      echo inputSelectEInput("Integrantes", "integrante", $cargos);
+      echo inputSelectEInput("Integrante", "integrante", $cargos);
       ?>
 
     </div>
@@ -59,34 +62,32 @@ require_once 'componentes.php';
           <input type="date" class="form-control" name="data" required>
         </div>
 
-       <div class="form-section">
+        <div class="form-section">
           <label for="Local" class="form-label">Local</label>
-          <input type="Local" class="form-control" name="local" required>
+          <input type="text" class="form-control" name="local" required>
         </div>
 
         <div class="form-section inline-row">
           <div class="flex-column">
             <label class="form-label">Hora Início</label>
-            <input type="time" class="form-control" name="horaInicial" required>
+            <input type="time" class="form-control" name="hora_inicial" required>
           </div>
           <div class="flex-column">
             <label class="form-label">Hora Final</label>
-            <input type="time" class="form-control" name="horaFinal" required>
+            <input type="time" class="form-control" name="hora_final" required>
           </div>
         </div>
       </div>
 
       <div class="campos-ata">
         <?php
-        echo inputTextarea("Informação Introdutória", "infoIntro");
+        // ALTERADOS para bate com o banco
+        echo inputTextarea("Informação Introdutória", "informacao_introdutoria");
         echo inputTextarea("Prefácio", "prefacio");
-        echo inputTextarea("Assunto", "assunto");
+        echo inputTextarea("Assunto", "assunto"); // esse você decide se vai salvar ou gerar apenas no PDF
         echo inputTextarea("Encerramento", "encerramento");
-
         ?>
       </div>
-
-
     </div>
   </div>
 

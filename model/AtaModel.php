@@ -36,7 +36,7 @@ class MeuPDF extends TCPDF
         $rightText = "www.uniararas.br";
 
         $this->SetXY(7, $pageHeight - $footerHeight - 10);
-        $this->MultiCell(0, 4, $leftText, 0, 'L', false, 1);
+        $this->MultiCell(0, 4, $leftText, 0, 'L', false, 1, '', '', true);
 
         $this->SetXY(-40, $pageHeight - $footerHeight + 2);
         $this->Cell(0, 0, $rightText, 0, 0, 'R');
@@ -44,12 +44,23 @@ class MeuPDF extends TCPDF
 }
 
 
-
 // =======================================================
 //  AtaModel
 // =======================================================
 class AtaModel
 {
+    public static function fromArray(array $dados): Ata
+    {
+        $ata = new Ata();
+        $ata->id = $dados['id'] ?? null;
+        $ata->titulo = $dados['titulo'] ?? '';
+        $ata->data = $dados['data'] ?? '';
+        $ata->tipo = $dados['tipo'] ?? '';
+        $ata->assuntos = $dados['assuntos'] ?? '';
+        $ata->palavras_chave = $dados['palavras_chave'] ?? '';
+        $ata->resumo = $dados['resumo'] ?? '';
+        return $ata;
+    }
 
     // -------------------------------------------------------
     //  Função dinâmica (corrigida)
@@ -74,115 +85,119 @@ class AtaModel
         return "";
     }
 
-
     // =======================================================
-    //  CRIA ATA (CORRIGIDO COMPLETAMENTE)
+    //  CRIAR ATA (CORRIGIDO)
     // =======================================================
     public function criarAta($organizacoes, $cursos, $nucleos, $cargos)
-    {
-        // IMPORTANTE: limpar buffer antes de gerar PDF
-        if (ob_get_length()) ob_end_clean();
-
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-            // Select/Input dinâmicos
-            $organizacao = $this->obterValorCampo('organizacao', $organizacoes);
-            $curso = $this->obterValorCampo('curso', $cursos);
-            $nucleo = $this->obterValorCampo('nucleo', $nucleos);
-            $cargo = $this->obterValorCampo('cargo', $cargos);
-
-            // Campos simples
-            $local = $_POST['local'] ?? "";
-            $data = $_POST['data'] ?? "";
-            $horaInicial = $_POST['horaInicial'] ?? "";
-            $horaFinal   = $_POST['horaFinal'] ?? "";
-
-            $infoIntro = $_POST['infoIntro'] ?? "";
-            $prefacio = $_POST['prefacio'] ?? "";
-            $assunto = $_POST['assunto'] ?? "";
-            $encerramento = $_POST['encerramento'] ?? "";
-
-            // Remover quebras de linha
-            foreach (['local', 'data', 'horaInicial', 'horaFinal', 'infoIntro', 'prefacio', 'assunto', 'encerramento'] as $c) {
-                ${$c} = str_replace(["\r", "\n"], ' ', ${$c});
-            }
-
-            // Remover :00 dos horários
-            $horaInicial = preg_replace('/:00$/', '', $horaInicial);
-            $horaFinal   = preg_replace('/:00$/', '', $horaFinal);
-
-            // Criar data no formato extenso
-            try {
-                $data2 = new DateTime($data, new DateTimeZone('America/Sao_Paulo'));
-            } catch (Exception $e) {
-                $data2 = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
-            }
-
-            $fmt = new IntlDateFormatter(
-                'pt_BR',
-                IntlDateFormatter::LONG,
-                IntlDateFormatter::NONE,
-                'America/Sao_Paulo',
-                IntlDateFormatter::GREGORIAN,
-                "d 'de' MMMM 'de' y"
-            );
-
-            $novaData = $fmt->format($data2);
-            $textoData = preg_replace_callback(
-                "/de (\p{L}+)/u",
-                fn($m) => "de " . ucfirst($m[1]),
-                $novaData
-            );
-
-
-            // ================================================
-            //  GERA O PDF CORRETAMENTE
-            // ================================================
-            $pdf = new MeuPDF();
-            $pdf->SetFont('', '', 15);
-            $pdf->setPrintFooter(true);
-            $pdf->SetMargins(29, 40, 30);
-            $pdf->AddPage();
-
-            $pdf->Write(0, $nucleo);
-            $pdf->Ln(6);
-            $pdf->Write(0, $curso);
-            $pdf->Ln(6);
-            $pdf->Write(0, $organizacao);
-            $pdf->Ln(12);
-
-            $pdf->Write(0, 'Data: ' . $textoData);
-            $pdf->Ln(6);
-            $pdf->Write(0, 'Local: ' . $local);
-            $pdf->Ln(6);
-            $pdf->Write(0, 'Horário: ' . $horaInicial . 'h às ' . $horaFinal . 'h.');
-            $pdf->Ln(10);
-
-            $style = '<style> p { text-align: justify; } </style>';
-
-            $pdf->writeHTML($style . '<p>' . nl2br($infoIntro) . '</p>');
-            $pdf->Ln(5);
-
-            for ($i = 0; $i < 5; $i++) {
-                $pdf->Write(0, "teste dos integrantes ______________________");
-                $pdf->Ln(5);
-            }
-
-            $pdf->Ln(5);
-            $pdf->writeHTML($style . '<p>' . nl2br($prefacio) . '</p>');
-            $pdf->Ln(10);
-
-            $pdf->writeHTML($style . '<p>' . nl2br($assunto) . '</p>');
-            $pdf->Ln(5);
-
-            $pdf->writeHTML($style . '<p>' . nl2br($encerramento) . '</p>');
-
-            $pdf->Output('arquivo.pdf', 'I');
-            exit;
-
-        } else {
-            echo "<script>alert('Formulário não enviado corretamente.');</script>";
-        }
+{
+    if (ob_get_length()) {
+        ob_end_clean();
     }
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+        // Valores de selects ou inputs
+        $organizacao = $this->obterValorCampo('organizacao', $organizacoes);
+        $curso = $this->obterValorCampo('curso', $cursos);
+        $nucleo = $this->obterValorCampo('nucleo', $nucleos);
+        $cargo = $this->obterValorCampo('cargo', $cargos);
+
+        // Outros campos
+        $local = $_POST['local'] ?? '';
+        $data = $_POST['data'] ?? '';
+        $horaInicial = $_POST['hora_inicial'] ?? '';
+        $horaFinal = $_POST['hora_final'] ?? '';
+
+        $infoIntro = $_POST['infoIntro'] ?? '';
+        $prefacio = $_POST['prefacio'] ?? '';
+        $assunto = $_POST['assunto'] ?? '';
+        $encerramento = $_POST['encerramento'] ?? '';
+
+        // Limpar quebras de linha
+        foreach (['local', 'data', 'horaInicial', 'horaFinal', 'infoIntro', 'prefacio', 'assunto', 'encerramento'] as $c) {
+            ${$c} = str_replace(["\r", "\n"], ' ', ${$c});
+        }
+
+        // Remover :00 do horário
+        $horaInicial = preg_replace('/:00$/', '', $horaInicial);
+        $horaFinal = preg_replace('/:00$/', '', $horaFinal);
+
+        // Formatar data
+        try {
+            $dataObj = new DateTime($data, new DateTimeZone('America/Sao_Paulo'));
+        } catch (Exception $e) {
+            $dataObj = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+        }
+
+        $fmt = new IntlDateFormatter(
+            'pt_BR',
+            IntlDateFormatter::LONG,
+            IntlDateFormatter::NONE,
+            'America/Sao_Paulo',
+            IntlDateFormatter::GREGORIAN,
+            "d 'de' MMMM 'de' y"
+        );
+
+        $novaData = $fmt->format($dataObj);
+        $textoData = preg_replace_callback(
+            "/de (\p{L}+)/u",
+            fn($m) => "de " . ucfirst($m[1]),
+            $novaData
+        );
+
+        // ================================================
+        //  GERAÇÃO DO PDF
+        // ================================================
+        $pdf = new MeuPDF();
+        $pdf->SetFont('', '', 15);
+        $pdf->setPrintFooter(true);
+        $pdf->SetMargins(29, 40, 30);
+        $pdf->AddPage();
+
+        $pdf->Write(0, $nucleo);
+        $pdf->Ln(6);
+        $pdf->Write(0, $curso);
+        $pdf->Ln(6);
+        $pdf->Write(0, $organizacao);
+        $pdf->Ln(12);
+
+        $pdf->Write(0, 'Data: ' . $textoData);
+        $pdf->Ln(6);
+        $pdf->Write(0, 'Local: ' . $local);
+        $pdf->Ln(6);
+        $pdf->Write(0, 'Horário: ' . $horaInicial . 'h às ' . $horaFinal . 'h.');
+        $pdf->Ln(10);
+
+        $style = '<style> p { text-align: justify; } </style>';
+
+        $pdf->writeHTML($style . '<p>' . nl2br($infoIntro) . '</p>');
+        $pdf->Ln(5);
+
+        for ($i = 0; $i < 5; $i++) {
+            $pdf->Write(0, "teste dos integrantes ______________________");
+            $pdf->Ln(5);
+        }
+
+        $pdf->Ln(5);
+        $pdf->writeHTML($style . '<p>' . nl2br($prefacio) . '</p>');
+        $pdf->Ln(10);
+
+        $pdf->writeHTML($style . '<p>' . nl2br($assunto) . '</p>');
+        $pdf->Ln(5);
+
+        $pdf->writeHTML($style . '<p>' . nl2br($encerramento) . '</p>');
+
+        // Limpa buffer e envia PDF
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
+        $pdf->Output('arquivo.pdf', 'I');
+        exit;
+
+    } else {
+        echo "<script>alert('Formulário não enviado corretamente.');</script>";
+    }
+}
+
 }
 ?>

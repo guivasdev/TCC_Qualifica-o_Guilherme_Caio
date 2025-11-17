@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../model/CadastroItem.php';
 
 class CadastroController
 {
@@ -52,6 +53,8 @@ class CadastroController
 
         $dados = $_POST;
         unset($dados['tabela']);
+        unset($dados['assunto']);
+
 
         $item = new CadastroItem($tabela, $dados);
         $resultado = $this->model->salvar($item);

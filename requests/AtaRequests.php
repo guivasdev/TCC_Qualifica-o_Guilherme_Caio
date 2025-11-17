@@ -8,8 +8,8 @@ class AtaRequest
             'curso',
             'local',
             'data',
-            'horaInicial',
-            'horaFinal',
+            'hora_inicial',
+            'hora_final',
             'infoIntro',
             'prefacio',
             'nucleo',
@@ -23,8 +23,8 @@ class AtaRequest
             $data[$field] = str_replace(["\r", "\n"], ' ', $value);
         }
 
-        $data['horaInicial'] = preg_replace('/:00$/', '', $data['horaInicial']);
-        $data['horaFinal'] = preg_replace('/:00$/', '', $data['horaFinal']);
+        $data['hora_inicial'] = preg_replace('/:00$/', '', $data['hora_inicial']);
+        $data['hora_final'] = preg_replace('/:00$/', '', $data['hora_final']);
         return $data;
     }
 }

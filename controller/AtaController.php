@@ -1,9 +1,12 @@
 <?php
-require_once __DIR__ . "/../model/AtaModel.php";
-require_once __DIR__ . "/../model/OrganizacaoRepository.php";
-require_once __DIR__ . "/../model/CursoRepository.php";
-require_once __DIR__ . "/../model/NucleoRepository.php";
-require_once __DIR__ . "/../model/CargoRepository.php";
+require_once __DIR__ . '/../model/OrganizacaoRepository.php';
+require_once __DIR__ . '/../model/CadastroRepository.php';
+require_once __DIR__ . '/../model/AtaRepository.php';
+require_once __DIR__ . '/../model/CargoRepository.php';
+require_once __DIR__ . '/../model/CursoRepository.php';
+require_once __DIR__ . '/../model/NucleoRepository.php';
+
+
 class AtaController
 {
     private $model;
@@ -17,21 +20,13 @@ class AtaController
 
     public function gerarAta()
     {
-        $orgRepo = new OrganizacaoRepository();
-        $cursoRepo = new CursoRepository();
-        $nucRepo = new NucleoRepository();
-        $cargoRepo = new CargoRepository();
+        $organizacoes = (new OrganizacaoRepository())->buscarTodas();
+        $cursos = (new CursoRepository())->buscarTodas();
+        $nucleos = (new NucleoRepository())->buscarTodas();
+        $cargos = (new CargoRepository())->buscarTodas();
 
-        // supondo que os repositórios tenham um método buscarTodas() ou similar
-        $organizacoes = $orgRepo->buscarTodas();   // -> array [['id'=>..., 'nome'=>...], ...]
-        $cursos = $cursoRepo->buscarTodas();
-        $nucleos = $nucRepo->buscarTodas();
-        $cargos = $cargoRepo->buscarTodas();
-
-        // Chama criarAta passando os 4 arrays
-        $this->model->criarAta($organizacoes, $cursos, $nucleos, $cargos);
-        $resultado = $this->model->criarAta();
-        $this->view->mostrarPaginaATA($resultado);
+        $ataModel = new AtaModel();
+        $ataModel->criarAta($organizacoes, $cursos, $nucleos, $cargos);
     }
 
     public function buscarAta()
