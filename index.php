@@ -36,6 +36,7 @@ switch ($acao) {
     case 'buscar':
         $controller->mostrarBusca();
         break;
+        
     case 'gerar':
         $id = $_GET['id'] ?? null;
         $controller->mostrarPaginaAta($id);

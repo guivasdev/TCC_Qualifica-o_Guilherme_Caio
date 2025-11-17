@@ -81,28 +81,35 @@ class CadastroController
     // -----------------------------------------------
     // MOSTRAR ATA (POR ID OU ÚLTIMA)
     // -----------------------------------------------
-    public function mostrarPaginaAta($id)
-    {
-        $tabela = 'documento';
+    public function mostrarPaginaAta($id = null)
+{
+    $tabela = 'documento';
 
-        // Se não recebeu ID → busca o último documento
-        if ($id === null) {
-            $ultimo = $this->model->buscarUltimoRegistro($tabela);
+    // Se não recebeu ID → busca o último documento
+    if ($id === null) {
+        $ultimo = $this->model->buscarUltimoRegistro($tabela);
 
-            if ($ultimo) {
-                $id = $ultimo['id']; // pega o ID do último documento
-            } else {
-                // Nenhum documento → mostra página vazia
-                $this->ataView->mostrarPaginaAta(null);
-                return;
-            }
+        if ($ultimo) {
+            $id = $ultimo['id']; // pega o ID do último documento
+        } else {
+            // Nenhum documento → mostra página vazia
+            $this->ataView->mostrarPaginaAta(null);
+            return;
         }
-
-        // Carrega documento pelo ID
-        $dados = $this->model->buscarPorId($tabela, $id);
-
-        $this->ataView->mostrarPaginaAta($dados);
     }
+
+    // Carrega documento pelo ID
+    $dados = $this->model->buscarPorId($tabela, $id);
+
+    if ($dados) {
+        // Retorna todos os dados do documento
+        $this->ataView->mostrarPaginaAta($dados);
+    } else {
+        // Caso não encontre, mostra página vazia
+        $this->ataView->mostrarPaginaAta(null);
+    }
+}
+
 
     
 

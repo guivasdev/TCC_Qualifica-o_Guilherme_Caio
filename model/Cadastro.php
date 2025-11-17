@@ -21,14 +21,13 @@ class Cadastro
         return $this->repo->buscarTodas($tabela);
     }
 
-    public function buscarPorId(string $tabela, int $id): ?array
+    public function buscarPorId(string $tabela, int $id)
     {
         return $this->repo->buscarPorId($tabela, $id);
     }
-    public function buscarUltimoRegistro($tabela)
-{
-    return $this->repo->buscarUltimo($tabela);
-}
 
-
+    public function buscarUltimoRegistro(string $tabela)
+    {
+        return $this->repo->buscarUltimo($tabela);
+    }
 }
