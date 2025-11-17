@@ -1,41 +1,32 @@
 <?php
-
 require_once __DIR__ . '/MySql.php';
 
-class CadastroRepository
-{
+class CadastroRepository {
     private PDO $pdo;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->pdo = MySql::connect();
     }
 
-    public function salvar(array $dados): bool
-    {
-        $sql = "INSERT INTO cadastro (campo, valor) VALUES (:campo, :valor)";
+    public function salvar(string $tabela, array $dados): bool {
+        $campos = implode(', ', array_keys($dados));
+        $placeholders = ':' . implode(', :', array_keys($dados));
+
+        $sql = "INSERT INTO {$tabela} ({$campos}) VALUES ({$placeholders})";
         $stmt = $this->pdo->prepare($sql);
 
-        return $stmt->execute([
-            ':campo' => $dados['campo'],
-            ':valor' => $dados['valor'],
-        ]);
+        return $stmt->execute($dados);
     }
 
-    public function buscarTodas(): array
-    {
-        $sql = "SELECT * FROM documentos ORDER BY id DESC";
-        $stmt = $this->pdo->query($sql);
+    public function buscarTodas(string $tabela): array {
+        $stmt = $this->pdo->query("SELECT * FROM {$tabela} ORDER BY id DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function buscarPorId($id): ?array
-    {
-        $sql = "SELECT * FROM documentos WHERE id = :id LIMIT 1";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id]);
+    public function buscarPorId(string $tabela, int $id): ?array {
+        $stmt = $this->pdo->prepare("SELECT * FROM {$tabela} WHERE id = :id LIMIT 1");
+        $stmt->execute(['id' => $id]);
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $resultado !== false ? $resultado : null;
+        return $resultado ?: null;
     }
 }

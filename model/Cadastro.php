@@ -1,26 +1,23 @@
 <?php
+require_once __DIR__ . '/CadastroRepository.php';
+require_once __DIR__ . '/CadastroItem.php';
 
-class Cadastro
-{
+class Cadastro {
     private CadastroRepository $repo;
 
-    public function __construct(CadastroRepository $repo)
-    {
+    public function __construct(CadastroRepository $repo) {
         $this->repo = $repo;
     }
 
-    public function salvar(array $dados)
-    {
-        return $this->repo->salvar($dados);
+    public function salvar(CadastroItem $item): bool {
+        return $this->repo->salvar($item->tabela, $item->dados);
     }
 
-    public function buscarTodas()
-    {
-        return $this->repo->buscarTodas();
+    public function buscarTodas(string $tabela): array {
+        return $this->repo->buscarTodas($tabela);
     }
 
-    public function buscarPorId($id)
-    {
-        return $this->repo->buscarPorId($id);
+    public function buscarPorId(string $tabela, int $id): ?array {
+        return $this->repo->buscarPorId($tabela, $id);
     }
 }

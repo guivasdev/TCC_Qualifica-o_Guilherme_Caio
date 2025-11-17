@@ -22,6 +22,8 @@ $base = '/TCC_Qualifica-o_Guilherme_Caio';
       <ul>
         <li><a href="<?php echo $base; ?>/index.php?acao=gerar">Gerar ATA</a></li>
         <li><a href="<?php echo $base; ?>/index.php?acao=buscar">Buscar ATA</a></li>
+        <li><a href="<?php echo $base; ?>/index.php?acao=form">Cadastrar Componente</a></li>
+
 
       </ul>
     </div>

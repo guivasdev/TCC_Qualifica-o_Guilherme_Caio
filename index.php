@@ -4,8 +4,6 @@ require_once __DIR__ . '/model/CadastroRepository.php';
 require_once __DIR__ . '/model/Cadastro.php';
 require_once __DIR__ . '/model/CadastroItem.php';
 require_once __DIR__ . '/controller/CadastroController.php';
-
-// Views - garanta que os ficheiros existam exatamente nesses caminhos
 require_once __DIR__ . '/view/CadastroScreen.php';
 require_once __DIR__ . '/view/AtaScreen.php';
 
@@ -37,6 +35,6 @@ switch ($acao) {
         break;
 
     default:
-        $controller->mostrarFormulario();
+        $controller->mostrarFormularioUnico();
         break;
 }

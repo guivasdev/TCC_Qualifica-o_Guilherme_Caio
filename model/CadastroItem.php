@@ -1,13 +1,12 @@
 <?php
-
 class CadastroItem
 {
-    public string $campo;
-    public string $valor;
+    public string $tabela;
+    public array $dados; // ← vários campos reais
 
-    public function __construct(string $campo, string $valor)
+    public function __construct(string $tabela, array $dados)
     {
-        $this->campo = $campo;
-        $this->valor = $valor;
+        $this->tabela = $tabela;
+        $this->dados  = $dados;
     }
 }
