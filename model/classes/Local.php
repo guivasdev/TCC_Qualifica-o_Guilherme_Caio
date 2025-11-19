@@ -1,125 +1,69 @@
 <?php
-
 class Local{
     private $id=0;
     private $nome="";
 
     public function getLocalizacao($id, $nome){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-        require_once 'MySql.php';
-        $PDOlocal = new MySql();
-
-        $sql = "SELECT * FROM Localizacao WHERE id = '$id' OR nome = '$nome'";
-
-        if($sql = $PDOlocal->query($sql)){
-            
-            return $sql->fetchAll(PDO::FETCH_ASSOC);
-        }else{
-
-            return 0;
-        }
+        $stmt = $pdo->prepare("SELECT * FROM localizacao WHERE id = :id OR nome = :nome");
+        $stmt->execute([':id' => $id, ':nome' => $nome]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
+
     public function getALLLocalizacao(){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-        require_once 'MySql.php';
-        $PDOlocal = new MySql();
-
-        $sql = "SELECT * FROM Localizacao";
-
-        if($sql = $PDOlocal->query($sql)){
-            
-            return $sql->fetchAll(PDO::FETCH_ASSOC);
-        }else{
-
-            return 0;
-        }
+        $stmt = $pdo->query("SELECT * FROM localizacao");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function cadastrarLocal($nome): int{
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-        require_once 'MySql.php';
-        $PDOlocal = new MySql();
+        $stmt = $pdo->prepare("INSERT INTO localizacao (nome) VALUES (:nome)");
+        $ok = $stmt->execute([':nome' => $nome]);
 
-        $sql = "INSERT INTO Localizacao SET nome = '$nome'";
-
-        if($sql = $PDOlocal->query($sql)){
-            
-            // Cadastro realizado com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Localização cadastrado com sucesso!\");
-                    </script>
-                ";
-
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Localização cadastrado com sucesso!');</script>";
             return 1;
-        }else{
-
-            // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante o cadastro.\");
-                        </script>
-                ";
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante o cadastro.');</script>";
             return 0;
         }
     }
+
     public function editarLocal($id, $nome): int{
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-        require_once 'MySql.php';
-        $PDOlocal = new MySql();
+        $stmt = $pdo->prepare("UPDATE localizacao SET nome = :nome WHERE id = :id");
+        $ok = $stmt->execute([':nome' => $nome, ':id' => $id]);
 
-        $sql = "UPDATE Localizacao SET nome = '$nome' WHERE id = '$id'";
-
-        if($sql = $PDOlocal->query($sql)){
-            
-            // Edição realizada com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Localização editada com sucesso!\");
-                    </script>
-                ";
-
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Localização editada com sucesso!');</script>";
             return 1;
-        }else{
-
-            // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante a edição.\");
-                        </script>
-                ";
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante a edição.');</script>";
             return 0;
         }
     }
 
     public function excluirLocal($confirmar, $id): int{
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-        require_once 'MySql.php';
-        $PDOlocal = new MySql();
+        $stmt = $pdo->prepare("DELETE FROM localizacao WHERE id = :id");
+        $ok = $stmt->execute([':id' => $id]);
 
-        $sql = "DELETE FROM Localizacao WHERE id = '$id'"; #incluir desição para excluir, javascript alert ou um modal com botões?
-
-        if($sql = $PDOlocal->query($sql)){
-            // Exclusão realizada com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Localização excluída com sucesso!\");
-                    </script>
-                ";
-
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Localização excluída com sucesso!');</script>";
             return 1;
-        }else{
-            // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante a exclusão.\");
-                        </script>
-                ";
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante a exclusão.');</script>";
             return 0;
         }
     }

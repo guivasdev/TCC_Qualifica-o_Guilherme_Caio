@@ -1,133 +1,72 @@
-<?php 
-    class Cargo{
-        private $id = 0;
-        private $nome ="";
-        private $sigla = "";
+<?php
+class Cargo{
+    private $id = 0;
+    private $nome ="";
+    private $sigla = "";
 
-        public function getCargo($id, $nome){
-            
-            require_once 'MySql.php';
-            $cargoPDO = new MySql();
+    public function getCargo($id, $nome){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-            $sql = "SELECT * FROM cargo WHERE id = $id OR nome = $nome";
+        $stmt = $pdo->prepare("SELECT * FROM cargo WHERE id = :id OR nome = :nome");
+        $stmt->execute([':id' => $id, ':nome' => $nome]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
 
-            if ($sql = $cargoPDO->query($sql)) {
+    public function getALLCargos(){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-                return $result->fetchAll(PDO::FETCH_ASSOC);
-            } else {
+        $stmt = $pdo->query("SELECT * FROM cargo");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-                return 0;
-            }
-        }
+    public function cadastrarCargo($nome, $sigla):int{
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-        public function getALLCargos(){
+        $stmt = $pdo->prepare("INSERT INTO cargo (nome, sigla) VALUES (:nome, :sigla)");
+        $ok = $stmt->execute([':nome' => $nome, ':sigla' => $sigla]);
 
-            require_once 'MySql.php';
-            $cargoPDO = new MySql();
-
-            $sql = "SELECT * FROM cargo";
-
-            if ($sql = $cargoPDO->query($sql)) {
-
-                return $result->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-
-                return 0;
-            }
-        }
-
-        public function cadastrarCargo($nome, $sigla):int{
-
-            require_once 'MySql.php';
-            $cursoPDO = new MySql();
-            
-            $sql = "INSERT INTO cargo SET nome = $this->nome , sigla = $this->sigla";
-
-            if ($sql = $cursoPDO->query($sql)) {
-                
-                // Cadastro realizado com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Cargo cadastrado com sucesso!\");
-                    </script>
-                    ";
-
-                return 1;
-            } else {
-            
-                // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante o cadastro.\");
-                        </script>
-                    ";
-
-                return 0;
-            } 
-        }
-        public function editarCargo($id, $nome, $sigla):int{
-
-            require_once 'MySql.php';
-            $cargoPDO = new MySql();
-
-            $sql = "UPDATE cargo SET nome = $nome , sigla = $sigla WHERE id = $id";
-
-            if ($sql = $cargoPDO->query($sql)) {
-                
-                // Edição realizada com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Cargo editado com sucesso!\");
-                    </script>
-                    ";
-
-                return 1;
-            } else {
-            
-                // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante a edição.\");
-                        </script>
-                    ";
-
-                return 0;
-            }
-        }
-        public function excluriarCargo($confirmar, $cargo):int{
-
-            require_once 'MySql.php';
-            $cargoPDO = new MySql();
-
-            $sql = "DELETE FROM cargo WHERE id = $cargo->id"; #incluir desição para excluir, javascript alert ou um modal com botões?
-
-            if ($sql = $cargoPDO->query($sql)) {
-                
-                // Exclusão realizada com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Cargo excluído com sucesso!\");
-                    </script>
-                    ";
-
-                return 1;
-            } else {
-            
-                // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante a exclusão.\");
-                        </script>
-                    ";
-
-                return 0;
-            }
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Cargo cadastrado com sucesso!');</script>";
+            return 1;
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante o cadastro.');</script>";
+            return 0;
         }
     }
+
+    public function editarCargo($id, $nome, $sigla):int{
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
+
+        $stmt = $pdo->prepare("UPDATE cargo SET nome = :nome, sigla = :sigla WHERE id = :id");
+        $ok = $stmt->execute([':nome' => $nome, ':sigla' => $sigla, ':id' => $id]);
+
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Cargo editado com sucesso!');</script>";
+            return 1;
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante a edição.');</script>";
+            return 0;
+        }
+    }
+
+    public function excluriarCargo($confirmar, $cargo):int{
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
+
+        $stmt = $pdo->prepare("DELETE FROM cargo WHERE id = :id");
+        $ok = $stmt->execute([':id' => $cargo->id]);
+
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Cargo excluído com sucesso!');</script>";
+            return 1;
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante a exclusão.');</script>";
+            return 0;
+        }
+    }
+}
 ?>

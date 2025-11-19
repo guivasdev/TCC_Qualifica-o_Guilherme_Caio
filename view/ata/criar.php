@@ -82,7 +82,7 @@ require_once 'componentes.php';
       <div class="campos-ata">
         <?php
         // ALTERADOS para bate com o banco
-        echo inputTextarea("Informação Introdutória", "informacao_introdutoria");
+        echo inputTextarea("Informação Introdutória", "introducao");
         echo inputTextarea("Prefácio", "prefacio");
         echo inputTextarea("Assunto", "assunto"); // esse você decide se vai salvar ou gerar apenas no PDF
         echo inputTextarea("Encerramento", "encerramento");

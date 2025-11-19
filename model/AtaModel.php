@@ -55,10 +55,11 @@ class AtaModel
         $ata->id = $dados['id'] ?? null;
         $ata->titulo = $dados['titulo'] ?? '';
         $ata->data = $dados['data'] ?? '';
-        $ata->tipo = $dados['tipo'] ?? '';
-        $ata->assuntos = $dados['assuntos'] ?? '';
-        $ata->palavras_chave = $dados['palavras_chave'] ?? '';
-        $ata->resumo = $dados['resumo'] ?? '';
+        // Conteúdo dividido: prefacio / introducao / assunto / encerramento
+        $ata->prefacio = $dados['prefacio'] ?? ($dados['infoIntro'] ?? '');
+        $ata->introducao = $dados['introducao'] ?? ($dados['infoIntro'] ?? '');
+        $ata->assuntos = $dados['assuntos'] ?? ($dados['assunto'] ?? '');
+        $ata->encerramento = $dados['encerramento'] ?? '';
         return $ata;
     }
 

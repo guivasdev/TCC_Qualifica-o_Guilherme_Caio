@@ -1,6 +1,7 @@
 <?php
     class Documento{
         public $nome = "";
+        public $predefinicao_id = null;
         public $nucleoInstitucional = "";
         public $curso = "";
         public $organizacao = "";
@@ -32,142 +33,128 @@
         */
 
         public function gerarDocumento(): int{ #Geração do documento
-            
+            return 0;
         }
 
         public function salvarVersao($documento): int{ #Versionamento
-
+            return 0;
         }
         public function recuperarVersao($byteJson): int{ #Versionamento
-
+            return 0;
         }
 
         public function getDocumento($id, $nome){ #banco de dados
-
             require_once 'model/MySql.php';
-            $documentoPDO = new MySql;
+            $pdo = MySql::connect();
 
-            $sql = "SELECT * FROM Documentos WHERE id = '$id' OR nome = '$nome'";
+            $stmt = $pdo->prepare("SELECT * FROM documento WHERE id = :id OR nome = :nome");
+            $stmt->execute([':id' => $id, ':nome' => $nome]);
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if ($sql = $documentoPDO->query($sql)) {
-                
-                return $sql->fetchAll(PDO::FETCH_ASSOC);
-
-            }else {
-            
-                return 0;
-            }
+            return $res ?: [];
         }
 
         public function getALLDocumentos(){ #banco de dados
-
             require_once 'model/MySql.php';
-            $documentoPDO = new MySql;
+            $pdo = MySql::connect();
 
-            $sql = "SELECT * FROM Documentos";
+            $stmt = $pdo->query("SELECT * FROM documento");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
 
-            if ($sql = $documentoPDO->query($sql)) {
-                
-                return $sql->fetchAll(PDO::FETCH_ASSOC);
+        public function cadastrarDocumento($nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento, $predefinicaoId = null){ #banco de dados
+            require_once 'model/MySql.php';
+            $pdo = MySql::connect();
 
-            }else {
-            
+            // Normaliza nomes de parâmetro (alguns antigos usam caracteres especiais)
+            $idOrganizacao = $idOrganização;
+            $idNucleoInstitucional = $idNucleo;
+            $fkCurso = $idCurso;
+            $fkLocal = $idLocalizacao;
+            $fkIntegrantes = $idIntegrantes;
+
+            $sql = "INSERT INTO documento (titulo, organizacao_id, nucleo_id, curso_id, local_id, integrante_id, data, hora_inicio, prefacio, introducao, assunto, encerramento, conteudo, predefinicao_id) VALUES (:titulo, :organizacao_id, :nucleo_id, :curso_id, :local_id, :integrante_id, :data, :hora_inicio, :prefacio, :introducao, :assunto, :encerramento, :conteudo, :predefinicao_id)";
+
+            $stmt = $pdo->prepare($sql);
+            $ok = $stmt->execute([
+                ':titulo' => $nome,
+                ':organizacao_id' => $idOrganizacao,
+                ':nucleo_id' => $idNucleoInstitucional,
+                ':curso_id' => $fkCurso,
+                ':local_id' => $fkLocal,
+                ':integrante_id' => $fkIntegrantes,
+                ':data' => $data,
+                ':hora_inicio' => $hora,
+                ':prefacio' => $prefacio,
+                ':introducao' => $introducao,
+                ':assunto' => $assunto,
+                ':encerramento' => $encerramento,
+                ':conteudo' => null,
+                ':predefinicao_id' => $predefinicaoId
+            ]);
+
+            if ($ok) {
+                echo "<script type=\"text/javascript\">alert('Documento cadastrado com sucesso!');</script>";
+                return 1;
+            } else {
+                echo "<script type=\"text/javascript\">alert('Erro durante o cadastro.');</script>";
                 return 0;
             }
         }
 
-        public function cadastrarDocumento($nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento){ #banco de dados
-            
+        public function EditarDocumento($id, $nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento, $predefinicaoId = null){ #banco de dados
             require_once 'model/MySql.php';
-            $documentoPDO = new MySql;
+            $pdo = MySql::connect();
 
-            $sql = "INSERT INTO Documentos SET Nome = '$nome', fk_Organizacoes_Id = '$idOrganização', fk_Nucleos_Institucionais_Id = '$idNucleo', fk_Curso_Id = '$idCurso' fk_Localizacao_Id = '$idLocalizacao', fk_Integrantes_Id = '$idIntegrantes', Dia = '$data', Hora = '$hora', Prefacio = '$prefacio', Introducao' = $introducao', Assunto = '$assunto', Encerramento = '$encerramento' ";
+            // Normaliza nomes locais
+            $idOrganizacao = $idOrganização;
+            $idNucleoInstitucional = $idNucleo;
+            $fkCurso = $idCurso;
+            $fkLocal = $idLocalizacao;
+            $fkIntegrantes = $idIntegrantes;
 
-            if ($sql = $documentoPDO->query($sql)) {
-                
-                // Cadastro realizado com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0; URL=vendas.php'>
-                    <script type=\"text/javascript\">
-                        alert(\"Documento cadastrada com sucesso!\");
-                    </script>
-                    ";
+            $sql = "UPDATE documento SET titulo = :titulo, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id, integrante_id = :integrante_id, data = :data, hora_inicio = :hora_inicio, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento, conteudo = :conteudo, predefinicao_id = :predefinicao_id WHERE id = :id";
 
+            $stmt = $pdo->prepare($sql);
+            $ok = $stmt->execute([
+                ':titulo' => $nome,
+                ':organizacao_id' => $idOrganizacao,
+                ':nucleo_id' => $idNucleoInstitucional,
+                ':curso_id' => $fkCurso,
+                ':local_id' => $fkLocal,
+                ':integrante_id' => $fkIntegrantes,
+                ':data' => $data,
+                ':hora_inicio' => $hora,
+                ':prefacio' => $prefacio,
+                ':introducao' => $introducao,
+                ':assunto' => $assunto,
+                ':encerramento' => $encerramento,
+                ':conteudo' => null,
+                ':predefinicao_id' => $predefinicaoId,
+                ':id' => $id
+            ]);
+
+            if ($ok) {
+                echo "<script type=\"text/javascript\">alert('Documento editado com sucesso!');</script>";
                 return 1;
             } else {
-            
-                // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0; URL=vendas.php'>
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante o cadastro.\");
-                        </script>
-                    ";
-
-                return 0;
-            }
-        }
-
-        public function EditarDocumento($id, $nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento){ #banco de dados
-
-            require_once 'model/MySql.php';
-            $documentoPDO = new MySql;
-
-            $sql = "UPDATE Documentos SET Nome = '$nome', fk_Organizacoes_Id = '$organizacao', fk_Nucleos_Institucionais_Id = '$nucleoInstitucional', fk_Curso_Id = '$curso' fk_Localizacao_Id = '$local', fk_Integrantes_Id = '$integrantes', Dia = '$data', Hora = '$horas', Prefacio = '$prefacio', Introducao' = $introducao', Assunto = '$assunto', Encerramento = '$encerramento' WHERE id = '$id' ";
-
-            if ($sql = $documentoPDO->query($sql)) {
-                
-                // Edição realizada com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Documento editado com sucesso!\");
-                    </script>
-                    ";
-
-                return 1;
-            } else {
-            
-                // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante a edição.\");
-                        </script>
-                    ";
-
+                echo "<script type=\"text/javascript\">alert('Erro durante a edição.');</script>";
                 return 0;
             }
         }
 
         public function excluirDocumento($id): int{ #banco de dados
-
             require_once 'model/MySql.php';
-            $documentoPDO = new MySql;
+            $pdo = MySql::connect();
 
-            $sql = "DELETE FROM Documentos WHERE id = '$id'"; #incluir desição para excluir, javascript alert ou um modal com botões?
+            $stmt = $pdo->prepare("DELETE FROM documento WHERE id = :id");
+            $ok = $stmt->execute([':id' => $id]);
 
-            if ($sql = $documentoPDO->query($sql)) {
-                
-                // Exclusão realizada com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Documento excluído com sucesso!\");
-                    </script>
-                    ";
-
+            if ($ok) {
+                echo "<script type=\"text/javascript\">alert('Documento excluído com sucesso!');</script>";
                 return 1;
             } else {
-            
-                // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante a exclusão.\");
-                        </script>
-                    ";
-
+                echo "<script type=\"text/javascript\">alert('Erro durante a exclusão.');</script>";
                 return 0;
             }
         }

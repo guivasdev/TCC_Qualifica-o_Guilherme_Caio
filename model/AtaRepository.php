@@ -20,18 +20,19 @@ class AtaRepository implements IAtaRepository {
     // ---------------------------------------------------------
     public function salvar(Ata $ata): bool
     {
-        $sql = "INSERT INTO atas (titulo, data, tipo, assuntos, palavras_chave, resumo)
-                VALUES (:titulo, :data, :tipo, :assuntos, :palavras_chave, :resumo)";
+        // Salva ATA na tabela `documento` (campos de conteúdo separados)
+        $sql = "INSERT INTO documento (titulo, data, prefacio, introducao, assunto, encerramento)
+                VALUES (:titulo, :data, :prefacio, :introducao, :assunto, :encerramento)";
 
         $stmt = $this->pdo->prepare($sql);
 
         return $stmt->execute([
-            ':titulo'         => $ata->titulo,
-            ':data'           => $ata->data,
-            ':tipo'           => $ata->tipo,
-            ':assuntos'       => $ata->assuntos,
-            ':palavras_chave' => $ata->palavras_chave,
-            ':resumo'         => $ata->resumo
+            ':titulo' => $ata->titulo ?? null,
+            ':data' => $ata->data ?? null,
+            ':prefacio' => $ata->prefacio ?? ($ata->infoIntro ?? null),
+            ':introducao' => $ata->introducao ?? ($ata->infoIntro ?? null),
+            ':assunto' => $ata->assuntos ?? ($ata->assunto ?? null),
+            ':encerramento' => $ata->encerramento ?? null
         ]);
     }
 
@@ -40,7 +41,7 @@ class AtaRepository implements IAtaRepository {
     // ---------------------------------------------------------
     public function buscarTodas(): array 
     {
-        $sql = "SELECT * FROM atas ORDER BY data DESC";
+        $sql = "SELECT * FROM documento ORDER BY data DESC";
         $stmt = $this->pdo->query($sql);
 
         $resultados = [];
@@ -58,7 +59,13 @@ class AtaRepository implements IAtaRepository {
     // ---------------------------------------------------------
     public function buscar(string $filtro, string $texto): ?Ata
     {
-        $sql = "SELECT * FROM atas WHERE $filtro LIKE :texto LIMIT 1";
+        // Protege contra filtro inválido/injeção esquerda: whitelist de colunas
+        $allowed = ['titulo','data','conteudo','prefacio','introducao','assunto','encerramento'];
+        if (!in_array($filtro, $allowed)) {
+            $filtro = 'titulo';
+        }
+
+        $sql = "SELECT * FROM documento WHERE $filtro LIKE :texto LIMIT 1";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':texto' => "%$texto%"]);
 

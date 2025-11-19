@@ -1,145 +1,111 @@
-<?php 
-    class Predefiniao{
-        public $nucleoInstitucional = "";
-        public $curso = "";
-        public $organizacao = "";
-        public $data = "";
-        public $local = "";
-        public $hora = "";
-        public $integrantes = "";
-        public $introducao = "";
-        public $assunto = "";
-        public $encerramento = "";
-        public$prefacio = "";
+<?php
+class Predefinicao{
+    public $nucleoInstitucional = "";
+    public $curso = "";
+    public $organizacao = "";
+    public $data = "";
+    public $local = "";
+    public $hora = "";
+    public $integrantes = "";
+    public $introducao = "";
+    public $assunto = "";
+    public $encerramento = "";
+    public $prefacio = "";
 
-        public function getPredefinicao($id, $nome){ #banco de dados
+    public function getPredefinicao($id, $nome){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-            require_once 'model/MySql.php';
-            $PredefinicaoPDO = new MySql;
+        $stmt = $pdo->prepare("SELECT * FROM predefinicoes WHERE id = :id OR nome = :nome");
+        $stmt->execute([':id' => $id, ':nome' => $nome]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
 
-            $sql = "SELECT * FROM Predefinicoes WHERE id = '$id' OR nome = '$nome'";
+    public function getALLPredefinicoes(){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-            if ($sql = $PredefinicaoPDO->query($sql)) {
-                
-                return $sql->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $pdo->query("SELECT * FROM predefinicoes");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-            }else {
-            
-                return 0;
-            }
-        }
+    public function cadastrarPredefinicao($nome, $idOrganizacao, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
 
-        public function getALLPredefinicaos(){ #banco de dados
+        $sql = "INSERT INTO predefinicoes (nome, organizacao_id, nucleo_id, curso_id, local_id, integrante_id, dia, hora, prefacio, introducao, assunto, encerramento) VALUES (:nome, :organizacao_id, :nucleo_id, :curso_id, :local_id, :integrante_id, :dia, :hora, :prefacio, :introducao, :assunto, :encerramento)";
 
-            require_once 'model/MySql.php';
-            $PredefinicaoPDO = new MySql;
+        $stmt = $pdo->prepare($sql);
+        $ok = $stmt->execute([
+            ':nome' => $nome,
+            ':organizacao_id' => $idOrganizacao,
+            ':nucleo_id' => $idNucleo,
+            ':curso_id' => $idCurso,
+            ':local_id' => $idLocalizacao,
+            ':integrante_id' => $idIntegrantes,
+            ':dia' => $data,
+            ':hora' => $hora,
+            ':prefacio' => $prefacio,
+            ':introducao' => $introducao,
+            ':assunto' => $assunto,
+            ':encerramento' => $encerramento
+        ]);
 
-            $sql = "SELECT * FROM Predefinicoes";
-
-            if ($sql = $PredefinicaoPDO->query($sql)) {
-                
-                return $sql->fetchAll(PDO::FETCH_ASSOC);
-
-            }else {
-            
-                return 0;
-            }
-        }
-
-        public function cadastrarPredefinicao($nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento){ #banco de dados
-            
-            require_once 'model/MySql.php';
-            $PredefinicaoPDO = new MySql;
-
-            $sql = "INSERT INTO Predefinicoes SET Nome = '$nome', fk_Organizacoes_Id = '$idOrganização', fk_Nucleos_Institucionais_Id = '$idNucleo', fk_Curso_Id = '$idCurso' fk_Localizacao_Id = '$idLocalizacao', fk_Integrantes_Id = '$idIntegrantes', Dia = '$data', Hora = '$hora', Prefacio = '$prefacio', Introducao' = $introducao', Assunto = '$assunto', Encerramento = '$encerramento' ";
-
-            if ($sql = $PredefinicaoPDO->query($sql)) {
-                
-                // Cadastro realizado com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0; URL=vendas.php'>
-                    <script type=\"text/javascript\">
-                        alert(\"Predefinição cadastrada com sucesso!\");
-                    </script>
-                    ";
-
-                return 1;
-            } else {
-            
-                // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0; URL=vendas.php'>
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante o cadastro.\");
-                        </script>
-                    ";
-
-                return 0;
-            } 
-        }
-
-        public function EditarPredefinicao($id, $nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento){ #banco de dados
-
-            require_once 'model/MySql.php';
-            $PredefinicaoPDO = new MySql;
-
-            $sql = "UPDATE Predefinicoes SET Nome = '$nome', fk_Organizacoes_Id = '$organizacao', fk_Nucleos_Institucionais_Id = '$nucleoInstitucional', fk_Curso_Id = '$curso' fk_Localizacao_Id = '$local', fk_Integrantes_Id = '$integrantes', Dia = '$data', Hora = '$horas', Prefacio = '$prefacio', Introducao' = $introducao', Assunto = '$assunto', Encerramento = '$encerramento' WHERE id = '$id' ";
-
-            if ($sql = $PredefinicaoPDO->query($sql)) {
-                
-                // Edição realizada com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Predefinição editado com sucesso!\");
-                    </script>
-                    ";
-
-                return 1;
-            } else {
-            
-                // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante a edição.\");
-                        </script>
-                    ";
-
-                return 0;
-            }
-        }
-
-        public function excluirPredefinicao($id): int{ #banco de dados
-
-            require_once 'model/MySql.php';
-            $PredefinicaoPDO = new MySql;
-
-            $sql = "DELETE FROM Predefinicoes WHERE id = '$id'"; #incluir desição para excluir, javascript alert ou um modal com botões?
-
-            if ($sql = $PredefinicaoPDO->query($sql)) {
-                
-                // Exclusão realizada com sucesso
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;>
-                    <script type=\"text/javascript\">
-                        alert(\"Predefinição excluído com sucesso!\");
-                    </script>
-                    ";
-
-                return 1;
-            } else {
-            
-                // Caso ocorra falha
-                echo "
-                    <META HTTP-EQUIV=REFRESH CONTENT='0;
-                        <script type=\"text/javascript\">
-                            alert(\"Erro durante a exclusão.\");
-                        </script>
-                    ";
-
-                return 0;
-            }
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Predefinição cadastrada com sucesso!');</script>";
+            return 1;
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante o cadastro.');</script>";
+            return 0;
         }
     }
+
+    public function editarPredefinicao($id, $nome, $idOrganizacao, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
+
+        $sql = "UPDATE predefinicoes SET nome = :nome, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id, integrante_id = :integrante_id, dia = :dia, hora = :hora, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento WHERE id = :id";
+
+        $stmt = $pdo->prepare($sql);
+        $ok = $stmt->execute([
+            ':nome' => $nome,
+            ':organizacao_id' => $idOrganizacao,
+            ':nucleo_id' => $idNucleo,
+            ':curso_id' => $idCurso,
+            ':local_id' => $idLocalizacao,
+            ':integrante_id' => $idIntegrantes,
+            ':dia' => $data,
+            ':hora' => $hora,
+            ':prefacio' => $prefacio,
+            ':introducao' => $introducao,
+            ':assunto' => $assunto,
+            ':encerramento' => $encerramento,
+            ':id' => $id
+        ]);
+
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Predefinição editada com sucesso!');</script>";
+            return 1;
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante a edição.');</script>";
+            return 0;
+        }
+    }
+
+    public function excluirPredefinicao($id): int{
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
+
+        $stmt = $pdo->prepare("DELETE FROM predefinicoes WHERE id = :id");
+        $ok = $stmt->execute([':id' => $id]);
+
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Predefinição excluída com sucesso!');</script>";
+            return 1;
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante a exclusão.');</script>";
+            return 0;
+        }
+    }
+}
 ?>
