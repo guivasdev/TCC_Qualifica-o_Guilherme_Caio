@@ -15,18 +15,22 @@ require_once __DIR__ . "/../../model/classes/Local.php";
 /* ============================
    INSTANCIA OS REPOS
 ================================*/
-$repoOrg = new OrganizacaoRepository();
-$repoNuc = new NucleoRepository();
-$repoCurso = new CursoRepository();
-$repoCargo = new CargoRepository();
+$repoCurso = new Curso();
+$repoCargo = new Cargo();
+$repoIntegrante = new Integrante();
+$repoNucleo = new NucleoInstitucional();
+$repoOrganizacao = new Organizacao();
+$repoLocal = new Local();
 
 /* ============================
    BUSCA DO BANCO
 ================================*/
-$organizacao = $repoOrg->buscarTodas();
-$nucleos = $repoNuc->buscarTodas();
-$cursos = $repoCurso->buscarTodas();
-$cargos = $repoCargo->buscarTodas();
+$cursos = $repoCargo->buscarTodos();
+$cargos = $repoCurso->buscarTodos();
+$integrantes = $repoIntegrante->buscarTodos();
+$nucleos = $repoNucleo->buscarTodas();
+$organizacao = $repoOrganizacao->buscarTodas();
+$locais = $repoLocal->buscarTodos();
 
 /* COMPONENTES */
 require_once 'componentes.php';
@@ -48,10 +52,12 @@ require_once 'componentes.php';
 
       <?php
       // ALTERADO: nomes iguais aos da tabela
-      echo inputSelectEInput("Organização", "organizacao", $organizacao);
-      echo inputSelectEInput("Núcleo Institucional", "nucleo", $nucleos);
       echo inputSelectEInput("Curso", "curso", $cursos);
-      echo inputSelectEInput("Integrante", "integrante", $cargos);
+      echo inputSelectEInput("Cargo", "cargo", $cargos);
+      echo inputSelectEInput("Integrante", "integrante", $integrantes);
+      echo inputSelectEInput("Núcleo Institucional", "nucleo", $nucleos);
+      echo inputSelectEInput("Organização", "organizacao", $organizacao);
+      echo inputSelectEInput("Local", "local", $locais);
       ?>
 
     </div>
