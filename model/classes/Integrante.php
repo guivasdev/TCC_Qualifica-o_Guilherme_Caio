@@ -17,7 +17,7 @@ class Integrante{
         require_once 'model/MySql.php';
         $pdo = MySql::connect();
 
-        $stmt = $pdo->query("SELECT * FROM integrante");
+        $stmt = $pdo->query("SELECT * FROM integrante ORDER BY nome ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

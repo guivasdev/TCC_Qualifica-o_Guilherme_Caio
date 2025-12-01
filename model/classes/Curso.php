@@ -16,7 +16,7 @@ class Curso{
         require_once 'model/MySql.php';
         $pdo = MySql::connect();
 
-        $stmt = $pdo->query("SELECT * FROM curso");
+        $stmt = $pdo->query("SELECT * FROM curso ORDER BY nome ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

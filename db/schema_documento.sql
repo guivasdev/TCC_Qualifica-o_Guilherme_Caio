@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `documento` (
   `nucleo_id` INT UNSIGNED DEFAULT NULL,
   `curso_id` INT UNSIGNED DEFAULT NULL,
   `local_id` INT UNSIGNED DEFAULT NULL,
-  `integrante_id` INT UNSIGNED DEFAULT NULL,
+  -- integrante_id was deprecated; use join table documento_integrante
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT NULL,
   INDEX `idx_documento_titulo` (`titulo`),
@@ -161,7 +161,6 @@ CREATE TABLE IF NOT EXISTS `predefinicoes` (
   `nucleo_id` INT UNSIGNED DEFAULT NULL,
   `curso_id` INT UNSIGNED DEFAULT NULL,
   `local_id` INT UNSIGNED DEFAULT NULL,
-  `integrante_id` INT UNSIGNED DEFAULT NULL,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT NULL,
   INDEX `idx_predef_nome` (`nome`),
@@ -183,3 +182,21 @@ ALTER TABLE documento
   ADD CONSTRAINT `fk_documento_predefinicao` FOREIGN KEY (`predefinicao_id`) REFERENCES `predefinicoes`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- Observação: coluna `predefinicao_id` é a recomendada (substitui o antigo `fk_predefinicao_id`).
+
+-- Create join table: documento <-> integrante (N:N)
+CREATE TABLE IF NOT EXISTS `documento_integrante` (
+  `documento_id` INT UNSIGNED NOT NULL,
+  `integrante_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`documento_id`,`integrante_id`),
+  CONSTRAINT `fk_docint_documento` FOREIGN KEY (`documento_id`) REFERENCES `documento`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_docint_integrante` FOREIGN KEY (`integrante_id`) REFERENCES `integrante`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create join table: predefinicoes <-> integrante (N:N)
+CREATE TABLE IF NOT EXISTS `predefinicao_integrante` (
+  `predefinicao_id` INT UNSIGNED NOT NULL,
+  `integrante_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`predefinicao_id`,`integrante_id`),
+  CONSTRAINT `fk_predefint_predef` FOREIGN KEY (`predefinicao_id`) REFERENCES `predefinicoes`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_predefint_integrante` FOREIGN KEY (`integrante_id`) REFERENCES `integrante`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

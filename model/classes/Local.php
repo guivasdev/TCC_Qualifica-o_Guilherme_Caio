@@ -16,7 +16,7 @@ class Local{
         require_once 'model/MySql.php';
         $pdo = MySql::connect();
 
-        $stmt = $pdo->query("SELECT * FROM localizacao");
+        $stmt = $pdo->query("SELECT * FROM localizacao ORDER BY nome ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

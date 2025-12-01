@@ -4,10 +4,12 @@
 $base = '/TCC_Qualifica-o_Guilherme_Caio-master';
 
 
-require_once __DIR__ . "/../../model/OrganizacaoRepository.php";
-require_once __DIR__ . "/../../model/NucleoRepository.php";
-require_once __DIR__ . "/../../model/CursoRepository.php";
-require_once __DIR__ . "/../../model/CargoRepository.php";
+require_once __DIR__ . "/../../model/classes/Cargo.php";
+require_once __DIR__ . "/../../model/classes/Curso.php";
+require_once __DIR__ . "/../../model/classes/Integrante.php";
+require_once __DIR__ . "/../../model/classes/NucleoInstitucional.php";
+require_once __DIR__ . "/../../model/classes/Organizacao.php";
+require_once __DIR__ . "/../../model/classes/Local.php";
 
 
 /* ============================

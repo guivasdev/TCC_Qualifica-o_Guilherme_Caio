@@ -33,7 +33,7 @@ class Predefinicao{
         require_once 'model/MySql.php';
         $pdo = MySql::connect();
 
-        $sql = "INSERT INTO predefinicoes (nome, organizacao_id, nucleo_id, curso_id, local_id, integrante_id, dia, hora, prefacio, introducao, assunto, encerramento) VALUES (:nome, :organizacao_id, :nucleo_id, :curso_id, :local_id, :integrante_id, :dia, :hora, :prefacio, :introducao, :assunto, :encerramento)";
+        $sql = "INSERT INTO predefinicoes (nome, organizacao_id, nucleo_id, curso_id, local_id, dia, hora, prefacio, introducao, assunto, encerramento) VALUES (:nome, :organizacao_id, :nucleo_id, :curso_id, :local_id, :dia, :hora, :prefacio, :introducao, :assunto, :encerramento)";
 
         $stmt = $pdo->prepare($sql);
         $ok = $stmt->execute([
@@ -42,7 +42,6 @@ class Predefinicao{
             ':nucleo_id' => $idNucleo,
             ':curso_id' => $idCurso,
             ':local_id' => $idLocalizacao,
-            ':integrante_id' => $idIntegrantes,
             ':dia' => $data,
             ':hora' => $hora,
             ':prefacio' => $prefacio,
@@ -51,7 +50,20 @@ class Predefinicao{
             ':encerramento' => $encerramento
         ]);
 
-        if ($ok) {
+            if ($ok) {
+                $newId = (int)$pdo->lastInsertId();
+                // vincular integrantes ao template via predefinicao_integrante
+                if (!empty($idIntegrantes)) {
+                    if (is_array($idIntegrantes)) {
+                        foreach ($idIntegrantes as $i) {
+                            $ins = $pdo->prepare('INSERT IGNORE INTO predefinicao_integrante (predefinicao_id, integrante_id) VALUES (:predef, :integ)');
+                            $ins->execute([':predef' => $newId, ':integ' => (int)$i]);
+                        }
+                    } else {
+                        $ins = $pdo->prepare('INSERT IGNORE INTO predefinicao_integrante (predefinicao_id, integrante_id) VALUES (:predef, :integ)');
+                        $ins->execute([':predef' => $newId, ':integ' => (int)$idIntegrantes]);
+                    }
+                }
             echo "<script type=\"text/javascript\">alert('Predefinição cadastrada com sucesso!');</script>";
             return 1;
         } else {
@@ -64,7 +76,7 @@ class Predefinicao{
         require_once 'model/MySql.php';
         $pdo = MySql::connect();
 
-        $sql = "UPDATE predefinicoes SET nome = :nome, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id, integrante_id = :integrante_id, dia = :dia, hora = :hora, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento WHERE id = :id";
+        $sql = "UPDATE predefinicoes SET nome = :nome, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id, dia = :dia, hora = :hora, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento WHERE id = :id";
 
         $stmt = $pdo->prepare($sql);
         $ok = $stmt->execute([
@@ -73,7 +85,6 @@ class Predefinicao{
             ':nucleo_id' => $idNucleo,
             ':curso_id' => $idCurso,
             ':local_id' => $idLocalizacao,
-            ':integrante_id' => $idIntegrantes,
             ':dia' => $data,
             ':hora' => $hora,
             ':prefacio' => $prefacio,
@@ -83,7 +94,20 @@ class Predefinicao{
             ':id' => $id
         ]);
 
-        if ($ok) {
+            if ($ok) {
+                // atualiza mapping de integrantes para a predefinicao
+                if (!empty($idIntegrantes)) {
+                    $pdo->prepare('DELETE FROM predefinicao_integrante WHERE predefinicao_id = :predef')->execute([':predef' => $id]);
+                    if (is_array($idIntegrantes)) {
+                        foreach ($idIntegrantes as $i) {
+                            $ins = $pdo->prepare('INSERT IGNORE INTO predefinicao_integrante (predefinicao_id, integrante_id) VALUES (:predef, :integ)');
+                            $ins->execute([':predef' => $id, ':integ' => (int)$i]);
+                        }
+                    } else {
+                        $ins = $pdo->prepare('INSERT IGNORE INTO predefinicao_integrante (predefinicao_id, integrante_id) VALUES (:predef, :integ)');
+                        $ins->execute([':predef' => $id, ':integ' => (int)$idIntegrantes]);
+                    }
+                }
             echo "<script type=\"text/javascript\">alert('Predefinição editada com sucesso!');</script>";
             return 1;
         } else {
@@ -106,6 +130,29 @@ class Predefinicao{
             echo "<script type=\"text/javascript\">alert('Erro durante a exclusão.');</script>";
             return 0;
         }
+    }
+    // helpers para predefinicao_integrante (N:N)
+    // helpers para predefinicao_integrante (N:N)
+    public function adicionarIntegrante($predefinicaoId, $integranteId){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
+        $stmt = $pdo->prepare('INSERT IGNORE INTO predefinicao_integrante (predefinicao_id, integrante_id) VALUES (:predef, :integ)');
+        return $stmt->execute([':predef' => $predefinicaoId, ':integ' => $integranteId]);
+    }
+
+    public function removerIntegrante($predefinicaoId, $integranteId){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
+        $stmt = $pdo->prepare('DELETE FROM predefinicao_integrante WHERE predefinicao_id = :predef AND integrante_id = :integ');
+        return $stmt->execute([':predef' => $predefinicaoId, ':integ' => $integranteId]);
+    }
+
+    public function listarIntegrantes($predefinicaoId){
+        require_once 'model/MySql.php';
+        $pdo = MySql::connect();
+        $stmt = $pdo->prepare('SELECT i.* FROM integrante i JOIN predefinicao_integrante pi ON i.id = pi.integrante_id WHERE pi.predefinicao_id = :predef');
+        $stmt->execute([':predef' => $predefinicaoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

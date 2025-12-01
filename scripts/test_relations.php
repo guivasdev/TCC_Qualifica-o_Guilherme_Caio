@@ -11,6 +11,10 @@ try {
     $integranteId = 1;
     $localId = 1;
 
+    // detecta um documento e predefinicao existentes (fallback para 1)
+    $documentoId = (int)($pdo->query('SELECT id FROM documento LIMIT 1')->fetchColumn() ?: 1);
+    $predefinicaoId = (int)($pdo->query('SELECT id FROM predefinicoes LIMIT 1')->fetchColumn() ?: 1);
+
     echo "Teste: adicionar relacionamento organizacao <-> nucleo...\n";
     $stmt = $pdo->prepare('INSERT IGNORE INTO organizacao_nucleo (organizacao_id, nucleo_id) VALUES (:org, :nuc)');
     $stmt->execute([':org' => $organizacaoId, ':nuc' => $nucleoId]);
@@ -31,6 +35,16 @@ try {
     $stmt->execute([':org' => $organizacaoId, ':local' => $localId]);
     echo "OK\n";
 
+    echo "Teste: adicionar documento <-> integrante...\n";
+    $stmt = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
+    $stmt->execute([':doc' => $documentoId ?? 1, ':integ' => $integranteId]);
+    echo "OK\n";
+
+    echo "Teste: adicionar predefinicao <-> integrante...\n";
+    $stmt = $pdo->prepare('INSERT IGNORE INTO predefinicao_integrante (predefinicao_id, integrante_id) VALUES (:predef, :integ)');
+    $stmt->execute([':predef' => $predefinicaoId ?? 1, ':integ' => $integranteId]);
+    echo "OK\n";
+
     echo "Verificando entradas...\n";
     $rows = $pdo->query('SELECT * FROM organizacao_nucleo')->fetchAll(PDO::FETCH_ASSOC);
     print_r($rows);
@@ -41,6 +55,8 @@ try {
     $pdo->prepare('DELETE FROM organizacao_curso WHERE organizacao_id = :org AND curso_id = :curso')->execute([':org' => $organizacaoId, ':curso' => $cursoId]);
     $pdo->prepare('DELETE FROM organizacao_integrante WHERE organizacao_id = :org AND integrante_id = :integ')->execute([':org' => $organizacaoId, ':integ' => $integranteId]);
     $pdo->prepare('DELETE FROM organizacao_local WHERE organizacao_id = :org AND local_id = :local')->execute([':org' => $organizacaoId, ':local' => $localId]);
+    $pdo->prepare('DELETE FROM documento_integrante WHERE documento_id = :doc AND integrante_id = :integ')->execute([':doc' => $documentoId ?? 1, ':integ' => $integranteId]);
+    $pdo->prepare('DELETE FROM predefinicao_integrante WHERE predefinicao_id = :predef AND integrante_id = :integ')->execute([':predef' => $predefinicaoId ?? 1, ':integ' => $integranteId]);
     echo "Removido\n";
 
 } catch (Exception $e) {

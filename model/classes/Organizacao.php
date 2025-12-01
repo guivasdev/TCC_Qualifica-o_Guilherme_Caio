@@ -19,7 +19,7 @@ class Organizacao{
         require_once 'model/MySql.php';
         $pdo = MySql::connect();
 
-        $stmt = $pdo->query("SELECT * FROM organizacao");
+        $stmt = $pdo->query("SELECT * FROM organizacao ORDER BY nome ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
