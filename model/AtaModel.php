@@ -89,7 +89,7 @@ class AtaModel
     // =======================================================
     //  CRIAR ATA (CORRIGIDO)
     // =======================================================
-   public function criarAta($organizacoes, $cursos, $nucleos, $cargos)
+   public function criarAta($organizacoes, $cursos, $nucleos, $cargos, $integrantes, $locais)
 {
     if (ob_get_length()) {
         ob_end_clean();
@@ -102,9 +102,10 @@ class AtaModel
         $curso = $this->obterValorCampo('curso', $cursos);
         $nucleo = $this->obterValorCampo('nucleo', $nucleos);
         $cargo = $this->obterValorCampo('cargo', $cargos);
+        $integrantes = $this->obterValorCampo('integante', $integrantes);
+        $local = $this->obterValorCampo('local', $locais);
 
         // Outros campos
-        $local = $_POST['local'] ?? '';
         $data = $_POST['data'] ?? '';
         $horaInicial = $_POST['hora_inicial'] ?? '';
         $horaFinal = $_POST['hora_final'] ?? '';
@@ -164,7 +165,7 @@ class AtaModel
 
         $pdf->Write(0, 'Data: ' . $textoData);
         $pdf->Ln(6);
-        $pdf->Write(0, 'Local: ' . $local);
+        $pdf->Write(0, $local);
         $pdf->Ln(6);
         $pdf->Write(0, 'Horário: ' . $horaInicial . 'h às ' . $horaFinal . 'h.');
         $pdf->Ln(10);
@@ -174,9 +175,9 @@ class AtaModel
         $pdf->writeHTML($style . '<p>' . nl2br($infoIntro) . '</p>');
         $pdf->Ln(5);
 
-        for ($i = 0; $i < 5; $i++) {
-            $pdf->Write(0, "teste dos integrantes ______________________");
-            $pdf->Ln(5);
+        foreach ($i as $integrantes) {
+
+            $pdf->Write(0, $i +" ______________________");
         }
 
         $pdf->Ln(5);

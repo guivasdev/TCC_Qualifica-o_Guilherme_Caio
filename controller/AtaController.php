@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__ . '/../model/OrganizacaoRepository.php';
-require_once __DIR__ . '/../model/CadastroRepository.php';
-require_once __DIR__ . '/../model/AtaRepository.php';
-require_once __DIR__ . '/../model/CargoRepository.php';
-require_once __DIR__ . '/../model/CursoRepository.php';
-require_once __DIR__ . '/../model/NucleoRepository.php';
+require_once __DIR__ . "/../../model/classes/Cargo.php";
+require_once __DIR__ . "/../../model/classes/Curso.php";
+require_once __DIR__ . "/../../model/classes/Integrante.php";
+require_once __DIR__ . "/../../model/classes/NucleoInstitucional.php";
+require_once __DIR__ . "/../../model/classes/Organizacao.php";
+require_once __DIR__ . "/../../model/classes/Local.php";
 
 
 class AtaController
@@ -20,13 +20,15 @@ class AtaController
 
     public function gerarAta()
     {
-        $organizacoes = (new OrganizacaoRepository())->buscarTodas();
-        $cursos = (new CursoRepository())->buscarTodas();
-        $nucleos = (new NucleoRepository())->buscarTodas();
-        $cargos = (new CargoRepository())->buscarTodas();
+        $cursos = (new Curso())->getALLCursos();
+        $cargos = (new Cargo())->getALLCargos();
+        $integrantes = (new Integrante())->getALLIntegrantes();
+        $nucleos = (new NucleoInstitucional())->getALLNucleoInstitucional();
+        $organizacoes = (new Organizacao())->getALLOrganizacoes();
+        $locais = (new Local())->getALLLocalizacao();
 
         $ataModel = new AtaModel();
-        $ataModel->criarAta($organizacoes, $cursos, $nucleos, $cargos);
+        $ataModel->criarAta($organizacoes, $cursos, $nucleos, $cargos, $integrantes, $locais);
     }
 
     public function buscarAta()
