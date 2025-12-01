@@ -1,6 +1,6 @@
 <?php
  define('HOST', 'localhost');
-    define('DB', 'testetcc');
+    define('DB', 'outrora');
     define('USER', 'root');
     define('PASS', '');
     $banco = new MySql();

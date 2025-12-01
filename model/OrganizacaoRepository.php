@@ -6,7 +6,7 @@ class OrganizacaoRepository {
 
     public function __construct() {
         $this->pdo = new PDO(
-            "mysql:host=localhost;dbname=testetcc;charset=utf8",
+            "mysql:host=localhost;dbname=outrora;charset=utf8",
             "root",
             "",
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]

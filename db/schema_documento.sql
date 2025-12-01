@@ -1,5 +1,5 @@
 -- Schema completo para o projeto: tabelas de apoio + tabela `documento` usada para ATAs
--- Ajuste o nome do banco conforme seu ambiente (ex.: `testetcc`).
+-- Ajuste o nome do banco conforme seu ambiente (ex.: `outrora`).
 -- Executar em ambiente de desenvolvimento; revise antes de aplicar em produção.
 
 -- Recomendações: faça backup antes de rodar ou use migrations.

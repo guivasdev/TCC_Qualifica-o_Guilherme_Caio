@@ -25,12 +25,12 @@ $repoLocal = new Local();
 /* ============================
    BUSCA DO BANCO
 ================================*/
-$cursos = $repoCargo->buscarTodos();
-$cargos = $repoCurso->buscarTodos();
-$integrantes = $repoIntegrante->buscarTodos();
-$nucleos = $repoNucleo->buscarTodas();
-$organizacao = $repoOrganizacao->buscarTodas();
-$locais = $repoLocal->buscarTodos();
+$cursos = $repoCurso->getALLCursos();
+$cargos = $repoCargo->getALLCargos();
+$integrantes = $repoIntegrante->getALLIntegrantes();
+$nucleos = $repoNucleo->getALLNucleoInstitucional();
+$organizacao = $repoOrganizacao->getALLOrganizacoes();
+$locais = $repoLocal->getALLLocalizacao();
 
 /* COMPONENTES */
 require_once 'componentes.php';
