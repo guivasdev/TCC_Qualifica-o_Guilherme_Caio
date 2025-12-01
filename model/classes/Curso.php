@@ -4,7 +4,7 @@ class Curso{
     private $nome = "";
 
     public function getCurso($id, $nome){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("SELECT * FROM curso WHERE id = :id OR nome = :nome");
@@ -13,7 +13,7 @@ class Curso{
     }
 
     public function getALLCursos(){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->query("SELECT * FROM curso ORDER BY nome ASC");
@@ -21,7 +21,7 @@ class Curso{
     }
 
     public function cadastrarCurso($nome): int {
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("INSERT INTO curso (nome) VALUES (:nome)");
@@ -37,7 +37,7 @@ class Curso{
     }
 
     public function editarCurso($id, $nome):int{
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("UPDATE curso SET nome = :nome WHERE id = :id");
@@ -53,7 +53,7 @@ class Curso{
     }
 
     public function excluirCurso($confirmar, $curso):int{
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("DELETE FROM curso WHERE id = :id");

@@ -5,7 +5,7 @@ class Cargo{
     private $sigla = "";
 
     public function getCargo($id, $nome){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("SELECT * FROM cargo WHERE id = :id OR nome = :nome");
@@ -14,7 +14,7 @@ class Cargo{
     }
 
     public function getALLCargos(){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->query("SELECT * FROM cargo ORDER BY nome ASC");
@@ -22,7 +22,7 @@ class Cargo{
     }
 
     public function cadastrarCargo($nome, $sigla):int{
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("INSERT INTO cargo (nome, sigla) VALUES (:nome, :sigla)");
@@ -38,7 +38,7 @@ class Cargo{
     }
 
     public function editarCargo($id, $nome, $sigla):int{
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("UPDATE cargo SET nome = :nome, sigla = :sigla WHERE id = :id");
@@ -54,7 +54,7 @@ class Cargo{
     }
 
     public function excluriarCargo($confirmar, $cargo):int{
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("DELETE FROM cargo WHERE id = :id");

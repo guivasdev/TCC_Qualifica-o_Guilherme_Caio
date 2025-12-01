@@ -6,7 +6,7 @@ class NucleoInstitucional{
     private $sigla = "";
 
     public function getNucleoInstitucional($id, $nome){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("SELECT * FROM nucleo_institucional WHERE id = :id OR nome = :nome");
@@ -15,7 +15,7 @@ class NucleoInstitucional{
     }
 
     public function getALLNucleoInstitucional(){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->query("SELECT * FROM nucleo_institucional ORDER BY nome ASC");
@@ -23,7 +23,7 @@ class NucleoInstitucional{
     }
 
     public function cadastrarNucleo($nome){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("INSERT INTO nucleo_institucional (nome) VALUES (:nome)");
@@ -39,7 +39,7 @@ class NucleoInstitucional{
     }
 
     public function adicionarIntegrante($id, $idInteg){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         // Usa tabela de junção nucleo_integrante
@@ -50,7 +50,7 @@ class NucleoInstitucional{
     }
 
     public function removerIntegrante($id, $idInteg){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $sql = "DELETE FROM nucleo_integrante WHERE nucleo_id = :nucleo_id AND integrante_id = :integ_id";
@@ -60,7 +60,7 @@ class NucleoInstitucional{
     }
 
     public function editarNucleo($id){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("UPDATE nucleo_institucional SET nome = :nome WHERE id = :id");
@@ -69,7 +69,7 @@ class NucleoInstitucional{
     }
 
     public function excluirNucleo($confirmar, $id){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("DELETE FROM nucleo_institucional WHERE id = :id");

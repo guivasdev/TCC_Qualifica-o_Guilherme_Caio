@@ -44,7 +44,7 @@
         }
 
         public function getDocumento($id, $nome){ #banco de dados
-            require_once 'model/MySql.php';
+            require_once __DIR__ ."/../MySql.php";
             $pdo = MySql::connect();
 
             $stmt = $pdo->prepare("SELECT * FROM documento WHERE id = :id OR nome = :nome");
@@ -55,7 +55,7 @@
         }
 
         public function getALLDocumentos(){ #banco de dados
-            require_once 'model/MySql.php';
+            require_once __DIR__ ."/../MySql.php";
             $pdo = MySql::connect();
 
             $stmt = $pdo->query("SELECT * FROM documento");
@@ -63,7 +63,7 @@
         }
 
         public function cadastrarDocumento($nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento, $predefinicaoId = null){ #banco de dados
-            require_once 'model/MySql.php';
+            require_once __DIR__ ."/../MySql.php";
             $pdo = MySql::connect();
 
             // Normaliza nomes de parâmetro (alguns antigos usam caracteres especiais)
@@ -117,7 +117,7 @@
         }
 
         public function EditarDocumento($id, $nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento, $predefinicaoId = null){ #banco de dados
-            require_once 'model/MySql.php';
+            require_once __DIR__ ."/../MySql.php";
             $pdo = MySql::connect();
 
             // Normaliza nomes locais
@@ -173,7 +173,7 @@
         }
 
         public function excluirDocumento($id): int{ #banco de dados
-            require_once 'model/MySql.php';
+            require_once __DIR__ ."/../MySql.php";
             $pdo = MySql::connect();
 
             $stmt = $pdo->prepare("DELETE FROM documento WHERE id = :id");
@@ -190,21 +190,21 @@
 
         // ---------------- helpers para documento_integrante (N:N)
         public function adicionarIntegrante($documentoId, $integranteId){
-            require_once 'model/MySql.php';
+            require_once __DIR__ ."/../MySql.php";
             $pdo = MySql::connect();
             $stmt = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
             return $stmt->execute([':doc' => $documentoId, ':integ' => $integranteId]);
         }
 
         public function removerIntegrante($documentoId, $integranteId){
-            require_once 'model/MySql.php';
+            require_once __DIR__ ."/../MySql.php";
             $pdo = MySql::connect();
             $stmt = $pdo->prepare('DELETE FROM documento_integrante WHERE documento_id = :doc AND integrante_id = :integ');
             return $stmt->execute([':doc' => $documentoId, ':integ' => $integranteId]);
         }
 
         public function listarIntegrantes($documentoId){
-            require_once 'model/MySql.php';
+            require_once __DIR__ ."/../MySql.php";
             $pdo = MySql::connect();
             $stmt = $pdo->prepare('SELECT i.* FROM integrante i JOIN documento_integrante di ON i.id = di.integrante_id WHERE di.documento_id = :doc');
             $stmt->execute([':doc' => $documentoId]);

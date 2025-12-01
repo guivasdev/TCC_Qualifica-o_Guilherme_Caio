@@ -4,7 +4,7 @@ class Local{
     private $nome="";
 
     public function getLocalizacao($id, $nome){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("SELECT * FROM localizacao WHERE id = :id OR nome = :nome");
@@ -13,7 +13,7 @@ class Local{
     }
 
     public function getALLLocalizacao(){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->query("SELECT * FROM localizacao ORDER BY nome ASC");
@@ -21,7 +21,7 @@ class Local{
     }
 
     public function cadastrarLocal($nome): int{
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("INSERT INTO localizacao (nome) VALUES (:nome)");
@@ -37,7 +37,7 @@ class Local{
     }
 
     public function editarLocal($id, $nome): int{
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("UPDATE localizacao SET nome = :nome WHERE id = :id");
@@ -53,7 +53,7 @@ class Local{
     }
 
     public function excluirLocal($confirmar, $id): int{
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("DELETE FROM localizacao WHERE id = :id");

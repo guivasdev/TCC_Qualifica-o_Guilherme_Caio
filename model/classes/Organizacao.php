@@ -7,7 +7,7 @@ class Organizacao{
     private $integrantes = [];
 
     public function getOrganizacao($id, $nome){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("SELECT * FROM organizacao WHERE id = :id OR nome = :nome");
@@ -16,7 +16,7 @@ class Organizacao{
     }
 
     public function getALLOrganizacoes(){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->query("SELECT * FROM organizacao ORDER BY nome ASC");
@@ -24,7 +24,7 @@ class Organizacao{
     }
 
     public function cadastrarOrganizacao($nome){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("INSERT INTO organizacao (nome) VALUES (:nome)");
@@ -34,7 +34,7 @@ class Organizacao{
     }
 
     public function adicionarNucleo($id, $idNucleo){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         // Usa tabela de junção organizacao_nucleo (N:N)
@@ -45,7 +45,7 @@ class Organizacao{
     }
 
     public function removerNucleo($id, $idNucleo){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $sql = "DELETE FROM organizacao_nucleo WHERE organizacao_id = :org_id AND nucleo_id = :nucleo_id";
@@ -55,7 +55,7 @@ class Organizacao{
     }
 
     public function adicionarCurso($id, $idCurso){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         // Usa tabela de junção organizacao_curso
@@ -66,7 +66,7 @@ class Organizacao{
     }
 
     public function removerCurso($id, $idCurso){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $sql = "DELETE FROM organizacao_curso WHERE organizacao_id = :org_id AND curso_id = :curso_id";
@@ -76,7 +76,7 @@ class Organizacao{
     }
 
     public function adicionarIntegrantes($id, $idIntegrantes){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         // Usa tabela de junção organizacao_integrante
@@ -87,7 +87,7 @@ class Organizacao{
     }
 
     public function removerIntegrante($id, $idIntegrante){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $sql = "DELETE FROM organizacao_integrante WHERE organizacao_id = :org_id AND integrante_id = :integ_id";
@@ -97,7 +97,7 @@ class Organizacao{
     }
 
     public function adicionarLocalizacao($id, $idLocalizacao){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         // Usa tabela de junção organizacao_local
@@ -108,7 +108,7 @@ class Organizacao{
     }
 
     public function removerLocalizacao($id, $idLocalizacao){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $sql = "DELETE FROM organizacao_local WHERE organizacao_id = :org_id AND local_id = :local_id";
@@ -118,7 +118,7 @@ class Organizacao{
     }
 
     public function editarOrganizacao($id, $nome){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("UPDATE organizacao SET nome = :nome WHERE id = :id");
@@ -127,7 +127,7 @@ class Organizacao{
     }
 
     public function excluirOrganizacao($confirmar, $id){
-        require_once 'model/MySql.php';
+        require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("DELETE FROM organizacao WHERE id = :id");
