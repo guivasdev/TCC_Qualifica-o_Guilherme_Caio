@@ -3,7 +3,7 @@
     class Pesquisa{
         public $documento = new Documento();
 
-        public function Pesquisar(): Documento{
+        public function Pesquisar(){
             require_once __DIR__ . '/../MySQL.php';
             $pdo = MySQL::conectar();
 
@@ -16,6 +16,12 @@
             LEFT JOIN documento_integrante di ON di.documento_id = d.id
             LEFT JOIN integrante i ON i.id = di.integrante_id");
 
+            if($sql->execute()){
+                $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+                
+                return $resultado;
+            }
+            
         }
     }
 ?>

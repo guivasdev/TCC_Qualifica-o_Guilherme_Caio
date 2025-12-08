@@ -1,7 +1,12 @@
 <?php 
+    require_once __DIR__ . '/../model/classes/Pesquisa.php';
+
     class BuscarAtaModel{
-        public function buscarAtaa(){
-            return 'busca da ata com sucesso teste';
+
+        public function buscarAtas(){
+            $Busca = new Pesquisa();
+            
+            return $Busca->Pesquisar();
         }
     }
 ?>
