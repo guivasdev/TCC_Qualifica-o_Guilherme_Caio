@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../Model/classes/Documento.php';
 
 // =======================================================
 //  Classe personalizada TCPDF
@@ -147,6 +148,24 @@ class AtaModel
             $novaData
         );
 
+        $doc = new Documento();
+
+        $doc->cadastrarDocumento(
+                $nome, 
+                $titulo, 
+                $data, 
+                $hora_inicio, 
+                $hora_final, 
+                $prefacio, 
+                $introducao, 
+                $assunto, 
+                $encerramento, 
+                $idOrganizacao, 
+                $idNucleoInstitucional, 
+                $idCurso, 
+                $idLocal
+        );
+
         // ================================================
         //  GERAÇÃO DO PDF
         // ================================================
@@ -180,7 +199,7 @@ class AtaModel
             $pdf->Write(0, $i +" ______________________");
         }
 
-        $pdf->Ln(5);
+        $pdf->Ln(20);// Espaço antes do prefácio valor anteriro 5, adicionado + 15, motiovo integrantes
         $pdf->writeHTML($style . '<p>' . nl2br($prefacio) . '</p>');
         $pdf->Ln(10);
 

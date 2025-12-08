@@ -62,7 +62,7 @@
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        public function cadastrarDocumento($nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento, $predefinicaoId = null){ #banco de dados
+        public function cadastrarDocumento($nome, $titulo, $data, $hora_inicio, $hora_final, $prefacio, $introducao, $assunto, $encerramento, $idOrganizacao, $idNucleoInstitucional, $idCurso, $idLocal){ #banco de dados
             require_once __DIR__ ."/../MySql.php";
             $pdo = MySql::connect();
 
@@ -73,23 +73,25 @@
             $fkLocal = $idLocalizacao;
             $fkIntegrantes = $idIntegrantes;
 
-            $sql = "INSERT INTO documento (titulo, organizacao_id, nucleo_id, curso_id, local_id, data, hora_inicio, prefacio, introducao, assunto, encerramento, conteudo, predefinicao_id) VALUES (:titulo, :organizacao_id, :nucleo_id, :curso_id, :local_id, :data, :hora_inicio, :prefacio, :introducao, :assunto, :encerramento, :conteudo, :predefinicao_id)";
+            $sql = "INSERT INTO documento (nome, titulo, data, hora_inicio, hora_final prefacio, introducao, assunto, encerramento, conteudo, organizacao_id, nucleo_id, curso_id, local_id, predefinicao_id) VALUES (:nome, :titulo, :data, :hora_inicio, :hora_final, :prefacio, :introducao, :assunto, :encerramento, :conteudo, :organizacao_id, :nucleo_id, :curso_id, :local_id, :predefinicao_id)";
 
             $stmt = $pdo->prepare($sql);
             $ok = $stmt->execute([
-                ':titulo' => $nome,
-                ':organizacao_id' => $idOrganizacao,
-                ':nucleo_id' => $idNucleoInstitucional,
-                ':curso_id' => $fkCurso,
-                ':local_id' => $fkLocal,
-                ':data' => $data,
-                ':hora_inicio' => $hora,
-                ':prefacio' => $prefacio,
-                ':introducao' => $introducao,
-                ':assunto' => $assunto,
-                ':encerramento' => $encerramento,
-                ':conteudo' => null,
-                ':predefinicao_id' => $predefinicaoId
+                ':nome' => $nome, 
+                ':titulo' => $titulo, 
+                ':data' => $data, 
+                ':hora_inicio' => $hora_inicio, 
+                ':hora_final' => $hora_final, 
+                ':prefacio' => $prefacio, 
+                ':introducao' => $introducao, 
+                ':assunto' => $assunto, 
+                ':encerramento' => $encerramento, 
+                ':conteudo' => null, 
+                ':organizacao_id' => $idOrganizacao, 
+                ':nucleo_id' => $idNucleoInstitucional, 
+                ':curso_id' => $idCurso, 
+                ':local_id' => $idLocal, 
+                ':predefinicao_id '=> null
             ]);
 
             if ($ok) {
