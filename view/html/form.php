@@ -1,11 +1,11 @@
 <?php
-$base = '/TCC_Qualifica-o_Guilherme_Caio-master';
+$base = '/TCC_Qualifica-o_Guilherme_Caio';
 
-// Garante que as variáveis existam (evita tela branca)
-$organizacoes = $organizacoes ?? [];
-$nucleos = $nucleos ?? [];
-$cursos = $cursos ?? [];
-$cargos = $cargos ?? [];
+$organizacoes = $dados['organizacoes'] ?? [];
+$nucleos = $dados['nucleos'] ?? [];
+$cursos = $dados['cursos'] ?? [];
+$cargos = $dados['cargos'] ?? [];
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -118,7 +118,7 @@ $cargos = $cargos ?? [];
             <option value="">Selecione...</option>
             <option value="organizacao">Organização</option>
             <option value="nucleo">Núcleo</option>
-            <option value="cursos">Curso</option>
+            <option value="curso">Curso</option>
             <option value="cargo">Cargo</option>
             <option value="integrante">Integrante</option>
         </select>

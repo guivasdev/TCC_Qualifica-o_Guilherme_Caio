@@ -1,5 +1,5 @@
 <?php
-$base = '/TCC_Qualifica-o_Guilherme_Caio-master';
+$base = '/TCC_Qualifica-o_Guilherme_Caio';
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +59,7 @@ $base = '/TCC_Qualifica-o_Guilherme_Caio-master';
     <div id="resultado" class="overlay"></div>
   </div>
   <?php
-  $path = '/TCC_Qualifica-o_Guilherme_Caio-master/js/';
+  $path = '/TCC_Qualifica-o_Guilherme_Caio/js/';
   ?>
 
   <script src="<?php echo $path; ?>jquery-3.7.1.min.js"></script>

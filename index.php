@@ -47,6 +47,6 @@ switch ($acao) {
         break;
 
     case 'form':
-        $controller->mostrarFormularioUnico();
+        $controller->exibirFormularioCriar();
         break;
 }

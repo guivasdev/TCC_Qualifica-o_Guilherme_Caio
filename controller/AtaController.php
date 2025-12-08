@@ -18,6 +18,7 @@ class AtaController
         $this->view = $view;
     }
 
+
     public function gerarAta()
     {
         $organizacoes = (new OrganizacaoRepository())->buscarTodas();

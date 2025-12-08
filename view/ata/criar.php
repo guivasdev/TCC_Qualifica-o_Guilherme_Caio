@@ -1,7 +1,7 @@
 <?php include 'header.php'; ?>
 
 <?php
-$base = '/TCC_Qualifica-o_Guilherme_Caio-master';
+$base = '/TCC_Qualifica-o_Guilherme_Caio';
 
 
 require_once __DIR__ . "/../../model/OrganizacaoRepository.php";
@@ -31,7 +31,7 @@ require_once 'componentes.php';
 ?>
 
 <link rel="stylesheet" href="<?php echo $base; ?>/externo/CriarAta.css">
-<form id="formAta" method="post" action="/TCC_Qualifica-o_Guilherme_Caio-master/index.php?acao=gerarAta">
+<form id="formAta" method="post" action="/TCC_Qualifica-o_Guilherme_Caio/index.php?acao=gerarAta">
 
   <!-- TABELA QUE SERÁ SALVA -->
   <input type="hidden" name="tabela" value="documento">
