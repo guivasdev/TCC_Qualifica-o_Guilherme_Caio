@@ -129,24 +129,23 @@
             $fkLocal = $idLocalizacao;
             $fkIntegrantes = $idIntegrantes;
 
-            $sql = "UPDATE documento SET titulo = :titulo, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id, data = :data, hora_inicio = :hora_inicio, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento, conteudo = :conteudo, predefinicao_id = :predefinicao_id WHERE id = :id";
+            $sql = "UPDATE documento SET 'nome = :nome, titulo = :titulo, data = :data, hora_inicio = :hora_inicio, hora_final = :hora_final, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id' WHERE id = :id";
 
             $stmt = $pdo->prepare($sql);
             $ok = $stmt->execute([
-                ':titulo' => $nome,
-                ':organizacao_id' => $idOrganizacao,
-                ':nucleo_id' => $idNucleoInstitucional,
-                ':curso_id' => $fkCurso,
-                ':local_id' => $fkLocal,
-                ':data' => $data,
-                ':hora_inicio' => $hora,
-                ':prefacio' => $prefacio,
-                ':introducao' => $introducao,
-                ':assunto' => $assunto,
-                ':encerramento' => $encerramento,
-                ':conteudo' => null,
-                ':predefinicao_id' => $predefinicaoId,
-                ':id' => $id
+                ':nome' => $nome, 
+                ':titulo' => $titulo, 
+                ':data' => $data, 
+                ':hora_inicio' => $hora_inicio, 
+                ':hora_final' => $hora_final, 
+                ':prefacio' => $prefacio, 
+                ':introducao' => $introducao, 
+                ':assunto' => $assunto, 
+                ':encerramento' => $encerramento, 
+                ':organizacao_id' => $idOrganizacao, 
+                ':nucleo_id' => $idNucleoInstitucional, 
+                ':curso_id' => $idCurso, 
+                ':local_id' => $idLocal, 
             ]);
 
             if ($ok) {
