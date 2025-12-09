@@ -28,12 +28,12 @@ INSERT INTO localizacao (nome) VALUES
 ('Sala Virtual - Zoom');
 
 -- 4) organizacoes
-INSERT INTO organizacao (nome) VALUES
-('Diretoria Acadêmica'),
-('Coordenação de Curso A'),
-('Coordenação de Curso B'),
-('Comissão de Pesquisa'),
-('Centro Estudantil');
+INSERT INTO organizacao (nome, sigla) VALUES
+('Diretoria Acadêmica', 'DA'),
+('Coordenação de Curso A', 'CCA'),
+('Coordenação de Curso B', 'CCB'),
+('Comissão de Pesquisa', 'CP'),
+('Centro Estudantil', 'CE');
 
 -- 5) núcleos institucionais
 INSERT INTO nucleo_institucional (nome, sigla) VALUES
