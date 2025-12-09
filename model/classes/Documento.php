@@ -1,206 +1,218 @@
 <?php
-    class Documento{
-        public $nome = "";
-        public $predefinicao_id = null;
-        public $nucleoInstitucional = "";
-        public $curso = "";
-        public $organizacao = "";
-        public $data = "";
-        public $horas = "";
-        public $local = "";
-        public $hora = "";
-        public $integrantes = [];
-        public $introducao = "";
-        public $assunto = "";
-        public $encerramento = "";
-        public $prefacio = "";
+class Documento
+{
+    public $nome = "";
+    public $predefinicao_id = null;
+    public $nucleoInstitucional = "";
+    public $curso = "";
+    public $organizacao = "";
+    public $data = "";
+    public $horas = "";
+    public $local = "";
+    public $hora = "";
+    public $integrantes = [];
+    public $introducao = "";
+    public $assunto = "";
+    public $encerramento = "";
+    public $prefacio = "";
 
-        /*
-        public function getComponentes($n, $c, $o, $d, $l, $h, $i, $in, $a, $e, $p){
-           
-            $this->nucleoInstitucional = $n;
-            $this->curso = $c;
-            $this->organizacao = $o;
-            $this->data = $d;
-            $this->local = $l;
-            $this->hora = $h;
-            $this->integrantes = $i;
-            $this->introducao = $in;
-            $this->assunto = $a;
-            $this->encerramento = $e;
-            $this->prefacio = $p;
-        }
-        */
+    /*
+    public function getComponentes($n, $c, $o, $d, $l, $h, $i, $in, $a, $e, $p){
 
-        public function gerarDocumento(): int{ #Geração do documento
-            return 0;
-        }
+        $this->nucleoInstitucional = $n;
+        $this->curso = $c;
+        $this->organizacao = $o;
+        $this->data = $d;
+        $this->local = $l;
+        $this->hora = $h;
+        $this->integrantes = $i;
+        $this->introducao = $in;
+        $this->assunto = $a;
+        $this->encerramento = $e;
+        $this->prefacio = $p;
+    }
+    */
 
-        public function salvarVersao($documento): int{ #Versionamento
-            return 0;
-        }
-        public function recuperarVersao($byteJson): int{ #Versionamento
-            return 0;
-        }
+    public function gerarDocumento(): int
+    { #Geração do documento
+        return 0;
+    }
 
-        public function getDocumento($id, $nome){ #banco de dados
-            require_once __DIR__ ."/../MySql.php";
-            $pdo = MySql::connect();
+    public function salvarVersao($documento): int
+    { #Versionamento
+        return 0;
+    }
+    public function recuperarVersao($byteJson): int
+    { #Versionamento
+        return 0;
+    }
 
-            $stmt = $pdo->prepare("SELECT * FROM documento WHERE id = :id OR nome = :nome");
-            $stmt->execute([':id' => $id, ':nome' => $nome]);
-            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function getDocumento($id, $nome)
+    { #banco de dados
+        require_once __DIR__ . "/../MySql.php";
+        $pdo = MySql::connect();
 
-            return $res ?: [];
-        }
+        $stmt = $pdo->prepare("SELECT * FROM documento WHERE id = :id OR nome = :nome");
+        $stmt->execute([':id' => $id, ':nome' => $nome]);
+        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        public function getALLDocumentos(){ #banco de dados
-            require_once __DIR__ ."/../MySql.php";
-            $pdo = MySql::connect();
+        return $res ?: [];
+    }
 
-            $stmt = $pdo->query("SELECT * FROM documento");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
+    public function getALLDocumentos()
+    { #banco de dados
+        require_once __DIR__ . "/../MySql.php";
+        $pdo = MySql::connect();
 
-        public function cadastrarDocumento($nome, $data, $hora_inicio, $hora_final, $prefacio, $introducao, $assunto, $encerramento, $idOrganizacao, $idNucleoInstitucional, $idCurso, $idLocal){ #banco de dados
-            require_once __DIR__ ."/../MySql.php";
-            $pdo = MySql::connect();        
+        $stmt = $pdo->query("SELECT * FROM documento");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-            $sql = "INSERT INTO documento (nome, data, hora_inicio, hora_final prefacio, introducao, assunto, encerramento, conteudo, organizacao_id, nucleo_id, curso_id, local_id, predefinicao_id) VALUES (:nome, :data, :hora_inicio, :hora_final, :prefacio, :introducao, :assunto, :encerramento, :conteudo, :organizacao_id, :nucleo_id, :curso_id, :local_id, :predefinicao_id)";
+    public function cadastrarDocumento($nome, $data, $hora_inicio, $hora_final, $prefacio, $introducao, $assunto, $encerramento, $idOrganizacao, $idNucleoInstitucional, $idCurso, $idLocal)
+    { #banco de dados
 
-            $stmt = $pdo->prepare($sql);
-            $ok = $stmt->execute([
-                ':nome' => $nome, 
-                ':data' => $data, 
-                ':hora_inicio' => $hora_inicio, 
-                ':hora_final' => $hora_final, 
-                ':prefacio' => $prefacio, 
-                ':introducao' => $introducao, 
-                ':assunto' => $assunto, 
-                ':encerramento' => $encerramento, 
-                ':conteudo' => null, 
-                ':organizacao_id' => $idOrganizacao, 
-                ':nucleo_id' => $idNucleoInstitucional, 
-                ':curso_id' => $idCurso, 
-                ':local_id' => $idLocal, 
-                ':predefinicao_id '=> null
-            ]);
+        require_once __DIR__ . "/../MySql.php";
+        $pdo = MySql::connect();
 
-            if ($ok) {
-                $newId = (int)$pdo->lastInsertId();
+        $sql = "INSERT INTO documento (nome, data, hora_inicio, hora_final, prefacio, introducao, assunto, encerramento, conteudo, organizacao_id, nucleo_id, curso_id, local_id) VALUES (:nome, :data, :hora_inicio, :hora_final, :prefacio, :introducao, :assunto, :encerramento, :conteudo, :organizacao_id, :nucleo_id, :curso_id, :local_id)";
 
-                // vincula integrantes (se informado) na join table documento_integrante
-                if (!empty($fkIntegrantes)) {
-                    if (is_array($fkIntegrantes)) {
-                        foreach ($fkIntegrantes as $i) {
-                            $ins = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
-                            $ins->execute([':doc' => $newId, ':integ' => (int)$i]);
-                        }
-                    } else {
+        $stmt = $pdo->prepare($sql);
+        $ok = $stmt->execute([
+            ':nome' => $nome,
+            ':data' => $data,
+            ':hora_inicio' => $hora_inicio,
+            ':hora_final' => $hora_final,
+            ':prefacio' => $prefacio,
+            ':introducao' => $introducao,
+            ':assunto' => $assunto,
+            ':encerramento' => $encerramento,
+            ':conteudo' => null,
+            ':organizacao_id' => $idOrganizacao,
+            ':nucleo_id' => $idNucleoInstitucional,
+            ':curso_id' => $idCurso,
+            ':local_id' => $idLocal,
+        ]);
+
+        if ($ok) {
+            $newId = (int) $pdo->lastInsertId();
+
+            // vincula integrantes (se informado) na join table documento_integrante
+            if (!empty($fkIntegrantes)) {
+                if (is_array($fkIntegrantes)) {
+                    foreach ($fkIntegrantes as $i) {
                         $ins = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
-                        $ins->execute([':doc' => $newId, ':integ' => (int)$fkIntegrantes]);
+                        $ins->execute([':doc' => $newId, ':integ' => (int) $i]);
                     }
+                } else {
+                    $ins = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
+                    $ins->execute([':doc' => $newId, ':integ' => (int) $fkIntegrantes]);
                 }
-
-                echo "<script type=\"text/javascript\">alert('Documento cadastrado com sucesso!');</script>";
-                return 1;
-            } else {
-                echo "<script type=\"text/javascript\">alert('Erro durante o cadastro.');</script>";
-                return 0;
             }
-        }
 
-        public function EditarDocumento($id, $nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento, $predefinicaoId = null){ #banco de dados
-            require_once __DIR__ ."/../MySql.php";
-            $pdo = MySql::connect();
-
-            // Normaliza nomes locais
-            $idOrganizacao = $idOrganização;
-            $idNucleoInstitucional = $idNucleo;
-            $fkCurso = $idCurso;
-            $fkLocal = $idLocalizacao;
-            $fkIntegrantes = $idIntegrantes;
-
-            $sql = "UPDATE documento SET 'nome = :nome, data = :data, hora_inicio = :hora_inicio, hora_final = :hora_final, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id' WHERE id = :id";
-
-            $stmt = $pdo->prepare($sql);
-            $ok = $stmt->execute([
-                ':nome' => $nome,
-                ':data' => $data, 
-                ':hora_inicio' => $hora_inicio, 
-                ':hora_final' => $hora_final, 
-                ':prefacio' => $prefacio, 
-                ':introducao' => $introducao, 
-                ':assunto' => $assunto, 
-                ':encerramento' => $encerramento, 
-                ':organizacao_id' => $idOrganizacao, 
-                ':nucleo_id' => $idNucleoInstitucional, 
-                ':curso_id' => $idCurso, 
-                ':local_id' => $idLocal, 
-            ]);
-
-            if ($ok) {
-                // atualiza mapping de integrantes: remover antigos e inserir os novos (se informado)
-                if (!empty($fkIntegrantes)) {
-                    // remove mapeamentos antigos
-                    $pdo->prepare('DELETE FROM documento_integrante WHERE documento_id = :doc')->execute([':doc' => $id]);
-                    // insere novos
-                    if (is_array($fkIntegrantes)) {
-                        foreach ($fkIntegrantes as $i) {
-                            $ins = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
-                            $ins->execute([':doc' => $id, ':integ' => (int)$i]);
-                        }
-                    } else {
-                        $ins = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
-                        $ins->execute([':doc' => $id, ':integ' => (int)$fkIntegrantes]);
-                    }
-                }
-
-                echo "<script type=\"text/javascript\">alert('Documento editado com sucesso!');</script>";
-                return 1;
-            } else {
-                echo "<script type=\"text/javascript\">alert('Erro durante a edição.');</script>";
-                return 0;
-            }
-        }
-
-        public function excluirDocumento($id): int{ #banco de dados
-            require_once __DIR__ ."/../MySql.php";
-            $pdo = MySql::connect();
-
-            $stmt = $pdo->prepare("DELETE FROM documento WHERE id = :id");
-            $ok = $stmt->execute([':id' => $id]);
-
-            if ($ok) {
-                echo "<script type=\"text/javascript\">alert('Documento excluído com sucesso!');</script>";
-                return 1;
-            } else {
-                echo "<script type=\"text/javascript\">alert('Erro durante a exclusão.');</script>";
-                return 0;
-            }
-        }
-
-        // ---------------- helpers para documento_integrante (N:N)
-        public function adicionarIntegrante($documentoId, $integranteId){
-            require_once __DIR__ ."/../MySql.php";
-            $pdo = MySql::connect();
-            $stmt = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
-            return $stmt->execute([':doc' => $documentoId, ':integ' => $integranteId]);
-        }
-
-        public function removerIntegrante($documentoId, $integranteId){
-            require_once __DIR__ ."/../MySql.php";
-            $pdo = MySql::connect();
-            $stmt = $pdo->prepare('DELETE FROM documento_integrante WHERE documento_id = :doc AND integrante_id = :integ');
-            return $stmt->execute([':doc' => $documentoId, ':integ' => $integranteId]);
-        }
-
-        public function listarIntegrantes($documentoId){
-            require_once __DIR__ ."/../MySql.php";
-            $pdo = MySql::connect();
-            $stmt = $pdo->prepare('SELECT i.* FROM integrante i JOIN documento_integrante di ON i.id = di.integrante_id WHERE di.documento_id = :doc');
-            $stmt->execute([':doc' => $documentoId]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo "<script type=\"text/javascript\">alert('Documento cadastrado com sucesso!');</script>";
+            return 1;
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante o cadastro.');</script>";
+            return 0;
         }
     }
+
+    public function EditarDocumento($id, $nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento)
+    { #banco de dados
+        require_once __DIR__ . "/../MySql.php";
+        $pdo = MySql::connect();
+
+        // Normaliza nomes locais
+        $idOrganizacao = $idOrganização;
+        $idNucleoInstitucional = $idNucleo;
+        $fkCurso = $idCurso;
+        $fkLocal = $idLocalizacao;
+        $fkIntegrantes = $idIntegrantes;
+
+        $sql = "UPDATE documento SET 'nome = :nome, data = :data, hora_inicio = :hora_inicio, hora_final = :hora_final, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id' WHERE id = :id";
+
+        $stmt = $pdo->prepare($sql);
+        $ok = $stmt->execute([
+            ':nome' => $nome,
+            ':data' => $data,
+            ':hora_inicio' => $hora_inicio,
+            ':hora_final' => $hora_final,
+            ':prefacio' => $prefacio,
+            ':introducao' => $introducao,
+            ':assunto' => $assunto,
+            ':encerramento' => $encerramento,
+            ':organizacao_id' => $idOrganizacao,
+            ':nucleo_id' => $idNucleoInstitucional,
+            ':curso_id' => $idCurso,
+            ':local_id' => $idLocal,
+        ]);
+
+        if ($ok) {
+            // atualiza mapping de integrantes: remover antigos e inserir os novos (se informado)
+            if (!empty($fkIntegrantes)) {
+                // remove mapeamentos antigos
+                $pdo->prepare('DELETE FROM documento_integrante WHERE documento_id = :doc')->execute([':doc' => $id]);
+                // insere novos
+                if (is_array($fkIntegrantes)) {
+                    foreach ($fkIntegrantes as $i) {
+                        $ins = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
+                        $ins->execute([':doc' => $id, ':integ' => (int) $i]);
+                    }
+                } else {
+                    $ins = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
+                    $ins->execute([':doc' => $id, ':integ' => (int) $fkIntegrantes]);
+                }
+            }
+
+            echo "<script type=\"text/javascript\">alert('Documento editado com sucesso!');</script>";
+            return 1;
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante a edição.');</script>";
+            return 0;
+        }
+    }
+
+    public function excluirDocumento($id): int
+    { #banco de dados
+        require_once __DIR__ . "/../MySql.php";
+        $pdo = MySql::connect();
+
+        $stmt = $pdo->prepare("DELETE FROM documento WHERE id = :id");
+        $ok = $stmt->execute([':id' => $id]);
+
+        if ($ok) {
+            echo "<script type=\"text/javascript\">alert('Documento excluído com sucesso!');</script>";
+            return 1;
+        } else {
+            echo "<script type=\"text/javascript\">alert('Erro durante a exclusão.');</script>";
+            return 0;
+        }
+    }
+
+    // ---------------- helpers para documento_integrante (N:N)
+    public function adicionarIntegrante($documentoId, $integranteId)
+    {
+        require_once __DIR__ . "/../MySql.php";
+        $pdo = MySql::connect();
+        $stmt = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
+        return $stmt->execute([':doc' => $documentoId, ':integ' => $integranteId]);
+    }
+
+    public function removerIntegrante($documentoId, $integranteId)
+    {
+        require_once __DIR__ . "/../MySql.php";
+        $pdo = MySql::connect();
+        $stmt = $pdo->prepare('DELETE FROM documento_integrante WHERE documento_id = :doc AND integrante_id = :integ');
+        return $stmt->execute([':doc' => $documentoId, ':integ' => $integranteId]);
+    }
+
+    public function listarIntegrantes($documentoId)
+    {
+        require_once __DIR__ . "/../MySql.php";
+        $pdo = MySql::connect();
+        $stmt = $pdo->prepare('SELECT i.* FROM integrante i JOIN documento_integrante di ON i.id = di.integrante_id WHERE di.documento_id = :doc');
+        $stmt->execute([':doc' => $documentoId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
 ?>

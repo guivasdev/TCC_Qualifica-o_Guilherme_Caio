@@ -68,25 +68,26 @@ class AtaModel
     // -------------------------------------------------------
     //  Função dinâmica (corrigida)
     // -------------------------------------------------------
-    function obterValorCampo($campo, $opcoes)
-    {
-        $novo = trim($_POST["{$campo}_novo"] ?? '');
-        $id = $_POST["{$campo}_id"] ?? '';
+   private function obterValorCampo($campo, $modelo)
+{
+    $campoId = $_POST[$campo . '_id'] ?? null;
+    $campoNovo = $_POST[$campo . '_novo'] ?? null;
 
-        if ($novo !== '') {
-            return str_replace(["\r", "\n"], ' ', $novo);
-        }
-
-        if ($id !== '') {
-            foreach ($opcoes as $op) {
-                if ($op['id'] == $id) {
-                    return str_replace(["\r", "\n"], ' ', $op['nome']);
-                }
-            }
-        }
-
-        return "";
+    // Se veio o ID selecionado no dropdown
+    if (!empty($campoId)) {
+        return $campoId;
     }
+
+    // Se o usuário digitou um novo valor
+    if (!empty($campoNovo)) {
+        // O $modelo deve ter um método para inserir e retornar o ID
+        return $modelo->inserir($campoNovo);
+    }
+
+    // Nada selecionado
+    return null;
+}
+
 
     // =======================================================
     //  CRIAR ATA (CORRIGIDO)
@@ -100,12 +101,12 @@ class AtaModel
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // Valores de selects ou inputs
-        $organizacao = $this->obterValorCampo('organizacao', $organizacoes);
-        $curso = $this->obterValorCampo('curso', $cursos);
-        $nucleo = $this->obterValorCampo('nucleo', $nucleos);
-        $cargo = $this->obterValorCampo('cargo', $cargos);
-        $integrantes = $this->obterValorCampo('integante', $integrantes);
-        $local = $this->obterValorCampo('local', $locais);
+      
+$organizacao = $this->obterValorCampo('organizacao', $organizacoes);
+$curso      = $this->obterValorCampo('curso', $cursos);
+$nucleo     = $this->obterValorCampo('nucleo', $nucleos);
+$integrantes = $this->obterValorCampo('integrante', $integrantes);
+$local       = $this->obterValorCampo('local', $locais);
 
         // Outros campos
         $nome = $_POST['nome'] ?? '';
@@ -150,7 +151,7 @@ class AtaModel
             $novaData
         );
 
-       
+       var_dump($curso[0]);
         $doc = new Documento();
         $doc->cadastrarDocumento(
                 $nome,
@@ -161,10 +162,10 @@ class AtaModel
                 $infoIntro, 
                 $assunto, 
                 $encerramento, 
-                $organizacao, 
-                $nucleo, 
-                $curso, 
-                $local
+                $organizacao[0], 
+                $nucleo[0], 
+                $curso[0], 
+                $local[0]
         );
 
         // ================================================
