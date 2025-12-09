@@ -122,7 +122,7 @@ class AtaModel
             $horaInicial = $_POST['hora_inicial'] ?? '';
             $horaFinal = $_POST['hora_final'] ?? '';
 
-            $infoIntro = $_POST['infoIntro'] ?? '';
+            $infoIntro = $_POST['introducao'] ?? '';
             $prefacio = $_POST['prefacio'] ?? '';
             $assunto = $_POST['assunto'] ?? '';
             $encerramento = $_POST['encerramento'] ?? '';
