@@ -64,6 +64,8 @@ $base = '/TCC_Qualifica-o_Guilherme_Caio-master';
 
   <script src="<?php echo $path; ?>jquery-3.7.1.min.js"></script>
   <script src="<?php echo $path; ?>menu.js"></script>
+  <script src="<?php echo $path; ?>buscar.js"></script>
+
 </body>
 
 </html>
