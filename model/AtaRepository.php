@@ -21,13 +21,12 @@ class AtaRepository implements IAtaRepository {
     public function salvar(Ata $ata): bool
     {
         // Salva ATA na tabela `documento` (campos de conteúdo separados)
-        $sql = "INSERT INTO documento (titulo, data, prefacio, introducao, assunto, encerramento)
-                VALUES (:titulo, :data, :prefacio, :introducao, :assunto, :encerramento)";
+        $sql = "INSERT INTO documento (data, prefacio, introducao, assunto, encerramento)
+                VALUES (:data, :prefacio, :introducao, :assunto, :encerramento)";
 
         $stmt = $this->pdo->prepare($sql);
 
         return $stmt->execute([
-            ':titulo' => $ata->titulo ?? null,
             ':data' => $ata->data ?? null,
             ':prefacio' => $ata->prefacio ?? ($ata->infoIntro ?? null),
             ':introducao' => $ata->introducao ?? ($ata->infoIntro ?? null),
@@ -60,9 +59,9 @@ class AtaRepository implements IAtaRepository {
     public function buscar(string $filtro, string $texto): ?Ata
     {
         // Protege contra filtro inválido/injeção esquerda: whitelist de colunas
-        $allowed = ['titulo','data','conteudo','prefacio','introducao','assunto','encerramento'];
+        $allowed = ['data','conteudo','prefacio','introducao','assunto','encerramento'];
         if (!in_array($filtro, $allowed)) {
-            $filtro = 'titulo';
+            $filtro = 'nome';
         }
 
         $sql = "SELECT * FROM documento WHERE $filtro LIKE :texto LIMIT 1";

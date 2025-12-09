@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../Model/classes/Documento.php';
 
+
 // =======================================================
 //  Classe personalizada TCPDF
 // =======================================================
@@ -54,7 +55,7 @@ class AtaModel
     {
         $ata = new Ata();
         $ata->id = $dados['id'] ?? null;
-        $ata->titulo = $dados['titulo'] ?? '';
+      
         $ata->data = $dados['data'] ?? '';
         // Conteúdo dividido: prefacio / introducao / assunto / encerramento
         $ata->prefacio = $dados['prefacio'] ?? ($dados['infoIntro'] ?? '');
@@ -107,6 +108,7 @@ class AtaModel
         $local = $this->obterValorCampo('local', $locais);
 
         // Outros campos
+        $nome = $_POST['nome'] ?? '';
         $data = $_POST['data'] ?? '';
         $horaInicial = $_POST['hora_inicial'] ?? '';
         $horaFinal = $_POST['hora_final'] ?? '';
@@ -148,22 +150,21 @@ class AtaModel
             $novaData
         );
 
+       
         $doc = new Documento();
-
         $doc->cadastrarDocumento(
-                $nome, 
-                $titulo, 
+                $nome,
                 $data, 
-                $hora_inicio, 
-                $hora_final, 
+                $horaInicial, 
+                $horaFinal, 
                 $prefacio, 
-                $introducao, 
+                $infoIntro, 
                 $assunto, 
                 $encerramento, 
-                $idOrganizacao, 
-                $idNucleoInstitucional, 
-                $idCurso, 
-                $idLocal
+                $organizacao, 
+                $nucleo, 
+                $curso, 
+                $local
         );
 
         // ================================================

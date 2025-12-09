@@ -33,8 +33,8 @@ try {
     $stmt = $pdo->prepare('INSERT IGNORE INTO predefinicao_integrante (predefinicao_id, integrante_id) VALUES (:predef, :integ)');
     $stmt->execute([':predef' => $predefId, ':integ' => $integId]);
 
-    $stmt = $pdo->prepare('INSERT INTO documento (titulo, data, hora_inicio, hora_final, prefacio, introducao, assunto, encerramento, organizacao_id, nucleo_id, curso_id, local_id, conteudo, predefinicao_id) VALUES (:titulo, CURDATE(), :hini, :hfin, :prefacio, :introducao, :assunto, :encerramento, :org, :nucleo, :curso, :local, :conteudo, :predef)');
-    $stmt->execute([':titulo' => 'ATA Exemplo', ':hini' => '09:00:00', ':hfin' => '10:00:00', ':prefacio' => 'Prefácio ATA', ':introducao' => 'Introdução ATA', ':assunto' => 'Assuntos ATA', ':encerramento' => 'Encerramento ATA', ':org' => $orgId, ':nucleo' => $nucleoId, ':curso' => $cursoId, ':local' => $localId, ':integ' => $integId, ':conteudo' => 'Conteúdo de teste', ':predef' => $predefId]);
+    $stmt = $pdo->prepare('INSERT INTO documento (nome, data, hora_inicio, hora_final, prefacio, introducao, assunto, encerramento, organizacao_id, nucleo_id, curso_id, local_id, conteudo, predefinicao_id) VALUES (:nome, CURDATE(), :hini, :hfin, :prefacio, :introducao, :assunto, :encerramento, :org, :nucleo, :curso, :local, :conteudo, :predef)');
+    $stmt->execute([':nome' => 'ATA Exemplo', ':hini' => '09:00:00', ':hfin' => '10:00:00', ':prefacio' => 'Prefácio ATA', ':introducao' => 'Introdução ATA', ':assunto' => 'Assuntos ATA', ':encerramento' => 'Encerramento ATA', ':org' => $orgId, ':nucleo' => $nucleoId, ':curso' => $cursoId, ':local' => $localId, ':integ' => $integId, ':conteudo' => 'Conteúdo de teste', ':predef' => $predefId]);
     $docId = (int)$pdo->lastInsertId();
 
     // vincular participante(s) ao documento

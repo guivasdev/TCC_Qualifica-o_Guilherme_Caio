@@ -37,7 +37,7 @@ $base = '/TCC_Qualifica-o_Guilherme_Caio-master';
       <div class="col-md-3">
         <select id="filtro" class="form-select">
           <option value="tudo">Tudo</option>
-          <option value="titulo">Título</option>
+          <option value="nome">Título</option>
           <option value="data">Data</option>
           <option value="prefacio">Prefácio</option>
           <option value="assunto">Assunto</option>

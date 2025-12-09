@@ -62,23 +62,15 @@
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        public function cadastrarDocumento($nome, $titulo, $data, $hora_inicio, $hora_final, $prefacio, $introducao, $assunto, $encerramento, $idOrganizacao, $idNucleoInstitucional, $idCurso, $idLocal){ #banco de dados
+        public function cadastrarDocumento($nome, $data, $hora_inicio, $hora_final, $prefacio, $introducao, $assunto, $encerramento, $idOrganizacao, $idNucleoInstitucional, $idCurso, $idLocal){ #banco de dados
             require_once __DIR__ ."/../MySql.php";
-            $pdo = MySql::connect();
+            $pdo = MySql::connect();        
 
-            // Normaliza nomes de parâmetro (alguns antigos usam caracteres especiais)
-            $idOrganizacao = $idOrganização;
-            $idNucleoInstitucional = $idNucleo;
-            $fkCurso = $idCurso;
-            $fkLocal = $idLocalizacao;
-            $fkIntegrantes = $idIntegrantes;
-
-            $sql = "INSERT INTO documento (nome, titulo, data, hora_inicio, hora_final prefacio, introducao, assunto, encerramento, conteudo, organizacao_id, nucleo_id, curso_id, local_id, predefinicao_id) VALUES (:nome, :titulo, :data, :hora_inicio, :hora_final, :prefacio, :introducao, :assunto, :encerramento, :conteudo, :organizacao_id, :nucleo_id, :curso_id, :local_id, :predefinicao_id)";
+            $sql = "INSERT INTO documento (nome, data, hora_inicio, hora_final prefacio, introducao, assunto, encerramento, conteudo, organizacao_id, nucleo_id, curso_id, local_id, predefinicao_id) VALUES (:nome, :data, :hora_inicio, :hora_final, :prefacio, :introducao, :assunto, :encerramento, :conteudo, :organizacao_id, :nucleo_id, :curso_id, :local_id, :predefinicao_id)";
 
             $stmt = $pdo->prepare($sql);
             $ok = $stmt->execute([
                 ':nome' => $nome, 
-                ':titulo' => $titulo, 
                 ':data' => $data, 
                 ':hora_inicio' => $hora_inicio, 
                 ':hora_final' => $hora_final, 
@@ -129,12 +121,11 @@
             $fkLocal = $idLocalizacao;
             $fkIntegrantes = $idIntegrantes;
 
-            $sql = "UPDATE documento SET 'nome = :nome, titulo = :titulo, data = :data, hora_inicio = :hora_inicio, hora_final = :hora_final, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id' WHERE id = :id";
+            $sql = "UPDATE documento SET 'nome = :nome, data = :data, hora_inicio = :hora_inicio, hora_final = :hora_final, prefacio = :prefacio, introducao = :introducao, assunto = :assunto, encerramento = :encerramento, organizacao_id = :organizacao_id, nucleo_id = :nucleo_id, curso_id = :curso_id, local_id = :local_id' WHERE id = :id";
 
             $stmt = $pdo->prepare($sql);
             $ok = $stmt->execute([
-                ':nome' => $nome, 
-                ':titulo' => $titulo, 
+                ':nome' => $nome,
                 ':data' => $data, 
                 ':hora_inicio' => $hora_inicio, 
                 ':hora_final' => $hora_final, 

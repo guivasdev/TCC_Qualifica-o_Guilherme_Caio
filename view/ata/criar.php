@@ -43,8 +43,8 @@ require_once 'componentes.php';
   <input type="hidden" name="tabela" value="documento">
 
   <div class="form-section">
-    <label for="titulo" class="form-label">Nome da ATA</label>
-    <input type="text" class="form-control" id="titulo" name="titulo" required>
+    <label for="nome" class="form-label">Nome da ATA</label>
+    <input type="text" class="form-control" id="nome" name="nome" required>
   </div>
 
   <div class="split-row">

@@ -1,5 +1,5 @@
 <?php
-$base = '/TCC_Qualifica-o_Guilherme_Caio-master';
+$base = '/TCC_Qualifica-o_Guilherme_Caio';
 
 // Garante que as variáveis existam (evita tela branca)
 $organizacoes = $organizacoes ?? [];
