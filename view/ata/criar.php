@@ -104,13 +104,14 @@ require_once 'componentes.php';
     <div class="split-col">
   
       <?php
-      // ALTERADO: nomes iguais aos da tabela
-      echo inputSelectEInput("Curso", "curso", $cursos);
-      echo inputSelectEInput("Cargo", "cargo", $cargos);
-      echo inputSelectEInput("Integrante", "integrante", $integrantes);
-      echo inputSelectEInput("Núcleo Institucional", "nucleo", $nucleos);
-      echo inputSelectEInput("Organização", "organizacao", $organizacao);
-      echo inputSelectEInput("Local", "local", $locais);
+$integrantesSelecionados = $dados['integrantes'] ?? []; // array de IDs
+echo inputSelectEInput("Curso", "curso", $cursos, $dados['curso_id'] ?? '');
+echo inputSelectEInput("Cargo", "cargo", $cargos, $dados['cargo_id'] ?? '');
+echo inputSelectEInput("Integrante", "integrante", $integrantes, '', $integrantesSelecionados); // <-- aqui
+echo inputSelectEInput("Núcleo Institucional", "nucleo", $nucleos, $dados['nucleo_id'] ?? '');
+echo inputSelectEInput("Organização", "organizacao", $organizacao, $dados['organizacao_id'] ?? '');
+echo inputSelectEInput("Local", "local", $locais, $dados['local_id'] ?? '');
+
       
       ?>
 
@@ -144,10 +145,11 @@ require_once 'componentes.php';
       <div class="campos-ata">
         <?php
         // ALTERADOS para bate com o banco
-        echo inputTextarea("Informação Introdutória", "introducao");
-        echo inputTextarea("Prefácio", "prefacio");
-        echo inputTextarea("Assunto", "assunto"); // esse você decide se vai salvar ou gerar apenas no PDF
-        echo inputTextarea("Encerramento", "encerramento");
+       echo inputTextarea("Informação Introdutória", "introducao", $dados['introducao'] ?? '');
+echo inputTextarea("Prefácio", "prefacio", $dados['prefacio'] ?? '');
+echo inputTextarea("Assunto", "assunto", $dados['assunto'] ?? '');
+echo inputTextarea("Encerramento", "encerramento", $dados['encerramento'] ?? '');
+
         ?>
       </div>
     </div>

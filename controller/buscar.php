@@ -13,7 +13,6 @@ if (empty($resultados)) {
     echo "<div class='alert alert-warning'>Nenhum resultado encontrado.</div>";
     exit;
 }
-//var_dump($resultados);
 // Exibir resultados
 foreach ($resultados as $r) {
     echo "<div class='p-3 mb-3 bg-dark text-white rounded' style='font-size: 1.05rem;'>";
@@ -43,17 +42,18 @@ foreach ($resultados as $r) {
 
     echo "<p>{$r['prefacio']}</p>";
 
-    echo "
-        <div class='d-flex gap-2 mt-3'>
-            <a href='{$base}/index.php?acao=buscar' class='btn btn-secondary w-50 py-2'>
-                <i class='bi bi-arrow-repeat'></i> Atualizar
-            </a>
+   echo "
+<div class='d-flex gap-2 mt-3'>
+    <!-- Atualizar: abre criarata.php com os dados do documento -->
+    <a href='/TCC_Qualifica-o_Guilherme_Caio-master/index.php?acao=gerar&id={$r['id']}' 
+       class='btn btn-secondary w-100 py-2'>
+       <i class='bi bi-arrow-repeat'></i> Atualizar
+    </a>
 
-            <a href='{$base}/index.php?acao=buscar' class='btn btn-primary w-50 py-2'>
-                <i class='bi bi-eye'></i> Visualizar
-            </a>
-        </div>
-    ";
+   
+</div>
+";
+
 
     echo "</div>";
 }

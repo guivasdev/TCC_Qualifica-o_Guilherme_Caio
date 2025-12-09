@@ -88,40 +88,31 @@ class CadastroController
         $this->ataView->mostrarBuscaATA($dados, $tabela);
     }
 
-    // -----------------------------------------------
-    // MOSTRAR ATA (POR ID OU ÚLTIMA)
-    // -----------------------------------------------
-    public function mostrarPaginaAta($id = null)
-    {
-        $tabela = 'documento';
+public function mostrarPaginaAta($id = null, bool $buscarUltimoSeNulo = true)
+{
+    $tabela = 'documento';
 
-        // Se não recebeu ID → busca o último documento
-        if ($id === null) {
-            $ultimo = $this->model->buscarUltimoRegistro($tabela);
-
-            if ($ultimo) {
-                $id = (int)$ultimo['id']; // pega o ID do último documento
-            } else {
-                // Nenhum documento → mostra página vazia
-                $this->ataView->mostrarPaginaAta(null);
-                return;
-            }
-        } else {
-            // Cast para inteiro para garantir tipo
-            $id = (int)$id;
-        }
-
-        // Carrega documento pelo ID
-        $dados = $this->model->buscarPorId($tabela, $id);
-
-        if ($dados) {
-            // Retorna todos os dados do documento
-            $this->ataView->mostrarPaginaAta($dados);
-        } else {
-            // Caso não encontre, mostra página vazia
-            $this->ataView->mostrarPaginaAta(null);
-        }
+    if ($id === null && $buscarUltimoSeNulo) {
+        $ultimo = $this->model->buscarUltimoRegistro($tabela);
+        $id = $ultimo ? (int) $ultimo['id'] : null;
     }
-    
+
+    if ($id === null) {
+        // Nenhum documento encontrado ou ID não enviado
+        $dados = []; // campos vazios
+        $this->ataView->mostrarPaginaATA($dados);
+        return;
+    }
+
+    // Busca os dados do documento
+    $dados = $this->model->buscarPorId($tabela, $id);
+
+    // Busca os IDs dos integrantes na tabela intermediária
+    $resultado = $this->model->documento_integrante($id);
+    $dados['integrantes'] = array_map(fn($item) => $item['integrante_id'], $resultado);
+
+    // Chama a view passando os dados
+    $this->ataView->mostrarPaginaATA($dados);
+}
 
 }

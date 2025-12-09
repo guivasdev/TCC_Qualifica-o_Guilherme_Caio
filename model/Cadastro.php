@@ -25,6 +25,10 @@ class Cadastro
     {
         return $this->repo->buscarPorId($tabela, $id);
     }
+    public function documento_integrante(int $documento_id): array
+    {
+             return $this->repo->documento_integrante($documento_id);
+ }
 
     public function buscarUltimoRegistro(string $tabela)
     {

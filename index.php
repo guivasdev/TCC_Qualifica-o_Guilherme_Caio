@@ -39,8 +39,14 @@ switch ($acao) {
         
     case 'gerar':
         $id = $_GET['id'] ?? null;
-        $controller->mostrarPaginaAta($id);
-        break;
+
+    if ($id !== null) {
+        $controller->mostrarPaginaAta((int)$id);
+    } else {
+        // Nenhum ID enviado, mostra formulário vazio
+        $controller->mostrarPaginaAta(null, false); // podemos usar um segundo parâmetro para não buscar último
+    }
+    break;
     case 'gerarAta':
         $controller2->gerarAta();
 

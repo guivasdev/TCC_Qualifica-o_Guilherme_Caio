@@ -24,6 +24,14 @@ class CadastroRepository
         return $stmt->execute($dados);
     }
 
+    public function documento_integrante(int $documento_id): array
+{
+    $sql = "SELECT integrante_id FROM documento_integrante WHERE documento_id = :doc_id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute(['doc_id' => $documento_id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
     public function buscarTodas(string $tabela): array
     {
         if (!$this->isValidTableName($tabela)) {
@@ -32,6 +40,7 @@ class CadastroRepository
         $stmt = $this->pdo->query("SELECT * FROM {$tabela} ORDER BY id DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     public function buscarPorId(string $tabela, int $id): ?array
     {

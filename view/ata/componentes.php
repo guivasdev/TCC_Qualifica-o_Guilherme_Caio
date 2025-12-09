@@ -1,7 +1,15 @@
 <?php
 if (!function_exists('inputSelectEInput')) {
 
-    function inputSelectEInput($label, $name, $opcoes)
+    /**
+     * Gera um select com input opcional e, para "integrante", checkboxes.
+     * @param string $label
+     * @param string $name
+     * @param array $opcoes
+     * @param mixed $selected Valor selecionado (para selects)
+     * @param array $selectedArray Valores selecionados (para checkboxes, integrande)
+     */
+    function inputSelectEInput($label, $name, $opcoes, $selected = '', $selectedArray = [])
     {
         $html = "<div class='form-section mb-3'>";
         $html .= "<label class='form-label'>{$label}</label>";
@@ -13,13 +21,13 @@ if (!function_exists('inputSelectEInput')) {
         $html .= "<select name='{$name}_id' id='select_{$name}' class='form-control' style='max-width:150px'>";
         $html .= "<option value=''>Selecionar</option>";
 
-        // Para Integrante, mostramos a opção especial
         if ($name === "integrante") {
             $html .= "<option value='mostrar'>Selecionar vários</option>";
         }
 
         foreach ($opcoes as $op) {
-            $html .= "<option value='{$op['id']}'>{$op['nome']}</option>";
+            $isSelected = ($op['id'] == $selected) ? "selected" : "";
+            $html .= "<option value='{$op['id']}' $isSelected>{$op['nome']}</option>";
         }
 
         $html .= "</select>";
@@ -37,23 +45,22 @@ if (!function_exists('inputSelectEInput')) {
             $html .= "<div id='bloco_integrantes' style='display:none; margin-top:10px; padding:10px; border:1px solid #555; border-radius:5px;'>";
 
             $html .= "<strong>Selecionar Integrantes:</strong><br>";
-
             $html .= "<div style='display:flex; flex-wrap:wrap; gap:10px; margin-top:5px;'>";
 
             foreach ($opcoes as $op) {
                 $id = $op['id'];
                 $nome = htmlspecialchars($op['nome']);
-                
+                $checked = in_array($id, $selectedArray) ? "checked" : "";
+
                 $html .= "
                     <label style='display:flex; align-items:center; gap:5px;'>
-                        <input type='checkbox' name='integrantes[]' value='{$id}'>
+                        <input type='checkbox' name='integrantes[]' value='{$id}' $checked>
                         {$nome}
                     </label>
                 ";
             }
 
             $html .= "</div>";
-
             $html .= "</div>";
         }
 
@@ -65,17 +72,17 @@ if (!function_exists('inputSelectEInput')) {
 
 if (!function_exists('inputTextarea')) {
 
-    function inputTextarea($label, $name)
+    /**
+     * Gera um textarea com valor padrão
+     */
+    function inputTextarea($label, $name, $value = '')
     {
         $html = "<div class='form-section'>";
         $html .= "<label class='form-label' for='{$name}'>{$label}</label>";
-        $html .= "<textarea class='form-control' id='{$name}' name='{$name}' rows='3'></textarea>";
+        $html .= "<textarea class='form-control' id='{$name}' name='{$name}' rows='3'>{$value}</textarea>";
         $html .= "</div>";
 
         return $html;
-
     }
 }
-
-
 ?>
