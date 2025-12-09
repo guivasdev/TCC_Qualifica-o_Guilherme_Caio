@@ -189,7 +189,7 @@ class AtaModel
         $nomecur = $cur->getCurso($curso[0], null);
         $nomeLoc = $loc->getLocalizacao($local[0], null);
 
-        
+        var_dump($integrantes)
         /*
 
         // ================================================
