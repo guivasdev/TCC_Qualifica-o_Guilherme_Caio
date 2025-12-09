@@ -2,11 +2,11 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../Model/classes/Documento.php';
 
-require_once __DIR__ . "/../../model/classes/Curso.php";
-require_once __DIR__ . "/../../model/classes/Integrante.php";
-require_once __DIR__ . "/../../model/classes/NucleoInstitucional.php";
-require_once __DIR__ . "/../../model/classes/Organizacao.php";
-require_once __DIR__ . "/../../model/classes/Local.php";
+require_once __DIR__ . "/../model/classes/Curso.php";
+require_once __DIR__ . "/../model/classes/Integrante.php";
+require_once __DIR__ . "/../model/classes/NucleoInstitucional.php";
+require_once __DIR__ . "/../model/classes/Organizacao.php";
+require_once __DIR__ . "/../model/classes/Local.php";
 
 
 // =======================================================
