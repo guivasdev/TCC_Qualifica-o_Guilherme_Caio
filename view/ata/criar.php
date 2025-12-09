@@ -49,7 +49,7 @@ require_once 'componentes.php';
 
   <div class="split-row">
     <div class="split-col">
-
+  
       <?php
       // ALTERADO: nomes iguais aos da tabela
       echo inputSelectEInput("Curso", "curso", $cursos);

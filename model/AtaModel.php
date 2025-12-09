@@ -108,11 +108,11 @@ class AtaModel
 
         // Valores de selects ou inputs
       
-        $organizacao = $this->obterValorCampo('organizacao', $organizacoes);
-        $curso      = $this->obterValorCampo('curso', $cursos);
-        $nucleo     = $this->obterValorCampo('nucleo', $nucleos);
-        $integrantes = $this->obterValorCampo('integrante', $integrantes);
-        $local       = $this->obterValorCampo('local', $locais);
+$organizacao = $this->obterValorCampo('organizacao', $organizacoes);
+$curso      = $this->obterValorCampo('curso', $cursos);
+$nucleo     = $this->obterValorCampo('nucleo', $nucleos);
+$integrantes = $this->obterValorCampo('integrante', $integrantes);
+$local       = $this->obterValorCampo('local', $locais);
 
         // Outros campos
         $nome = $_POST['nome'] ?? '';
@@ -177,19 +177,12 @@ class AtaModel
         $nuc = new NucleoInstitucional();
         $cur = new Curso();
         $loc = new Local();
-        $integr = new Integrante();
 
-        $listIntegrantes = [];
-        foreach ($integrantes as $i){
-            $listIntegrantes = array_merge($listIntegrantes, $integr->getIntegrante($i, null));
-        }
-        
-        $nomeOrg = $org->getOrganizacao($organizacao[0], null);
-        $nomeNuc = $nuc->getNucleoInstitucional($nucleo[0], null);
-        $nomecur = $cur->getCurso($curso[0], null);
-        $nomeLoc = $loc->getLocalizacao($local[0], null);
+        $organizacao = $org->getOrganizacao($organizacao[0], null);
+        $nucleo = $nuc->getNucleoInstitucional($nucleo[0], null);
+        $curso = $cur->getCurso($curso[0], null);
+        $local = $loc->getLocalizacao($local[0], null);
 
-        
         // ================================================
         //  GERAÇÃO DO PDF
         // ================================================
@@ -199,16 +192,16 @@ class AtaModel
         $pdf->SetMargins(29, 40, 30);
         $pdf->AddPage();
 
-        $pdf->Write(0, $nomeNuc["nome"] . " - " . $nomeNuc["sigla"]);
+        $pdf->Write(0, $nucleo[1]);
         $pdf->Ln(6);
-        $pdf->Write(0, $nomecur["nome"]);
+        $pdf->Write(0, $curso[1]);
         $pdf->Ln(6);
-        $pdf->Write(0, $nomeOrg["sigla"] . "|" . $nomeOrg["nome"]);
+        $pdf->Write(0, $organizacao[1]);
         $pdf->Ln(12);
 
         $pdf->Write(0, 'Data: ' . $textoData);
         $pdf->Ln(6);
-        $pdf->Write(0, $nomeLoc["nome"]);
+        $pdf->Write(0, $local[1]);
         $pdf->Ln(6);
         $pdf->Write(0, 'Horário: ' . $horaInicial . 'h às ' . $horaFinal . 'h.');
         $pdf->Ln(10);
@@ -218,10 +211,9 @@ class AtaModel
         $pdf->writeHTML($style . '<p>' . nl2br($infoIntro) . '</p>');
         $pdf->Ln(5);
 
-        // Integrantes
-        foreach ($listIntegrantes as $i) {
+        foreach ($i as $integrantes) {
 
-            $pdf->Write(0, $i["cargo_sigla"] . "." . $i["nome"] ." ______________________");
+            $pdf->Write(0, $i[8] + "." + $i[1] +" ______________________");
         }
 
         $pdf->Ln(20);// Espaço antes do prefácio valor anteriro 5, adicionado + 15, motiovo integrantes
@@ -243,7 +235,5 @@ class AtaModel
     } else {
         echo "<script>alert('Formulário não enviado corretamente.');</script>";
     }
-        
-}   
-}
+}}
 ?>
