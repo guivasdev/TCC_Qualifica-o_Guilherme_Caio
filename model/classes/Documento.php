@@ -68,7 +68,12 @@ class Documento
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function cadastrarDocumento($nome, $data, $hora_inicio, $hora_final, $prefacio, $introducao, $assunto, $encerramento, $idOrganizacao, $idNucleoInstitucional, $idCurso, $idLocal)
+public function cadastrarDocumento(
+    $nome, $data, $hora_inicio, $hora_final,
+    $prefacio, $introducao, $assunto, $encerramento,
+    $idOrganizacao, $idNucleoInstitucional, $idCurso, $idLocal,
+    $fkIntegrantes = []   // <---- ADICIONADO
+)
     { #banco de dados
 
         require_once __DIR__ . "/../MySql.php";
@@ -97,16 +102,16 @@ class Documento
             $newId = (int) $pdo->lastInsertId();
 
             // vincula integrantes (se informado) na join table documento_integrante
-            if (!empty($fkIntegrantes)) {
-                if (is_array($fkIntegrantes)) {
-                    foreach ($fkIntegrantes as $i) {
-                        $ins = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
-                        $ins->execute([':doc' => $newId, ':integ' => (int) $i]);
-                    }
-                } else {
-                    $ins = $pdo->prepare('INSERT IGNORE INTO documento_integrante (documento_id, integrante_id) VALUES (:doc, :integ)');
-                    $ins->execute([':doc' => $newId, ':integ' => (int) $fkIntegrantes]);
-                }
+             if (!empty($fkIntegrantes)) {
+            foreach ($fkIntegrantes as $i) {
+                $ins = $pdo->prepare(
+                    'INSERT INTO documento_integrante (documento_id, integrante_id)
+                     VALUES (:doc, :integ)'
+                );
+                $ins->execute([
+                    ':doc' => $newId,
+                    ':integ' => (int)$i
+                ]);
             }
 
             echo "<script type=\"text/javascript\">alert('Documento cadastrado com sucesso!');</script>";
@@ -116,7 +121,7 @@ class Documento
             return 0;
         }
     }
-
+    }
     public function EditarDocumento($id, $nome, $idOrganização, $idNucleo, $idCurso, $idLocalizacao, $idIntegrantes, $data, $hora, $prefacio, $introducao, $assunto, $encerramento)
     { #banco de dados
         require_once __DIR__ . "/../MySql.php";

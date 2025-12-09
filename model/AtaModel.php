@@ -170,7 +170,8 @@ class AtaModel
                 $organizacao[0],
                 $nucleo[0],
                 $curso[0],
-                $local[0]
+                $local[0],
+                $integrantes
             );
 
             $org = new Organizacao();
