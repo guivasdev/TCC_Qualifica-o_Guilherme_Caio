@@ -182,14 +182,6 @@ class AtaModel
         $nucleo = $nuc->getNucleoInstitucional($nucleo[0], null);
         $curso = $cur->getCurso($curso[0], null);
         $local = $loc->getLocalizacao($local[0], null);
-
-        var_dump($organizacao);
-        echo "<br><br>";
-        var_dump($nucleo);
-        echo "<br><br>";
-        var_dump($curso);
-        echo "<br><br>";
-        var_dump($local);
         
         // ================================================
         //  GERAÇÃO DO PDF
