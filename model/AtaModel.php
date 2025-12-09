@@ -184,7 +184,8 @@ class AtaModel
         $local = $loc->getLocalizacao($local[0], null);
 
         var_dump($organizacao, $nucleo, $curso, $local);
-
+        
+        /*
         // ================================================
         //  GERAÇÃO DO PDF
         // ================================================
@@ -234,8 +235,12 @@ class AtaModel
         $pdf->Output('arquivo.pdf', 'I');
         exit;
 
+        */
+
     } else {
         echo "<script>alert('Formulário não enviado corretamente.');</script>";
     }
-}}
+        
+}   
+}
 ?>
