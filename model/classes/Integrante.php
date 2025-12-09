@@ -8,7 +8,14 @@ class Integrante{
         require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
-        $stmt = $pdo->prepare("SELECT * FROM integrante WHERE id = :id OR nome = :nome");
+        $sql = "SELECT i.*, 
+                       c.id AS cargo_id, 
+                       c.nome AS cargo_nome, 
+                       c.sigla AS cargo_sigla
+                FROM integrante i
+                LEFT JOIN cargo c ON i.cargo_id = c.id
+                WHERE i.id = :id OR i.nome = :nome";
+        $stmt = $pdo->prepare($sql);
         $stmt->execute([':id' => $id, ':nome' => $nome]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
@@ -17,7 +24,14 @@ class Integrante{
         require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
-        $stmt = $pdo->query("SELECT * FROM integrante ORDER BY nome ASC");
+        $sql = "SELECT i.*, 
+                       c.id AS cargo_id, 
+                       c.nome AS cargo_nome, 
+                       c.sigla AS cargo_sigla
+                FROM integrante i
+                LEFT JOIN cargo c ON i.cargo_id = c.id
+                ORDER BY i.nome ASC";
+        $stmt = $pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

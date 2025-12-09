@@ -2,6 +2,12 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../Model/classes/Documento.php';
 
+require_once __DIR__ . "/../../model/classes/Curso.php";
+require_once __DIR__ . "/../../model/classes/Integrante.php";
+require_once __DIR__ . "/../../model/classes/NucleoInstitucional.php";
+require_once __DIR__ . "/../../model/classes/Organizacao.php";
+require_once __DIR__ . "/../../model/classes/Local.php";
+
 
 // =======================================================
 //  Classe personalizada TCPDF
@@ -151,7 +157,6 @@ $local       = $this->obterValorCampo('local', $locais);
             $novaData
         );
 
-       var_dump($curso[0]);
         $doc = new Documento();
         $doc->cadastrarDocumento(
                 $nome,
@@ -168,6 +173,11 @@ $local       = $this->obterValorCampo('local', $locais);
                 $local[0]
         );
 
+        $orgNome = $organizacao = new Organizacao()->getOrganizacao($organizacao, null);
+        $nucNome = $nucleo = new NucleoInstitucional()->getNucleo($nucleo, null);
+        $curNome = $curso = new Curso()->getCurso($curso, null);
+        $locNome = $local = new Local()->getLocal($local, null);
+
         // ================================================
         //  GERAÇÃO DO PDF
         // ================================================
@@ -177,16 +187,16 @@ $local       = $this->obterValorCampo('local', $locais);
         $pdf->SetMargins(29, 40, 30);
         $pdf->AddPage();
 
-        $pdf->Write(0, $nucleo);
+        $pdf->Write(0, $nucNome[1]);
         $pdf->Ln(6);
-        $pdf->Write(0, $curso);
+        $pdf->Write(0, $curNome[1]);
         $pdf->Ln(6);
-        $pdf->Write(0, $organizacao);
+        $pdf->Write(0, $orgNome[1]);
         $pdf->Ln(12);
 
         $pdf->Write(0, 'Data: ' . $textoData);
         $pdf->Ln(6);
-        $pdf->Write(0, $local);
+        $pdf->Write(0, $locNome[1]);
         $pdf->Ln(6);
         $pdf->Write(0, 'Horário: ' . $horaInicial . 'h às ' . $horaFinal . 'h.');
         $pdf->Ln(10);
@@ -198,7 +208,7 @@ $local       = $this->obterValorCampo('local', $locais);
 
         foreach ($i as $integrantes) {
 
-            $pdf->Write(0, $i +" ______________________");
+            $pdf->Write(0, $i[8] + "." + $i[1] +" ______________________");
         }
 
         $pdf->Ln(20);// Espaço antes do prefácio valor anteriro 5, adicionado + 15, motiovo integrantes
