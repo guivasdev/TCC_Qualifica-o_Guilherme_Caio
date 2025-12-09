@@ -12,9 +12,22 @@ if (!function_exists('inputSelectEInput')) {
         $html .= "<select name='{$name}_id' class='form-control' style='max-width:150px'>";
         $html .= "<option value=''>Selecionar</option>";
 
-        foreach ($opcoes as $op) {
+        
+
+        if ($opcoes['nome'] == "integrante"){
+            
+            foreach ($opcoes as $op) {
+                //$html .= "<option value='{$op['id']}'>{$op['nome']}</option>";
+                $html .= "<input type=checkbox  name={$op['nome']} value='{$op['id']}'>";
+            }
+        } else{
+
+            foreach ($opcoes as $op) {
             $html .= "<option value='{$op['id']}'>{$op['nome']}</option>";
+            }
         }
+
+        $html .= "<option value='{$op['id']}'>{$op['nome']}</option>";
 
         $html .= "</select>";
 
