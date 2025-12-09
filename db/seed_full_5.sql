@@ -117,4 +117,20 @@ LEFT JOIN curso c ON d.curso_id = c.id
 LEFT JOIN localizacao l ON d.local_id = l.id
 LEFT JOIN documento_integrante di ON di.documento_id = d.id
 LEFT JOIN integrante i ON i.id = di.integrante_id
+
+SELECT d.*,
+       o.nome AS organizacao_nome,
+       n.nome AS nucleo_nome,
+       c.nome AS curso_nome,
+       l.nome AS local_nome,
+       GROUP_CONCAT(DISTINCT i.id ORDER BY i.id SEPARATOR ', ') AS integrantes_id,
+       GROUP_CONCAT(DISTINCT i.nome ORDER BY i.nome SEPARATOR ', ') AS integrantes_nomes
+FROM documento d
+LEFT JOIN organizacao o ON d.organizacao_id = o.id
+LEFT JOIN nucleo_institucional n ON d.nucleo_id = n.id
+LEFT JOIN curso c ON d.curso_id = c.id
+LEFT JOIN localizacao l ON d.local_id = l.id
+LEFT JOIN documento_integrante di ON di.documento_id = d.id
+LEFT JOIN integrante i ON i.id = di.integrante_id
+GROUP BY d.id;
 ============================== */

@@ -177,11 +177,18 @@ class AtaModel
         $nuc = new NucleoInstitucional();
         $cur = new Curso();
         $loc = new Local();
+        $integr = new Integrante();
 
+        $listIntegrantes = [];
+        foreach ($integrantes as $i){
+            $listIntegrantes = array_merge($listIntegrantes, $integr->getIntegrante($i, null));
+        }
+        
         $nomeOrg = $org->getOrganizacao($organizacao[0], null);
         $nomeNuc = $nuc->getNucleoInstitucional($nucleo[0], null);
         $nomecur = $cur->getCurso($curso[0], null);
         $nomeLoc = $loc->getLocalizacao($local[0], null);
+
         
         // ================================================
         //  GERAÇÃO DO PDF
@@ -212,7 +219,7 @@ class AtaModel
         $pdf->Ln(5);
 
         // Integrantes
-        foreach ($i as $integrantes) {
+        foreach ($listIntegrantes as $i) {
 
             $pdf->Write(0, $i["cargo_sigla"] . "." . $i["nome"] ." ______________________");
         }
