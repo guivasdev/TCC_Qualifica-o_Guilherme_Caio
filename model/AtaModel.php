@@ -179,9 +179,9 @@ $local       = $this->obterValorCampo('local', $locais);
         $loc = new Local();
 
         $organizacao = $org->getOrganizacao($organizacao[0], null);
-        $nucleo = $nuc->getNucleo($nucleo[0], null);
+        $nucleo = $nuc->getNucleoInstitucional($nucleo[0], null);
         $curso = $cur->getCurso($curso[0], null);
-        $local = $loc->getLocal($local[0], null);
+        $local = $loc->getLocalizacao($local[0], null);
 
         // ================================================
         //  GERAÇÃO DO PDF
