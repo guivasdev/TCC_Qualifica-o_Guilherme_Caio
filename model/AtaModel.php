@@ -190,6 +190,7 @@ class AtaModel
         $nomeLoc = $loc->getLocalizacao($local[0], null);
 
         var_dump($integrantes);
+        
         /*
 
         // ================================================
