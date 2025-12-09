@@ -173,10 +173,15 @@ $local       = $this->obterValorCampo('local', $locais);
                 $local[0]
         );
 
-        $orgNome = $organizacao = new Organizacao()->getOrganizacao($organizacao[0], null);
-        $nucNome = $nucleo = new NucleoInstitucional()->getNucleo($nucleo[0], null);
-        $curNome = $curso = new Curso()->getCurso($curso[0], null);
-        $locNome = $local = new Local()->getLocal($local[0], null);
+        $org = new Organizacao()->getOrganizacao($organizacao[0], null);
+        $nuc = new NucleoInstitucional()->getNucleo($nucleo[0], null);
+        $cur = new Curso()->getCurso($curso[0], null);
+        $loc = new Local()->getLocal($local[0], null);
+
+        $organizacao = $org()->getOrganizacao($organizacao[0], null);
+        $nucleo = $nuc()->getNucleo($nucleo[0], null);
+        $curso = $cur()->getCurso($curso[0], null);
+        $local = $loc()->getLocal($local[0], null);
 
         // ================================================
         //  GERAÇÃO DO PDF
@@ -187,16 +192,16 @@ $local       = $this->obterValorCampo('local', $locais);
         $pdf->SetMargins(29, 40, 30);
         $pdf->AddPage();
 
-        $pdf->Write(0, $nucNome[1]);
+        $pdf->Write(0, $nucleo[1]);
         $pdf->Ln(6);
-        $pdf->Write(0, $curNome[1]);
+        $pdf->Write(0, $curso[1]);
         $pdf->Ln(6);
-        $pdf->Write(0, $orgNome[1]);
+        $pdf->Write(0, $organizacao[1]);
         $pdf->Ln(12);
 
         $pdf->Write(0, 'Data: ' . $textoData);
         $pdf->Ln(6);
-        $pdf->Write(0, $locNome[1]);
+        $pdf->Write(0, $local[1]);
         $pdf->Ln(6);
         $pdf->Write(0, 'Horário: ' . $horaInicial . 'h às ' . $horaFinal . 'h.');
         $pdf->Ln(10);
