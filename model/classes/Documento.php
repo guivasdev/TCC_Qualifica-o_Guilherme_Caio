@@ -54,7 +54,7 @@ class Documento
 
         $stmt = $pdo->prepare("SELECT * FROM documento WHERE id = :id OR nome = :nome");
         $stmt->execute([':id' => $id, ':nome' => $nome]);
-        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $res ?: [];
     }

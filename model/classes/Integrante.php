@@ -17,7 +17,7 @@ class Integrante{
                 WHERE i.id = :id OR i.nome = :nome";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':id' => $id, ':nome' => $nome]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
     }
 
     public function getALLIntegrantes(){

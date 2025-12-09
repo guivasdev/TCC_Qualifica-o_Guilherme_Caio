@@ -9,7 +9,7 @@ class Local{
 
         $stmt = $pdo->prepare("SELECT * FROM localizacao WHERE id = :id OR nome = :nome");
         $stmt->execute([':id' => $id, ':nome' => $nome]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
     }
 
     public function getALLLocalizacao(){

@@ -10,7 +10,7 @@ class Cargo{
 
         $stmt = $pdo->prepare("SELECT * FROM cargo WHERE id = :id OR nome = :nome");
         $stmt->execute([':id' => $id, ':nome' => $nome]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
     }
 
     public function getALLCargos(){
