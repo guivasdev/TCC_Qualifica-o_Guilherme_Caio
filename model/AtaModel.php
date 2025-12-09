@@ -111,7 +111,7 @@ class AtaModel
             $organizacao = $this->obterValorCampo('organizacao', $organizacoes);
             $curso = $this->obterValorCampo('curso', $cursos);
             $nucleo = $this->obterValorCampo('nucleo', $nucleos);
-            $integrantes = $this->obterValorCampo('integrante', $integrantes);
+            $integrantes = $_POST['integrantes'] ?? [];
             $local = $this->obterValorCampo('local', $locais);
 
             // Outros campos

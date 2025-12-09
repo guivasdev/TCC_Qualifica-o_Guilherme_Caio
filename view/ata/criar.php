@@ -35,9 +35,62 @@ $locais = $repoLocal->getALLLocalizacao();
 /* COMPONENTES */
 require_once 'componentes.php';
 ?>
+<style>
+#bloco_integrantes {
+    background: #f0f0f0;               /* Fundo suave */
+    border: 1px solid #ccc;            /* Borda leve */
+    border-radius: 10px;               /* Bordas arredondadas */
+    padding: 12px;
+    width: 280px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* Sombra elegante */
+    animation: fadeIn 0.2s ease-in-out;
+}
 
+/* Título do bloco */
+#bloco_integrantes strong {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Cada opção (checkbox com label) */
+#bloco_integrantes label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+/* Hover bonito */
+#bloco_integrantes label:hover {
+    background: #e0e0e0;
+    transform: translateX(3px);
+}
+
+/* Checkbox maior e mais bonito */
+#bloco_integrantes input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+/* Animação quando o bloco abre */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
 <link rel="stylesheet" href="<?php echo $base; ?>/externo/CriarAta.css">
-<form id="formAta" method="post" action="/TCC_Qualifica-o_Guilherme_Caio-master/index.php?acao=gerarAta">
+<form  id="formAta" method="post" action="/TCC_Qualifica-o_Guilherme_Caio-master/index.php?acao=gerarAta">
 
   <!-- TABELA QUE SERÁ SALVA -->
   <input type="hidden" name="tabela" value="documento">
@@ -58,6 +111,7 @@ require_once 'componentes.php';
       echo inputSelectEInput("Núcleo Institucional", "nucleo", $nucleos);
       echo inputSelectEInput("Organização", "organizacao", $organizacao);
       echo inputSelectEInput("Local", "local", $locais);
+      
       ?>
 
     </div>
@@ -112,3 +166,43 @@ require_once 'componentes.php';
 </form>
 
 <?php include 'footer.php'; ?>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const selectIntegrante = document.getElementById("select_integrante");
+    const blocoIntegrantes = document.getElementById("bloco_integrantes");
+    const inputNovo = document.getElementById("input_integrante_novo");
+
+    // Abre/fecha quando o select muda
+    selectIntegrante.addEventListener("change", function () {
+
+        if (this.value === "mostrar") {
+            blocoIntegrantes.style.display = "block";
+            inputNovo.style.display = "none"; // esconder input no modo lista
+        } else {
+            blocoIntegrantes.style.display = "none";
+            inputNovo.style.display = "block";
+        }
+    });
+
+    // FECHAR AO CLICAR FORA
+    document.addEventListener("click", function (event) {
+
+        const clicouForaDoSelect =
+            !selectIntegrante.contains(event.target);
+
+        const clicouForaDoBloco =
+            !blocoIntegrantes.contains(event.target);
+
+        // só fecha se estiver aberto e clicou fora dos dois
+        if (blocoIntegrantes.style.display === "block" &&
+            clicouForaDoSelect &&
+            clicouForaDoBloco) {
+
+            blocoIntegrantes.style.display = "none";
+            selectIntegrante.value = ""; // volta select para "Selecionar"
+            inputNovo.style.display = "block"; // volta input
+        }
+    });
+});
+</script>
