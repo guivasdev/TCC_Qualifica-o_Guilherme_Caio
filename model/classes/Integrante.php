@@ -1,11 +1,13 @@
 <?php
-class Integrante{
+class Integrante
+{
     private $id = 0;
     private $nome = "";
     private $cargo = "";
 
-    public function getIntegrantes($id, $nome){
-        require_once __DIR__ ."/../MySql.php";
+    public function getIntegrantes($id, $nome)
+    {
+        require_once __DIR__ . "/../MySql.php";
         $pdo = MySql::connect();
 
         $sql = "SELECT i.*, 
@@ -20,8 +22,9 @@ class Integrante{
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
     }
 
-    public function getALLIntegrantes(){
-        require_once __DIR__ ."/../MySql.php";
+    public function getALLIntegrantes()
+    {
+        require_once __DIR__ . "/../MySql.php";
         $pdo = MySql::connect();
 
         $sql = "SELECT i.*, 
@@ -35,8 +38,9 @@ class Integrante{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function cadastrarIntegrantes($nome, $cargo): int{
-        require_once __DIR__ ."/../MySql.php";
+    public function cadastrarIntegrantes($nome, $cargo): int
+    {
+        require_once __DIR__ . "/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("INSERT INTO integrante (nome, cargo) VALUES (:nome, :cargo)");
@@ -51,8 +55,9 @@ class Integrante{
         }
     }
 
-    public function atribuirCargo($id, $id_cargo): int{
-        require_once __DIR__ ."/../MySql.php";
+    public function atribuirCargo($id, $id_cargo): int
+    {
+        require_once __DIR__ . "/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("UPDATE integrante SET cargo = :cargo WHERE id = :id");
@@ -60,8 +65,9 @@ class Integrante{
         return $ok ? 1 : 0;
     }
 
-    public function editarIntegrantes($id, $nome, $cargo): int{
-        require_once __DIR__ ."/../MySql.php";
+    public function editarIntegrantes($id, $nome, $cargo): int
+    {
+        require_once __DIR__ . "/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("UPDATE integrante SET nome = :nome, cargo = :cargo WHERE id = :id");
@@ -76,8 +82,9 @@ class Integrante{
         }
     }
 
-    public function excluirIntegrante($confirmar, $id): int{
-        require_once __DIR__ ."/../MySql.php";
+    public function excluirIntegrante($confirmar, $id): int
+    {
+        require_once __DIR__ . "/../MySql.php";
         $pdo = MySql::connect();
 
         $stmt = $pdo->prepare("DELETE FROM integrante WHERE id = :id");
