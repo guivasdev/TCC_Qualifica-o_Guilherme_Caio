@@ -183,6 +183,13 @@ $local       = $this->obterValorCampo('local', $locais);
         $curso = $cur->getCurso($curso[0], null);
         $local = $loc->getLocalizacao($local[0], null);
 
+<<<<<<< HEAD
+=======
+        var_dump($integrantes);
+        
+        /*
+
+>>>>>>> 2ebea13474fbdcf3d81362d6bcc7604af6db29b3
         // ================================================
         //  GERAÇÃO DO PDF
         // ================================================
@@ -231,6 +238,8 @@ $local       = $this->obterValorCampo('local', $locais);
         }
         $pdf->Output('arquivo.pdf', 'I');
         exit;
+
+        */
 
     } else {
         echo "<script>alert('Formulário não enviado corretamente.');</script>";
