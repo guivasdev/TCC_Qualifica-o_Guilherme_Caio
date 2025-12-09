@@ -191,7 +191,6 @@ class AtaModel
         echo "<br><br>";
         var_dump($local);
         
-        /*
         // ================================================
         //  GERAÇÃO DO PDF
         // ================================================
@@ -201,16 +200,16 @@ class AtaModel
         $pdf->SetMargins(29, 40, 30);
         $pdf->AddPage();
 
-        $pdf->Write(0, $nucleo[1]);
+        $pdf->Write(0, $nucleo["nome"]);
         $pdf->Ln(6);
-        $pdf->Write(0, $curso[1]);
+        $pdf->Write(0, $curso["nome"]);
         $pdf->Ln(6);
-        $pdf->Write(0, $organizacao[1]);
+        $pdf->Write(0, $organizacao["nome"]);
         $pdf->Ln(12);
 
         $pdf->Write(0, 'Data: ' . $textoData);
         $pdf->Ln(6);
-        $pdf->Write(0, $local[1]);
+        $pdf->Write(0, $local["nome"]);
         $pdf->Ln(6);
         $pdf->Write(0, 'Horário: ' . $horaInicial . 'h às ' . $horaFinal . 'h.');
         $pdf->Ln(10);
@@ -240,8 +239,6 @@ class AtaModel
         }
         $pdf->Output('arquivo.pdf', 'I');
         exit;
-
-        */
 
     } else {
         echo "<script>alert('Formulário não enviado corretamente.');</script>";
