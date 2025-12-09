@@ -1,5 +1,5 @@
 
-INSERT INTO organizacao (nome) VALUES ('Org Exemplo');
+INSERT INTO organizacao (nome, sigla) VALUES ('Org Exemplo', 'OE');
 INSERT INTO nucleo_institucional (nome, sigla) VALUES ('Núcleo Exemplo', 'NEX');
 INSERT INTO curso (nome) VALUES ('Curso Exemplo');
 INSERT INTO integrante (nome, cargo_id) VALUES ('Integrante Exemplo', NULL);

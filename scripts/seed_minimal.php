@@ -5,8 +5,8 @@ $pdo = MySql::connect();
 try {
     $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare('INSERT INTO organizacao (nome) VALUES (:nome)');
-    $stmt->execute([':nome' => 'Org Exemplo']);
+    $stmt = $pdo->prepare('INSERT INTO organizacao (nome, sigla) VALUES (:nome, :sigla)');
+    $stmt->execute([':nome' => 'Org Exemplo', ':sigla' => 'OE']);
     $orgId = (int)$pdo->lastInsertId();
 
     $stmt = $pdo->prepare('INSERT INTO nucleo_institucional (nome, sigla) VALUES (:nome, :sigla)');

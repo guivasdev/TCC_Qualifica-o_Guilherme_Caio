@@ -23,12 +23,12 @@ class Organizacao{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function cadastrarOrganizacao($nome){
+    public function cadastrarOrganizacao($nome, $sigla){
         require_once __DIR__ ."/../MySql.php";
         $pdo = MySql::connect();
 
-        $stmt = $pdo->prepare("INSERT INTO organizacao (nome) VALUES (:nome)");
-        $ok = $stmt->execute([':nome' => $nome]);
+        $stmt = $pdo->prepare("INSERT INTO organizacao (nome, sigla) VALUES (:nome, :sigla)");
+        $ok = $stmt->execute([':nome' => $nome, ':sigla' => $sigla]);
 
         return $ok ? 1 : 0;
     }

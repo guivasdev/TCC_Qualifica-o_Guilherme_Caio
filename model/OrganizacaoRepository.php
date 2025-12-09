@@ -14,7 +14,7 @@ class OrganizacaoRepository {
     }
 
     public function buscarTodas(): array {
-        $sql = "SELECT id, nome FROM organizacao ORDER BY nome";
+        $sql = "SELECT id, nome, sigla FROM organizacao ORDER BY nome";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 }
