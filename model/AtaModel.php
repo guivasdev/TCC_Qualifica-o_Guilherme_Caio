@@ -177,6 +177,12 @@ $local       = $this->obterValorCampo('local', $locais);
         $nuc = new NucleoInstitucional();
         $cur = new Curso();
         $loc = new Local();
+        $integr = new Integrante();
+
+        $listIntegrantes = [];
+        foreach ($integrantes as $i){
+            $listIntegrantes = array_merge($listIntegrantes, $integr->getIntegrante($i, null));
+        }
 
         $organizacao = $org->getOrganizacao($organizacao[0], null);
         $nucleo = $nuc->getNucleoInstitucional($nucleo[0], null);
@@ -217,7 +223,7 @@ $local       = $this->obterValorCampo('local', $locais);
         $pdf->writeHTML($style . '<p>' . nl2br($infoIntro) . '</p>');
         $pdf->Ln(5);
 
-        foreach ($i as $integrantes) {
+        foreach ($i as $listIntegrantes) {
 
             $pdf->Write(0, $i[8] + "." + $i[1] +" ______________________");
         }
