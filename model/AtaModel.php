@@ -173,10 +173,10 @@ $local       = $this->obterValorCampo('local', $locais);
                 $local[0]
         );
 
-        $orgNome = $organizacao = new Organizacao()->getOrganizacao($organizacao, null);
-        $nucNome = $nucleo = new NucleoInstitucional()->getNucleo($nucleo, null);
-        $curNome = $curso = new Curso()->getCurso($curso, null);
-        $locNome = $local = new Local()->getLocal($local, null);
+        $orgNome = $organizacao = new Organizacao()->getOrganizacao($organizacao[0], null);
+        $nucNome = $nucleo = new NucleoInstitucional()->getNucleo($nucleo[0], null);
+        $curNome = $curso = new Curso()->getCurso($curso[0], null);
+        $locNome = $local = new Local()->getLocal($local[0], null);
 
         // ================================================
         //  GERAÇÃO DO PDF
