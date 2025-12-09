@@ -16,8 +16,6 @@ if (!function_exists('inputSelectEInput')) {
             $html .= "<option value='{$op['id']}'>{$op['nome']}</option>";
         }
 
-        $html .= "<option value='{$op['id']}'>{$op['nome']}</option>";
-
         $html .= "</select>";
 
         // INPUT para novo valor
