@@ -108,11 +108,11 @@ class AtaModel
 
         // Valores de selects ou inputs
       
-$organizacao = $this->obterValorCampo('organizacao', $organizacoes);
-$curso      = $this->obterValorCampo('curso', $cursos);
-$nucleo     = $this->obterValorCampo('nucleo', $nucleos);
-$integrantes = $this->obterValorCampo('integrante', $integrantes);
-$local       = $this->obterValorCampo('local', $locais);
+        $organizacao = $this->obterValorCampo('organizacao', $organizacoes);
+        $curso      = $this->obterValorCampo('curso', $cursos);
+        $nucleo     = $this->obterValorCampo('nucleo', $nucleos);
+        $integrantes = $this->obterValorCampo('integrante', $integrantes);
+        $local       = $this->obterValorCampo('local', $locais);
 
         // Outros campos
         $nome = $_POST['nome'] ?? '';
@@ -182,6 +182,8 @@ $local       = $this->obterValorCampo('local', $locais);
         $nucleo = $nuc->getNucleoInstitucional($nucleo[0], null);
         $curso = $cur->getCurso($curso[0], null);
         $local = $loc->getLocalizacao($local[0], null);
+
+        var_dump($organizacao, $nucleo, $curso, $local);
 
         // ================================================
         //  GERAÇÃO DO PDF
