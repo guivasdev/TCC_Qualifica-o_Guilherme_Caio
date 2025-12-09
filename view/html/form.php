@@ -117,8 +117,8 @@ $cargos = $cargos ?? [];
         <select id="tipo-cadastro">
             <option value="">Selecione...</option>
             <option value="organizacao">Organização</option>
-            <option value="nucleo">Núcleo</option>
-            <option value="cursos">Curso</option>
+            <option value="nucleo_institucional">Núcleo</option>
+            <option value="curso">Curso</option>
             <option value="cargo">Cargo</option>
             <option value="integrante">Integrante</option>
         </select>
@@ -157,10 +157,12 @@ $cargos = $cargos ?? [];
             camposDiv.innerHTML = `
                 <label>Nome da Organização:</label>
                 <input type="text" name="nome" required>
+                <label>Sigla:</label>
+                <input type="text" name="sigla" placeholder="Ex: DA" maxlength="32">
             `;
         }
-        else if (tipo === 'nucleo') {
-            let options = organizacoes.map(o => `<option value="${o.id}">${o.nome}</option>`).join('');
+        else if (tipo === 'nucleo_institucional') {
+            let options = organizacoes.map(o => `<option value="${o.id}">${o.sigla ? o.sigla + ' | ' : ''}${o.nome}</option>`).join('');
             camposDiv.innerHTML = `
                 <label>Selecione a Organização:</label>
                 <select name="organizacao_id" required>
@@ -170,10 +172,12 @@ $cargos = $cargos ?? [];
 
                 <label>Nome do Núcleo:</label>
                 <input type="text" name="nome" required>
+                <label>Sigla:</label>
+                <input type="text" name="sigla" placeholder="Ex: NT" maxlength="64">
             `;
         }
         else if (tipo === 'curso') {
-            let options = nucleos.map(n => `<option value="${n.id}">${n.nome}</option>`).join('');
+            let options = nucleos.map(n => `<option value="${n.id}">${n.sigla ? n.sigla + ' | ' : ''}${n.nome}</option>`).join('');
             camposDiv.innerHTML = `
                 <label>Selecione o Núcleo:</label>
                 <select name="nucleo_id" required>
@@ -189,11 +193,13 @@ $cargos = $cargos ?? [];
             camposDiv.innerHTML = `
                 <label>Nome do Cargo:</label>
                 <input type="text" name="nome" required>
+                <label>Sigla:</label>
+                <input type="text" name="sigla" placeholder="Ex: PRES" maxlength="32">
             `;
         }
         else if (tipo === 'integrante') {
             let cursoOptions = cursos.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
-            let cargoOptions = cargos.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+            let cargoOptions = cargos.map(c => `<option value="${c.id}">${c.sigla ? c.sigla + ' - ' : ''}${c.nome}</option>`).join('');
 
             camposDiv.innerHTML = `
                 <label>Selecione o Curso:</label>

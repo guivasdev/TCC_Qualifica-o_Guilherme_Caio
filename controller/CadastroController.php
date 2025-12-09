@@ -9,9 +9,11 @@ class CadastroController
 
     private array $tabelas = [
         'Organização' => 'organizacao',
-        'Núcleo Institucional' => 'nucleo',
-        'Curso' => 'cursos',
-        'Integrante' => 'integrantes'
+        'Núcleo Institucional' => 'nucleo_institucional',
+        'Curso' => 'curso',
+        'Integrante' => 'integrante',
+        'Local' => 'localizacao',
+        'Cargo' => 'cargo',
     ];
 
     public function __construct(Cadastro $model, $formView, $ataView)
@@ -26,16 +28,21 @@ class CadastroController
     // -----------------------------------------------
     public function mostrarFormularioUnico()
     {
+
         $organizacao = $this->model->buscarTodas('organizacao');
-        $nucleos = $this->model->buscarTodas('nucleo');
+        $nucleos = $this->model->buscarTodas('nucleo_institucional');
         $cursos = $this->model->buscarTodas('curso');
         $cargos = $this->model->buscarTodas('cargo');
+        $local = $this->model->buscarTodas('localizacao');
+        $integrante = $this->model->buscarTodas('integrante');
 
         $this->formView->mostrarFormularioUnico(
             $organizacao,
             $nucleos,
             $cursos,
-            $cargos
+            $cargos,
+            $local,
+            $integrante
         );
     }
 
@@ -55,13 +62,16 @@ class CadastroController
         unset($dados['tabela']);
         unset($dados['assunto']);
 
+        try {
+            $item = new CadastroItem($tabela, $dados);
+            $resultado = $this->model->salvar($item);
 
-        $item = new CadastroItem($tabela, $dados);
-        $resultado = $this->model->salvar($item);
-
-        $_SESSION['mensagem'] = $resultado
-            ? "✔ Registro salvo com sucesso!"
-            : "✘ Erro ao salvar.";
+            $_SESSION['mensagem'] = $resultado
+                ? "✔ Registro salvo com sucesso!"
+                : "✘ Erro ao salvar.";
+        } catch (Exception $e) {
+            $_SESSION['mensagem'] = "✘ Erro ao salvar: " . $e->getMessage();
+        }
 
         header("Location: index.php?acao=buscar");
         exit;
@@ -82,35 +92,36 @@ class CadastroController
     // MOSTRAR ATA (POR ID OU ÚLTIMA)
     // -----------------------------------------------
     public function mostrarPaginaAta($id = null)
-{
-    $tabela = 'documento';
+    {
+        $tabela = 'documento';
 
-    // Se não recebeu ID → busca o último documento
-    if ($id === null) {
-        $ultimo = $this->model->buscarUltimoRegistro($tabela);
+        // Se não recebeu ID → busca o último documento
+        if ($id === null) {
+            $ultimo = $this->model->buscarUltimoRegistro($tabela);
 
-        if ($ultimo) {
-            $id = $ultimo['id']; // pega o ID do último documento
+            if ($ultimo) {
+                $id = (int)$ultimo['id']; // pega o ID do último documento
+            } else {
+                // Nenhum documento → mostra página vazia
+                $this->ataView->mostrarPaginaAta(null);
+                return;
+            }
         } else {
-            // Nenhum documento → mostra página vazia
+            // Cast para inteiro para garantir tipo
+            $id = (int)$id;
+        }
+
+        // Carrega documento pelo ID
+        $dados = $this->model->buscarPorId($tabela, $id);
+
+        if ($dados) {
+            // Retorna todos os dados do documento
+            $this->ataView->mostrarPaginaAta($dados);
+        } else {
+            // Caso não encontre, mostra página vazia
             $this->ataView->mostrarPaginaAta(null);
-            return;
         }
     }
-
-    // Carrega documento pelo ID
-    $dados = $this->model->buscarPorId($tabela, $id);
-
-    if ($dados) {
-        // Retorna todos os dados do documento
-        $this->ataView->mostrarPaginaAta($dados);
-    } else {
-        // Caso não encontre, mostra página vazia
-        $this->ataView->mostrarPaginaAta(null);
-    }
-}
-
-
     
 
 }

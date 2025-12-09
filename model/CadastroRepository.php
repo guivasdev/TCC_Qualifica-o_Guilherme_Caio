@@ -38,7 +38,7 @@ class CadastroRepository
         if (!$this->isValidTableName($tabela)) {
             return null;
         }
-        $sql = "SELECT * FROM {$tabela} WHERE id = :id LIMIT 1";
+        $sql = "SELECT * FROM {$tabela} WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
