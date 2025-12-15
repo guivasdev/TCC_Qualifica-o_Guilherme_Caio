@@ -1,0 +1,189 @@
+/* Lógico_1: */
+
+CREATE TABLE IF NOT EXISTS Documentos (
+    Id INTEGER(8) PRIMARY KEY,
+    Nome VARCHAR(100) UNIQUE NOT NULL, 
+    Dia_Hora DATETIME,
+    Prefacio MEDIUMTEXT,
+    Introducao MEDIUMTEXT,
+    Assunto MEDIUMTEXT,
+    Encerramento MEDIUMTEXT
+);
+
+CREATE TABLE IF NOT EXISTS Organizacoes (
+    Id INTEGER(8) PRIMARY KEY,
+    Nome VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS Nucleos_Institucionais (
+    Id INTEGER(8) PRIMARY KEY,
+    Nome VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS Cursos (
+    Id INTEGER(8) PRIMARY KEY,
+    Nome VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS Integrantes (
+    Id INTEGER(8) PRIMARY KEY NOT NULL,
+    Nome VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS Cargos (
+    Id INTEGER(8) PRIMARY KEY NOT NULL,
+    Nomes VARCHAR(100),
+    Sigra VARCHAR(8)
+);
+
+CREATE TABLE IF NOT EXISTS Lista_de_Integrantes (
+    Id INTEGER(8) PRIMARY KEY NOT NULL,
+    Nome VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS Predefinicoes (
+    Id INTEGER(8) PRIMARY KEY,
+    Nome VARCHAR(100), 
+    Dia_Hora DATETIME,
+    Prefacio MEDIUMTEXT,
+    Introducao MEDIUMTEXT,
+    Assunto MEDIUMTEXT,
+    Encerramento MEDIUMTEXT
+);
+
+CREATE TABLE IF NOT EXISTS Localizacao (
+    Id INTEGER(8) PRIMARY KEY NOT NULL,
+    Nome VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS Documentos_Organizacoes_Predefinicoes (
+	Id INTEGER(8) PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS Nucleo_Integrante (
+	Id INTEGER(8) PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS Cursos_Integrantes (
+	Id INTEGER(8) PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS Integrante_lista_Integrante (
+	Id INTEGER(8) PRIMARY KEY
+);
+
+/* TABLE Documentos */
+
+ALTER TABLE Documentos ADD CONSTRAINT FK_DOC_ORG
+FOREIGN KEY (fk_Organizacao_Id)
+REFERENCES Organizacao (Id);
+
+ALTER TABLE Documentos ADD CONSTRAINT FK_DOC_NUCLEO
+FOREIGN KEY (fk_Nucleo_Institucional_Id)
+REFERENCES Nucleo_Institucional (Id);
+
+ALTER TABLE Documentos ADD CONSTRAINT FK_DOC_CURSO
+FOREIGN KEY (fk_Curso_Id)
+REFERENCES Curso (Id);
+
+ALTER TABLE Documentos ADD CONSTRAINT FK_DOC_LOCAL
+FOREIGN KEY (fk_Localizacao_Id)
+REFERENCES Localizacao (Id);
+
+ALTER TABLE Documentos ADD CONSTRAINT FK_DOC_INTEG
+FOREIGN KEY (fk_Integrantes_Id)
+REFERENCES Integrantes (Id);
+
+/* TABLE Organizacoes */
+
+ALTER TABLE Organizacoes ADD CONSTRAINT FK_ORG_NUCLEO
+FOREIGN KEY (fk_Nucleo_Institucional_Id)
+REFERENCES Nucleo_Institucional (Id);
+
+ALTER TABLE Organizacoes ADD CONSTRAINT FK_ORG_CURSO
+FOREIGN KEY (fk_Cursos_Id)
+REFERENCES Cursos (Id);
+
+ALTER TABLE Organizacoes ADD CONSTRAINT FK_ORG_LOCAL
+FOREIGN KEY (fk_Local_Id)
+REFERENCES Localizacao (Id);
+
+/* Nucleos_Institucionais */
+
+ALTER TABLE Nucleos_Institucionais ADD CONSTRAINT FK_NUCLEO_INTRG
+FOREIGN KEY (fk_Integrantes_Id)
+REFERENCES IntegranteS (Id);
+
+/* TABLE Integrantes */
+
+ALTER TABLE Integrantes ADD CONSTRAINT FK_INTEG_CARGO
+FOREIGN KEY (fk_Cargo_Id)
+REFERENCES Cargo (Id);
+
+/* TABLE Predefinicoes */
+
+ALTER TABLE Predefinicoes ADD CONSTRAINT FK_PRE_ORG
+FOREIGN KEY (fk_Organizacao_Id)
+REFERENCES Organizacao (Id);
+
+ALTER TABLE Predefinicoes ADD CONSTRAINT FK_PRE_NUCLEO
+FOREIGN KEY (fk_Nucleo_Institucional_Id)
+REFERENCES Nucleo_Institucional (Id);
+
+ALTER TABLE Predefinicoes ADD CONSTRAINT FK_PRE_CURSO
+FOREIGN KEY (fk_Curso_Id)
+REFERENCES Curso (Id);
+
+ALTER TABLE Predefinicoes ADD CONSTRAINT FK_PRE_LOCAL
+FOREIGN KEY (fk_Localizacao_Id)
+REFERENCES Localizacao (Id);
+
+ALTER TABLE Predefinicoes ADD CONSTRAINT FK_PRE_INTEG
+FOREIGN KEY (fk_Integrantes_Id) 
+REFERENCES Integrantes (Id);
+
+/* INTERMEDIATE TABLE */
+
+/* TABLE Documentos_Organizacoes_Predefinicoes */
+
+ALTER TABLE Documentos_Organizacoes_Predefinicoes ADD CONSTRAINT FK_DOP_DOC
+FOREIGN KEY (fk_Documentos_Id) 
+REFERENCES Documentos (Id);
+
+ALTER TABLE Documentos_Organizacoes_Predefinicoes ADD CONSTRAINT FK_DOP_ORG
+FOREIGN KEY (fk_Organizacoes_Id) 
+REFERENCES Organizações (Id);
+
+ALTER TABLE Documentos_Organizacoes_Predefinicoes ADD CONSTRAINT FK_DOP_PRE
+FOREIGN KEY (fk_Predefinicoes_Id) 
+REFERENCES Predefinições (Id);
+
+/* TABLE Nucleo_Integrante */
+
+ALTER TABLE Nucleo_Integrante ADD CONSTRAINT FK_NI_INTEG
+FOREIGN KEY (fk_Integrantes_Id) 
+REFERENCES Integrantes (Id);
+
+ALTER TABLE Nucleo_Integrante ADD CONSTRAINT FK_NI_NUCLEO
+FOREIGN KEY (fk_Nucleos_Institucionais_Id) 
+REFERENCES Nucleos_Institucionais (Id);
+
+/* TABLE Cursos_Integrantes */
+
+ALTER TABLE Cursos_Integrantes ADD CONSTRAINT FK_CI_CURSO
+FOREIGN KEY (fk_Cursos_Id) 
+REFERENCES Cursos (Id);
+
+ALTER TABLE Cursos_Integrantes ADD CONSTRAINT FK_CI_INTEG
+FOREIGN KEY (fk_Integrantes_Id) 
+REFERENCES Integrantes (Id);
+
+/* TABLE Integrante_lista_Integrante */
+
+ALTER TABLE Integrante_lista_Integrante ADD CONSTRAINT FK_IL_INTEG
+FOREIGN KEY (fk_Integrantes_Id) 
+REFERENCES Integrantes (Id);
+
+ALTER TABLE Integrante_lista_Integrante ADD CONSTRAINT FK_IL_LIST
+FOREIGN KEY (fk_Lista_de_Integrantes_Id) 
+REFERENCES Lista_de_Integrantes (Id);

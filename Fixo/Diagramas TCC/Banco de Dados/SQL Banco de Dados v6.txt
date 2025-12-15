@@ -1,0 +1,98 @@
+CREATE DATABASE tcc_organizacao;
+USE tcc_organizacao;
+
+-- =====================================
+-- 1) ORGANIZAÇÃO
+-- =====================================
+CREATE TABLE organizacao (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(200) NOT NULL
+);
+
+-- =====================================
+-- 2) NÚCLEO
+-- =====================================
+CREATE TABLE nucleo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    organizacao_id INT NOT NULL,
+    nome VARCHAR(200) NOT NULL,
+
+    FOREIGN KEY (organizacao_id)
+        REFERENCES organizacao(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+-- =====================================
+-- 3) CURSO
+-- =====================================
+CREATE TABLE curso (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nucleo_id INT NOT NULL,
+    nome VARCHAR(200) NOT NULL,
+
+    FOREIGN KEY (nucleo_id)
+        REFERENCES nucleo(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+-- =====================================
+-- 4) CARGO (apenas nome)
+-- =====================================
+CREATE TABLE cargo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(200) NOT NULL
+);
+
+-- =====================================
+-- 5) INTEGRANTE 
+-- (nome + curso + cargo)
+-- =====================================
+CREATE TABLE integrante (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    curso_id INT NOT NULL,
+    cargo_id INT NOT NULL,
+    nome VARCHAR(200) NOT NULL,
+
+    FOREIGN KEY (curso_id)
+        REFERENCES curso(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    FOREIGN KEY (cargo_id)
+        REFERENCES cargo(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+-- =====================================
+-- 6) DOCUMENTOS (mantém)
+-- Apenas o essencial
+-- =====================================
+CREATE TABLE documento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    organizacao_id INT NULL,
+    nucleo_id INT NULL,
+    curso_id INT NULL,
+    integrante_id INT NULL,
+    titulo VARCHAR(200) NOT NULL,
+    arquivo VARCHAR(255),
+    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (organizacao_id)
+        REFERENCES organizacao(id)
+        ON DELETE SET NULL,
+
+    FOREIGN KEY (nucleo_id)
+        REFERENCES nucleo(id)
+        ON DELETE SET NULL,
+
+    FOREIGN KEY (curso_id)
+        REFERENCES curso(id)
+        ON DELETE SET NULL,
+
+    FOREIGN KEY (integrante_id)
+        REFERENCES integrante(id)
+        ON DELETE SET NULL
+);
